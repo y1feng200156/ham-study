@@ -1,4 +1,13 @@
 import { Link } from "react-router";
+import CircularPolarizationScene from "../components/circular-polarization-scene";
+import { ClientOnly } from "../components/client-only";
+import EllipticalPolarizationScene from "../components/elliptical-polarization-scene";
+import GPAntennaScene from "../components/gp-antenna-scene";
+import HorizontalPolarizationScene from "../components/horizontal-polarization-scene";
+import InvertedVAntennaScene from "../components/inverted-v-scene";
+import MoxonAntennaScene from "../components/moxon-antenna-scene";
+import PositiveVAntennaScene from "../components/positive-v-scene";
+import QuadAntennaScene from "../components/quad-antenna-scene";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -8,6 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import VerticalPolarizationScene from "../components/vertical-polarization-scene";
+import YagiAntennaScene from "../components/yagi-antenna-scene";
 
 export default function Home() {
   return (
@@ -22,8 +33,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+               <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <VerticalPolarizationScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -41,8 +54,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <HorizontalPolarizationScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -60,8 +75,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <CircularPolarizationScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -79,8 +96,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <EllipticalPolarizationScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -98,8 +117,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <YagiAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -117,8 +138,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <InvertedVAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -136,8 +159,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <GPAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -155,8 +180,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <PositiveVAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -174,8 +201,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <QuadAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>
@@ -193,8 +222,10 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
-              3D 预览
+            <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <ClientOnly fallback={<div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />}>
+                  <MoxonAntennaScene isThumbnail={true} />
+               </ClientOnly>
             </div>
           </CardContent>
           <CardFooter>

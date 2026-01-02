@@ -1,67 +1,14 @@
 import { OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { useMemo, useState } from "react";
 import * as THREE from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
+import { RadialWaveLines } from "./radial-wave-lines";
 
-function WaveParticles() {
-    const particleCount = 500;
-    const [initialData] = useState(() => {
-        const positions = new Float32Array(particleCount * 3);
-        const angles = [];
-        const radii = [];
-        for(let i=0; i<particleCount; i++) {
-             angles.push(Math.random() * Math.PI * 2);
-             radii.push(Math.random() * 10);
-             positions[i*3] = 0;
-             positions[i*3+1] = 0;
-             positions[i*3+2] = 0;
-        }
-        return { positions, angles, radii };
-    });
-    
-    const particlesRef = useRef<THREE.Points>(null);
-    const radiiRef = useRef([...initialData.radii]);
 
-    useFrame(({ clock }) => {
-       if (!particlesRef.current) return;
-       const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
-       const t = clock.getElapsedTime() * 4;
-       
-       for(let i=0; i<particleCount; i++) {
-           radiiRef.current[i] += 0.05; 
-           if(radiiRef.current[i] > 10) radiiRef.current[i] = 0;
-           
-           const r = radiiRef.current[i];
-           const angle = initialData.angles[i];
-           
-           const k = 2;
-           const phase = k * r - t;
-           
-           // Vertical Polarization: Vibrates Up/Down (Y axis)
-           const y = Math.sin(phase) * 1.5;
-           
-           positions[i*3] = Math.cos(angle) * r;
-           positions[i*3+1] = y + 1; // Center height offset
-           positions[i*3+2] = Math.sin(angle) * r;
-       }
-       particlesRef.current.geometry.attributes.position.needsUpdate = true;
-    });
 
-    return (
-         <points ref={particlesRef}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={particleCount}
-                    args={[initialData.positions, 3]}
-                />
-            </bufferGeometry>
-            <pointsMaterial color="#22d3ee" size={0.15} transparent opacity={0.6} />
-        </points>
-    );
-}
+
 
 function GPAntenna() {
     const radials = 4;
@@ -145,7 +92,7 @@ function RadiationPattern() {
      <group position={[0, 3, 0]}>
         <mesh geometry={geometry}>
             <meshBasicMaterial 
-                color="#8b5cf6" 
+                color="#22c55e" 
                 wireframe={true} 
                 transparent={true} 
                 opacity={0.3} 
@@ -155,67 +102,90 @@ function RadiationPattern() {
   );
 }
 
-export default function GPAntennaScene() {
-    const [showPattern, setShowPattern] = useState(true);
+export default function GPAntennaScene({ isThumbnail = false }: { isThumbnail?: boolean }) {
     const [showWaves, setShowWaves] = useState(true);
+    const [showPattern, setShowPattern] = useState(true);
 
     return (
-        <div className="relative w-full h-[450px] md:h-[600px] border rounded-lg overflow-hidden bg-black touch-none">
-            <Canvas camera={{ position: [10, 5, 10], fov: 45 }}>
+        <div className={`relative w-full ${isThumbnail ? 'h-full' : 'h-[450px] md:h-[600px]'} border rounded-lg overflow-hidden bg-black touch-none`}>
+            <Canvas 
+                camera={{ position: [10, 5, 10], fov: 45 }}
+                frameloop={isThumbnail ? "demand" : "always"}
+            >
                 <color attach="background" args={["#111111"]} />
                 <fog attach="fog" args={["#111111", 10, 50]} />
-                <OrbitControls enableDamping dampingFactor={0.05} target={[0, 3, 0]} />
                 
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 10, 10]} intensity={1} />
+                {!isThumbnail && <OrbitControls enableDamping dampingFactor={0.05} target={[0, 3, 0]} />}
                 
-                <gridHelper args={[20, 20, 0x333333, 0x222222]} />
+                <ambientLight intensity={0.5} color={0x404040} />
+                <directionalLight position={[10, 10, 10]} intensity={1} color={0xffffff} />
                 
+                <axesHelper args={[5]} />
+                <gridHelper args={[20, 20, 0x333333, 0x222222]} position={[0,-3,0]} />
+
                 <GPAntenna />
                 {showPattern && <RadiationPattern />}
                 {showWaves && (
                     <group position={[0, 3, 0]}>
-                        <WaveParticles />
+                        <RadialWaveLines antennaType="gp" polarizationType="vertical" isThumbnail={isThumbnail} />
                     </group>
                 )}
-                
             </Canvas>
 
-            <div className="absolute top-4 left-4 p-4 bg-black/70 text-white rounded-lg pointer-events-none select-none max-w-xs">
-                <h1 className="text-xl font-bold text-violet-500 mb-2">GP天线 (Ground Plane)</h1>
-                <p className="text-xs text-gray-300 mb-2">
-                    最常见的垂直全向天线。由一根垂直振子和若干根地网 (Radials) 组成。
-                </p>
-                <div className="space-y-1 text-xs">
-                    <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                        <span>垂直振子 (Radiator)</span>
+            {!isThumbnail && (
+                <>
+                    <div className="absolute top-4 left-4 right-4 md:right-auto md:w-auto p-3 md:p-4 bg-black/70 text-white rounded-lg max-w-full md:max-w-xs pointer-events-none select-none">
+                        <h2 className="text-lg md:text-xl font-bold mb-2">GP天线 (Ground Plane)</h2>
+                        <p className="text-xs md:text-sm text-gray-300 mb-2">
+                             最常见的垂直全向天线。由一根垂直振子和若干根地网 (Radials) 组成。
+                            <br />
+                            A vertical radiator with radials acting as a ground plane.
+                        </p>
+                        
+                        <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-sm" />
+                                <span>垂直接地振子 (有源 / Radiator)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-blue-500 rounded-sm" />
+                                <span>地网 (无源 / Radials)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
+                                <span>辐射方向图 (Pattern)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
+                                <span>电磁波</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-col space-y-3 pointer-events-auto">
+                            <div className="flex items-center space-x-2">
+                                <Switch 
+                                    id="wave-mode" 
+                                    checked={showWaves}
+                                    onCheckedChange={setShowWaves}
+                                />
+                                <Label htmlFor="wave-mode" className="text-xs md:text-sm">显示电波 (Show Waves)</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Switch 
+                                    id="pattern-mode" 
+                                    checked={showPattern}
+                                    onCheckedChange={setShowPattern}
+                                />
+                                <Label htmlFor="pattern-mode" className="text-xs md:text-sm">显示方向图 (Show Pattern)</Label>
+                            </div>
+                        </div>
                     </div>
-                     <div className="flex items-center gap-2">
-                         <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                         <span>地网 (Radials) - 模拟地平面</span>
+                
+                    <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
+                        Created by BG4IST - For Ham Radio Education
                     </div>
-                    <div className="flex items-center gap-2">
-                         <span className="w-2 h-2 bg-violet-500 rounded-full"></span>
-                        <span>方向图 (Violet)</span>
-                    </div>
-                     <div className="flex items-center gap-2">
-                         <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
-                        <span>电波 (Cyan)</span>
-                    </div>
-                </div>
-            </div>
-             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto bg-black/70 p-3 rounded-lg backdrop-blur-sm shadow-xl border border-white/10">
-                <div className="flex items-center space-x-2">
-                    <Switch id="show-pattern" checked={showPattern} onCheckedChange={setShowPattern} />
-                    <Label htmlFor="show-pattern" className="text-white text-xs cursor-pointer">方向图</Label>
-                </div>
-                <div className="w-px h-4 bg-white/20"></div>
-                <div className="flex items-center space-x-2">
-                    <Switch id="show-waves" checked={showWaves} onCheckedChange={setShowWaves} />
-                    <Label htmlFor="show-waves" className="text-white text-xs cursor-pointer">电波</Label>
-                </div>
-            </div>
+                </>
+            )}
         </div>
     );
 }

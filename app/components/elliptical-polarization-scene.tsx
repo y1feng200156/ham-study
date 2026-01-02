@@ -1,9 +1,11 @@
 import { OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
-import type * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
+import { useMemo, useState } from "react";
+import * as THREE from "three";
 import { Label } from "~/components/ui/label";
 import { Slider } from "~/components/ui/slider";
+import { Switch } from "~/components/ui/switch";
+import { RadialWaveLines } from "./radial-wave-lines";
 
 function GenericAntenna() {
   return (
@@ -20,96 +22,66 @@ function GenericAntenna() {
   );
 }
 
-function WaveParticles({ ampY, ampZ, phaseShift }: { ampY: number, ampZ: number, phaseShift: number }) {
-    const particleCount = 600;
-    
-    // Initial state
-    const [initialData] = useState(() => {
-        const initialOffsets = [];
-        const positions = new Float32Array(particleCount * 3);
+function RadiationPattern({ ampY, ampZ }: { ampY: number, ampZ: number }) {
+  const geometry = useMemo(() => {
+    // Elliptical pattern logic
+    const geo = new THREE.SphereGeometry(1, 60, 40);
+    const posAttribute = geo.attributes.position;
+    const vertex = new THREE.Vector3();
+    const scale = 8;
 
-        for (let i = 0; i < particleCount; i++) {
-            initialOffsets.push(Math.random() * 20); // Spread along X axis
-            positions[i * 3] = 0;
-            positions[i * 3 + 1] = 0;
-            positions[i * 3 + 2] = 0;
-        }
-        return { initialOffsets, positions };
-    });
+    const maxAmp = Math.max(ampY, ampZ, 0.1);
+    const normY = ampY / maxAmp;
+    const normZ = ampZ / maxAmp;
 
-    const particlesRef = useRef<THREE.Points>(null);
-    const offsetsRef = useRef([...initialData.initialOffsets]);
-
-    useFrame(({ clock }) => {
-        if (!particlesRef.current) return;
+    for (let i = 0; i < posAttribute.count; i++) {
+        vertex.fromBufferAttribute(posAttribute, i);
+        vertex.normalize();
         
-        const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
-        const t = clock.getElapsedTime() * 4; 
+        const gainVerticalPol = Math.sqrt(vertex.x * vertex.x + vertex.z * vertex.z);
+        const gainHorizontalPol = Math.sqrt(vertex.x * vertex.x + vertex.y * vertex.y);
         
-        const k = 1.0; 
-        const phaseShiftRad = (phaseShift * Math.PI) / 180;
-
-        for (let i = 0; i < particleCount; i++) {
-            // Move particle along X
-            offsetsRef.current[i] += 0.05; 
-            
-            if (offsetsRef.current[i] > 15) {
-                offsetsRef.current[i] = -2; // Reset
-            }
-            
-            const x = offsetsRef.current[i];
-            
-            // Wave equation
-            const angle = k * x - t;
-            
-            const y = ampY * Math.cos(angle);
-            const z = ampZ * Math.cos(angle + phaseShiftRad); // Apply phase shift to Z component relative to Y
-            
-            if (x < -2) {
-                positions[i * 3] = x;
-                positions[i * 3 + 1] = 0;
-                positions[i * 3 + 2] = 0;
-            } else {
-                positions[i * 3] = x;
-                positions[i * 3 + 1] = y;
-                positions[i * 3 + 2] = z;
-            }
-        }
+        // Combine
+        const gain = (normY * gainVerticalPol + normZ * gainHorizontalPol) / (normY + normZ + 0.001);
         
-        particlesRef.current.geometry.attributes.position.needsUpdate = true;
-    });
+        vertex.multiplyScalar(gain * scale);
+        posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
+    }
+    geo.computeVertexNormals();
+    return geo;
+  }, [ampY, ampZ]);
 
-    return (
-        <points ref={particlesRef}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={particleCount}
-                    args={[initialData.positions, 3]}
-                />
-            </bufferGeometry>
-            <pointsMaterial
-                color="#a855f7" // Purple
-                size={0.15}
-                transparent
-                opacity={0.8}
+  return (
+    <group>
+        <mesh geometry={geometry}>
+            <meshBasicMaterial 
+                color="#22c55e" 
+                wireframe={true} 
+                transparent={true} 
+                opacity={0.2} 
             />
-        </points>
-    );
+        </mesh>
+    </group>
+  );
 }
 
-export default function EllipticalPolarizationScene() {
+export default function EllipticalPolarizationScene({ isThumbnail = false }: { isThumbnail?: boolean }) {
     const [ampY, setAmpY] = useState(1.5);
     const [ampZ, setAmpZ] = useState(0.8);
-    const [phaseShift, setPhaseShift] = useState(90); // Degrees
+    const [phaseShift, setPhaseShift] = useState(90); 
+    const [showWaves, setShowWaves] = useState(true);
+    const [showPattern, setShowPattern] = useState(true);
 
     return (
-        <div className="relative w-full h-[450px] md:h-[600px] border rounded-lg overflow-hidden bg-black touch-none">
-            <Canvas camera={{ position: [10, 5, 10], fov: 45 }}>
+        <div className={`relative w-full ${isThumbnail ? 'h-full' : 'h-[450px] md:h-[600px]'} border rounded-lg overflow-hidden bg-black touch-none`}>
+            <Canvas 
+                camera={{ position: [10, 5, 10], fov: 45 }}
+                frameloop={isThumbnail ? "demand" : "always"}
+            >
                 <color attach="background" args={["#111111"]} />
                 <fog attach="fog" args={["#111111", 10, 50]} />
                 
-                <OrbitControls enableDamping dampingFactor={0.05} />
+                {!isThumbnail && <OrbitControls enableDamping dampingFactor={0.05} />}
                 
                 <ambientLight intensity={0.5} color={0x404040} />
                 <directionalLight position={[10, 10, 10]} intensity={1} color={0xffffff} />
@@ -118,63 +90,106 @@ export default function EllipticalPolarizationScene() {
                 <gridHelper args={[20, 20, 0x333333, 0x222222]} position={[0,-2,0]} />
 
                 <GenericAntenna />
-                <WaveParticles ampY={ampY} ampZ={ampZ} phaseShift={phaseShift} />
+                {showPattern && <RadiationPattern ampY={ampY} ampZ={ampZ} />}
+                {showWaves && <RadialWaveLines antennaType="elliptical" polarizationType="elliptical" isThumbnail={isThumbnail} />}
             </Canvas>
 
-            {/* Overlay UI */}
-             <div className="absolute top-4 left-4 right-4 md:right-auto md:w-auto p-3 md:p-4 bg-black/70 text-white rounded-lg max-w-full md:max-w-xs pointer-events-none select-none">
-                <h1 className="text-xl font-bold text-purple-400 mb-2">椭圆极化 (Elliptical Polarization)</h1>
-                 <p className="text-sm mb-2">
-                    最普遍的极化形式。垂直和水平分量的幅度和相位不完美时形成。
-                </p>
-                 <div className="text-xs text-gray-300">
-                     调整下方参数观察波形变化。当幅度相等且相位差90度时为圆极化。
-                 </div>
-            </div>
+            {!isThumbnail && (
+                <>
+                    <div className="absolute top-4 left-4 right-4 md:right-auto md:w-auto p-3 md:p-4 bg-black/70 text-white rounded-lg max-w-full md:max-w-xs pointer-events-none select-none overflow-y-auto max-h-[90%]">
+                        <h2 className="text-lg md:text-xl font-bold mb-2">椭圆极化 (Elliptical Polarization)</h2>
+                        <p className="text-xs md:text-sm text-gray-300 mb-2">
+                            最普遍的极化形式。垂直和水平分量的幅度和相位不完美时形成。
+                             <br />
+                            The general form where E-field traces an ellipse.
+                        </p>
+                        
+                        <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-sm" />
+                                <span>振子 (有源)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-gray-400 rounded-sm" />
+                                <span>无源元件/地网</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
+                                <span>辐射方向图</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
+                                <span>电磁波</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-col space-y-4 pointer-events-auto">
+                            <div className="flex items-center space-x-2">
+                                <Switch 
+                                    id="wave-mode" 
+                                    checked={showWaves}
+                                    onCheckedChange={setShowWaves}
+                                />
+                                <Label htmlFor="wave-mode" className="text-xs md:text-sm">显示电波 (Show Waves)</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Switch 
+                                    id="pattern-mode" 
+                                    checked={showPattern}
+                                    onCheckedChange={setShowPattern}
+                                />
+                                <Label htmlFor="pattern-mode" className="text-xs md:text-sm">显示方向图 (Show Pattern)</Label>
+                            </div>
 
-            <div className="absolute bottom-6 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 flex flex-col gap-4 pointer-events-auto bg-black/70 p-4 rounded-lg backdrop-blur-sm w-full md:w-80">
-                <div className="space-y-2">
-                    <div className="flex justify-between text-white text-xs">
-                        <Label>垂直幅度 (Y)</Label>
-                        <span>{ampY.toFixed(1)}</span>
+                            <div className="space-y-1">
+                                <div className="flex justify-between text-white text-xs">
+                                    <Label>垂直幅度 (Amp Y)</Label>
+                                    <span>{ampY.toFixed(1)}</span>
+                                </div>
+                                <Slider
+                                    value={[ampY]}
+                                    min={0}
+                                    max={3}
+                                    step={0.1}
+                                    onValueChange={(vals: number[]) => setAmpY(vals[0])}
+                                />
+                            </div>
+                            
+                            <div className="space-y-1">
+                                <div className="flex justify-between text-white text-xs">
+                                    <Label>水平幅度 (Amp Z)</Label>
+                                    <span>{ampZ.toFixed(1)}</span>
+                                </div>
+                                <Slider
+                                    value={[ampZ]}
+                                    min={0}
+                                    max={3}
+                                    step={0.1}
+                                    onValueChange={(vals: number[]) => setAmpZ(vals[0])}
+                                />
+                            </div>
+                            
+                            <div className="space-y-1">
+                                <div className="flex justify-between text-white text-xs">
+                                    <Label>相位差 (Phase Shift)</Label>
+                                    <span>{phaseShift.toFixed(0)}°</span>
+                                </div>
+                                <Slider
+                                    value={[phaseShift]}
+                                    min={0}
+                                    max={180}
+                                    step={1}
+                                    onValueChange={(vals: number[]) => setPhaseShift(vals[0])}
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <Slider
-                        value={[ampY]}
-                        min={0}
-                        max={3}
-                        step={0.1}
-                        onValueChange={(vals: number[]) => setAmpY(vals[0])}
-                    />
-                </div>
                 
-                <div className="space-y-2">
-                    <div className="flex justify-between text-white text-xs">
-                        <Label>水平幅度 (Z)</Label>
-                        <span>{ampZ.toFixed(1)}</span>
+                    <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
+                        Created by BG4IST - For Ham Radio Education
                     </div>
-                    <Slider
-                        value={[ampZ]}
-                        min={0}
-                        max={3}
-                        step={0.1}
-                        onValueChange={(vals: number[]) => setAmpZ(vals[0])}
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <div className="flex justify-between text-white text-xs">
-                        <Label>相位差 (Phase)</Label>
-                        <span>{phaseShift}°</span>
-                    </div>
-                    <Slider
-                        value={[phaseShift]}
-                        min={0}
-                        max={180}
-                        step={15}
-                        onValueChange={(vals: number[]) => setPhaseShift(vals[0])}
-                    />
-                </div>
-            </div>
+                </>
+            )}
         </div>
     );
 }

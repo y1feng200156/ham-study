@@ -1,10 +1,10 @@
 import type { Route } from "./+types/sitemap.xml";
 
 export const loader = ({ request }: Route.LoaderArgs) => {
-  const url = new URL(request.url);
-  const origin = url.origin;
+	const url = new URL(request.url);
+	const origin = url.origin;
 
-  const content = `<?xml version="1.0" encoding="UTF-8"?>
+	const content = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${origin}/</loc>
@@ -64,12 +64,12 @@ export const loader = ({ request }: Route.LoaderArgs) => {
 </urlset>
 `;
 
-  return new Response(content, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/xml",
-      "xml-version": "1.0",
-      encoding: "UTF-8",
-    },
-  });
+	return new Response(content, {
+		status: 200,
+		headers: {
+			"Content-Type": "application/xml",
+			"xml-version": "1.0",
+			encoding: "UTF-8",
+		},
+	});
 };

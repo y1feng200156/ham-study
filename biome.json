@@ -10,7 +10,7 @@
 		"includes": ["**", "!**/node_modules", "!**/build", "!**/.react-router"]
 	},
 	"formatter": {
-		"enabled": false
+		"enabled": true
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {

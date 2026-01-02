@@ -1,5 +1,5 @@
+import { BellIcon, BluetoothIcon, CodeIcon, CreditCardIcon, DotsThreeOutlineIcon, DotsThreeVerticalIcon, DownloadIcon, EnvelopeIcon, EyeIcon, FileIcon, FileTextIcon, FloppyDiskIcon, FolderIcon, FolderOpenIcon, GearIcon, KeyboardIcon, LayoutIcon, MagnifyingGlassIcon, MonitorIcon, MoonIcon, PaletteIcon, PlusIcon, QuestionIcon, ShieldIcon, SignOutIcon, SunIcon, TranslateIcon, UserIcon } from "@phosphor-icons/react"
 import * as React from "react"
-
 import {
   Example,
   ExampleWrapper,
@@ -63,7 +63,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { Textarea } from "~/components/ui/textarea"
-import { PlusIcon, BluetoothIcon, DotsThreeVerticalIcon, FileIcon, FolderIcon, FolderOpenIcon, CodeIcon, DotsThreeOutlineIcon, MagnifyingGlassIcon, FloppyDiskIcon, DownloadIcon, EyeIcon, LayoutIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon, UserIcon, CreditCardIcon, GearIcon, KeyboardIcon, TranslateIcon, BellIcon, EnvelopeIcon, ShieldIcon, QuestionIcon, FileTextIcon, SignOutIcon } from "@phosphor-icons/react"
 
 export function ComponentExample() {
   return (
@@ -81,7 +80,7 @@ function CardExample() {
         <div className="bg-primary absolute inset-0 z-30 aspect-video opacity-50 mix-blend-color" />
         <img
           src="https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Photo by mymind on Unsplash"
+          alt="mymind on Unsplash"
           title="Photo by mymind on Unsplash"
           className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale"
         />

@@ -9,24 +9,28 @@ interface RadialWaveLinesProps {
 }
 
 export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = false }: RadialWaveLinesProps) {
-    const lineCount = 12; // 12条射线
-    const segments = 120;  // 增加段数以获得更平滑的高频波
-    const maxDist = 25;
+    const lineCount = 20; // Increased line count for better density
+    const segments = 250;  // Increased segments for smoother high-freq waves
+    const maxDist = 30;
+    const minStart = 0.6; // Start from antenna surface
 
-    // Create 12 line objects
+    // Create line objects with vertex colors
     const lines = useMemo(() => {
         const linesArray: THREE.Line[] = [];
         
         for (let i = 0; i < lineCount; i++) {
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(segments * 3);
+            const colors = new Float32Array(segments * 3);
+
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
             
             const material = new THREE.LineBasicMaterial({
-                color: 0x22d3ee, // Cyan color matching legend
-                linewidth: 2,
+                vertexColors: true, // Enable vertex colors for pulse effect
+                blending: THREE.AdditiveBlending, // Additive blending for glow look
                 transparent: true,
-                opacity: 0.8
+                linewidth: 2,
             });
 
             const line = new THREE.Line(geometry, material);
@@ -54,8 +58,6 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
         if (isThumbnail) return;
         
         // Match example.html time increment logic
-        // example.html adds 0.05 per frame (at 60fps = 3.0 units/sec)
-        // Here we use elapsed time, so we multiply by 3.0 to match speed
         const time = clock.getElapsedTime() * 3.0; 
         lines.forEach(line => {
             updateLinePositions(line, time);
@@ -64,81 +66,63 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
 
     function updateLinePositions(line: THREE.Line, time: number) {
         const positions = line.geometry.attributes.position.array as Float32Array;
+        const colors = line.geometry.attributes.color.array as Float32Array;
         const theta = line.userData.theta;
 
-        // 计算射线方向 (在XZ平面上)
         const dirX = Math.cos(theta);
         const dirZ = Math.sin(theta);
         const dirVec = new THREE.Vector3(dirX, 0, dirZ).normalize();
 
-        // 计算该方向上的天线增益
         const gain = calculateGain(dirVec);
 
-        // 更新该线的每个顶点
         for (let j = 0; j < segments; j++) {
-            const r = (j / segments) * maxDist; // 距离中心的距离
-
-            // 基础位置 (在射线上)
+            // Distance from minStart
+            const r = minStart + (j / segments) * (maxDist - minStart);
+            
             const baseX = dirX * r;
             const baseZ = dirZ * r;
 
-            // --- 关键修改 ---
-            // 1. 增加波数 K: 从1.5 -> 4.5。波长变短，波更密集，消除“长绳感”。
-            // 2. 增加频率 W: 配合波长保持流动感。
-            const k = 4.5;
-            const w = 8.0;
+            // Physics parameters from example.html
+            const k = 2.0;
+            const w = 6.0;
             const phase = k * r - time * w;
 
-            // 3. 极速起振 (Super Fast Attack):
-            // exp(-r * 8.0) 意味着在 r=0.5时包络已经接近1.0了。
-            // 这样波形看起来就是直接从原点喷出来的，而不是有一段直棍子。
-            const startEnvelope = 1.0 - Math.exp(-r * 8.0);
-
-            // 4. 末端自然消散
+            // Removed start envelope for "instant out" effect
+            // End envelope for natural fade out
             const endEnvelope = Math.max(
                 0,
-                1.0 - Math.pow(r / (maxDist * 0.9), 4)
+                1.0 - Math.pow(r / (maxDist * 0.95), 3)
             );
+            
+            const decay = 4.0 / (r + 1.0);
 
-            // 5. 增强距离衰减: 让中心能量看起来很强，强调“点源”
-            const decay = 5.0 / (r + 1.5);
-
-            const amp = decay * gain * startEnvelope * endEnvelope;
+            const amp = decay * gain * endEnvelope;
             const waveVal = Math.sin(phase);
 
             let x = baseX;
             let y = 0;
             let z = baseZ;
 
-            // 根据极化方式添加偏移
             if (polarizationType === 'vertical') {
-                // 垂直极化：Y轴振动
                 y = amp * waveVal;
             } else if (polarizationType === 'horizontal') {
-                // 水平极化：切向振动
                 const tanX = -Math.sin(theta);
                 const tanZ = Math.cos(theta);
                 x += tanX * amp * waveVal;
                 z += tanZ * amp * waveVal;
             } else if (polarizationType === 'circular') {
-                // 圆极化：螺旋
                 const vComp = Math.sin(phase);
                 const hComp = Math.cos(phase);
-
                 const tanX = -Math.sin(theta);
                 const tanZ = Math.cos(theta);
-
                 y = amp * vComp;
                 x += tanX * amp * hComp;
                 z += tanZ * amp * hComp;
             } else if (polarizationType === 'elliptical') {
-                // 椭圆极化：类似圆极化但椭圆比例
                 const vComp = Math.sin(phase);
-                const hComp = Math.cos(phase) * 0.6; // Elliptical ratio
-
+                const hComp = Math.cos(phase) * 0.6;
                 const tanX = -Math.sin(theta);
                 const tanZ = Math.cos(theta);
-
                 y = amp * vComp;
                 x += tanX * amp * hComp;
                 z += tanZ * amp * hComp;
@@ -147,8 +131,21 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
             positions[j * 3] = x;
             positions[j * 3 + 1] = y;
             positions[j * 3 + 2] = z;
+
+            // --- Pulse Color Logic ---
+            // High intensity at wave peaks, transparent at nodes
+            let intensity = Math.pow(Math.abs(waveVal), 3.0);
+            intensity *= Math.min(1.0, r * 0.5); // Prevent start artifact
+            intensity *= endEnvelope;
+
+            // Cyan color (0, 1, 1)
+            colors[j * 3] = 0.0 * intensity;     // R
+            colors[j * 3 + 1] = 1.0 * intensity; // G
+            colors[j * 3 + 2] = 1.0 * intensity; // B
         }
+        
         line.geometry.attributes.position.needsUpdate = true;
+        line.geometry.attributes.color.needsUpdate = true;
     }
 
     function calculateGain(dirVec: THREE.Vector3): number {
@@ -157,17 +154,17 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
         switch (antennaType) {
             case 'vertical':
             case 'gp':
-                gain = 1.0; // Omnidirectional
+                gain = 1.0; 
                 break;
 
             case 'horizontal':
             case 'inverted-v':
             case 'positive-v':
-                gain = Math.abs(dirVec.z); // Max at ±Z
+                gain = Math.abs(dirVec.z); 
                 break;
 
             case 'yagi':
-                gain = dirVec.x > 0 ? dirVec.x ** 2 : 0.1;
+                gain = dirVec.x > 0 ? Math.pow(dirVec.x, 2) : 0.1;
                 break;
 
             case 'quad':
@@ -181,7 +178,7 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
 
             case 'circular':
             case 'elliptical':
-                gain = 1.0; // Nearly omnidirectional
+                gain = 1.0;
                 break;
         }
 

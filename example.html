@@ -168,7 +168,7 @@
       <div class="legend"><span class="box red"></span>振子 (有源)</div>
       <div class="legend"><span class="box grey"></span>无源元件/地网</div>
       <div class="legend"><span class="box green"></span>辐射方向图</div>
-      <div class="legend"><span class="box blue"></span>电磁波 (波形线)</div>
+      <div class="legend"><span class="box blue"></span>电磁波 (脉冲波)</div>
     </div>
 
     <div id="controls">
@@ -282,7 +282,6 @@
           .rotateX(Math.PI / 2)
           .rotateZ(Math.PI / 2)
       ); // ref fix position
-      // 修正Yagi组件位置逻辑，直接用Mesh避免复杂变换
       function createYagiElement(len, x, mat) {
         const el = new THREE.Mesh(
           new THREE.CylinderGeometry(0.1, 0.1, len, 16),
@@ -439,27 +438,34 @@
       );
       scene.add(patternMesh);
 
-      // --- 波浪线系统 ---
+      // --- 波浪线系统 (使用VertexColors实现脉冲效果) ---
       const waveLinesGroup = new THREE.Group();
       scene.add(waveLinesGroup);
-      const lineCount = 12;
-      const segments = 120; // 增加段数以获得更平滑的高频波
-      const maxDist = 25;
+      const lineCount = 20;
+      const segments = 250;
+      const maxDist = 30;
+      const minStart = 0.6; // 从天线表面开始，而不是中心
       const waveLines = [];
 
       for (let i = 0; i < lineCount; i++) {
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(segments * 3);
+        const colors = new Float32Array(segments * 3); // 颜色通道
+
         geometry.setAttribute(
           "position",
           new THREE.BufferAttribute(positions, 3)
         );
+        geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+        // 使用顶点颜色材质，AdditiveBlending实现高亮叠加
         const material = new THREE.LineBasicMaterial({
-          color: 0x00ffff,
-          linewidth: 2,
+          vertexColors: true,
+          blending: THREE.AdditiveBlending,
           transparent: true,
-          opacity: 0.8,
+          linewidth: 2,
         });
+
         const line = new THREE.Line(geometry, material);
         line.userData = { theta: (i / lineCount) * Math.PI * 2 };
         waveLines.push(line);
@@ -478,55 +484,55 @@
           id: 0,
           name: "垂直偶极子 (Vertical)",
           obj: antVertical,
-          desc: "全向辐射。请注意：波形上下起伏 (Y轴)。",
+          desc: "全向辐射。请注意：波形是向外飞出的脉冲。",
         },
         {
           id: 1,
           name: "水平偶极子 (Horizontal)",
           obj: antHorizontal,
-          desc: "全向(垂直面)，8字形(水平面)。波形左右摆动 (蛇形)。",
+          desc: "全向(垂直面)，8字形(水平面)。",
         },
         {
           id: 2,
           name: "圆极化 (Circular)",
           obj: antCircular,
-          desc: "螺旋前进。波形像开瓶器一样旋转。",
+          desc: "螺旋前进。波形像开瓶器一样旋转飞出。",
         },
         {
           id: 3,
           name: "八木天线 (Yagi)",
           obj: antYagi,
-          desc: "强定向(+X)。只有前方的波形振幅大，后方几乎是直的。",
+          desc: "强定向(+X)。能量主要向前喷射。",
         },
         {
           id: 4,
           name: "倒V天线 (Inverted V)",
           obj: antInvV,
-          desc: "水平偶极子的变形。波形近似水平极化。",
+          desc: "水平偶极子的变形。",
         },
         {
           id: 5,
           name: "GP天线 (Ground Plane)",
           obj: antGP,
-          desc: "垂直单极天线。波形上下起伏，类似垂直偶极子。",
+          desc: "垂直单极天线。垂直极化波。",
         },
         {
           id: 6,
           name: "正V天线 (Positive V)",
           obj: antPosV,
-          desc: "波形具有一定的定向性。",
+          desc: "具有一定的定向性。",
         },
         {
           id: 7,
           name: "方框天线 (Loop/Quad)",
           obj: antLoop,
-          desc: "前后双向辐射。侧面无波形。",
+          desc: "前后双向辐射。",
         },
         {
           id: 8,
           name: "莫克森 (Moxon)",
           obj: antMoxon,
-          desc: "前方波形宽，后方波形极小 (高前后比)。",
+          desc: "高前后比，后方非常干净。",
         },
       ];
       let currentMode = 0;
@@ -548,8 +554,8 @@
         modeSelect.value = currentMode;
 
         // Adjust wave origin
-        if (currentMode === 3 || currentMode === 8)
-          waveLinesGroup.position.set(-1, 0, 0);
+        if (currentMode === 3) waveLinesGroup.position.set(-1, 0, 0);
+        else if (currentMode === 8) waveLinesGroup.position.set(1, 0, 0);
         else waveLinesGroup.position.set(0, 0, 0);
 
         patternMesh.rotation.set(0, 0, 0);
@@ -582,7 +588,7 @@
       let time = 0;
       function animate() {
         requestAnimationFrame(animate);
-        time += 0.05;
+        time += 0.02; // 适中的速度
         controls.update();
 
         // 1. Update Pattern
@@ -630,10 +636,11 @@
           pos.needsUpdate = true;
         }
 
-        // 2. Update Wave Lines
+        // 2. Update Wave Lines (Pulse Mode)
         if (waveLinesGroup.visible) {
           waveLines.forEach((line) => {
             const positions = line.geometry.attributes.position.array;
+            const colors = line.geometry.attributes.color.array;
             const theta = line.userData.theta;
             const dirX = Math.cos(theta);
             const dirZ = Math.sin(theta);
@@ -656,32 +663,26 @@
             }
 
             for (let j = 0; j < segments; j++) {
-              const r = (j / segments) * maxDist;
+              // 距离从天线表面开始 (minStart)
+              const r = minStart + (j / segments) * (maxDist - minStart);
               const baseX = dirX * r;
               const baseZ = dirZ * r;
 
-              // --- 关键修改 ---
-              // 1. 增加波数 K: 从1.5 -> 4.5。波长变短，波更密集，消除“长绳感”。
-              // 2. 增加频率 W: 配合波长保持流动感。
-              const k = 4.5;
-              const w = 8.0;
+              // 波动参数
+              const k = 2.0;
+              const w = 6.0;
               const phase = k * r - time * w;
 
-              // 3. 极速起振 (Super Fast Attack):
-              // exp(-r * 8.0) 意味着在 r=0.5时包络已经接近1.0了。
-              // 这样波形看起来就是直接从原点喷出来的，而不是有一段直棍子。
-              const startEnvelope = 1.0 - Math.exp(-r * 8.0);
-
-              // 4. 末端自然消散
+              // 移除起步缓动 (Start Envelope)，让波直接存在
+              // 仅保留末端自然消散
               const endEnvelope = Math.max(
                 0,
-                1.0 - Math.pow(r / (maxDist * 0.9), 4)
+                1.0 - Math.pow(r / (maxDist * 0.95), 3)
               );
+              const decay = 4.0 / (r + 1.0);
 
-              // 5. 增强距离衰减: 让中心能量看起来很强，强调“点源”
-              const decay = 5.0 / (r + 1.5);
-
-              const amp = decay * gain * startEnvelope * endEnvelope;
+              // 基础振幅
+              const amp = decay * gain * endEnvelope;
               const waveVal = Math.sin(phase);
 
               let x = baseX;
@@ -711,11 +712,26 @@
                 x += tanX * amp * hComp;
                 z += tanZ * amp * hComp;
               }
+
               positions[j * 3] = x;
               positions[j * 3 + 1] = y;
               positions[j * 3 + 2] = z;
+
+              // --- 颜色处理 (关键) ---
+              // 根据波峰波谷计算透明度。
+              // Math.abs(waveVal) 接近1时最亮，接近0时全透明。
+              // pow(..., 3) 是为了让亮的部分更窄，看起来更像独立的脉冲。
+              let intensity = Math.pow(Math.abs(waveVal), 3.0);
+              intensity *= Math.min(1.0, r * 0.5); // 防止在极近处太亮刺眼
+              intensity *= endEnvelope; // 末端淡出
+
+              // 基础青色 (0, 1, 1)
+              colors[j * 3] = 0.0 * intensity; // R
+              colors[j * 3 + 1] = 1.0 * intensity; // G
+              colors[j * 3 + 2] = 1.0 * intensity; // B
             }
             line.geometry.attributes.position.needsUpdate = true;
+            line.geometry.attributes.color.needsUpdate = true;
           });
         }
 

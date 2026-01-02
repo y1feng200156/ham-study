@@ -89,6 +89,120 @@ export default function Home() {
             </Button>
           </CardFooter>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>八木-宇田天线 (Yagi-Uda Antenna)</CardTitle>
+            <CardDescription>
+               著名的定向天线，由引向器、有源振子和反射器组成。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/yagi-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>倒V天线 (Inverted V Antenna)</CardTitle>
+            <CardDescription>
+               架设简便的偶极子变种，中间高两端低。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/inverted-v-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>GP天线 (Ground Plane Antenna)</CardTitle>
+            <CardDescription>
+               垂直单极天线，带有水平或下倾的地网 (Radials)。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/gp-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>正V天线 (Positive V Antenna)</CardTitle>
+            <CardDescription>
+               两臂向上翘起的偶极子，适合楼顶架设，更加安全紧凑。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/positive-v-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>方框天线 (Quad Antenna)</CardTitle>
+            <CardDescription>
+               方形回路构成的定向天线，具有高增益和低底噪的特点。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/quad-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>莫克森天线 (Moxon Antenna)</CardTitle>
+            <CardDescription>
+               矩形紧凑型定向天线，拥有卓越的前后比和宽带宽。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/moxon-antenna">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

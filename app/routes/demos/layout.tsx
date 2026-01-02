@@ -20,6 +20,12 @@ export default function DemosLayout() {
     "horizontal-polarization": "水平极化 (Horizontal Polarization)",
     "circular-polarization": "圆极化 (Circular Polarization)",
     "elliptical-polarization": "椭圆极化 (Elliptical Polarization)",
+    "yagi-antenna": "八木-宇田天线 (Yagi-Uda Antenna)",
+    "inverted-v-antenna": "倒V天线 (Inverted V Antenna)",
+    "gp-antenna": "GP天线 (Ground Plane Antenna)",
+    "positive-v-antenna": "正V天线 (Positive V Antenna)",
+    "quad-antenna": "方框天线 (Quad Antenna)",
+    "moxon-antenna": "莫克森天线 (Moxon Antenna)",
   };
 
   const currentPath = location.pathname.split("/").pop() || "";

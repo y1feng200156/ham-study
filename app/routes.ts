@@ -26,5 +26,11 @@ export default [
       "demos/elliptical-polarization",
       "routes/demos/elliptical-polarization.tsx"
     ),
+    route("demos/yagi-antenna", "routes/demos/yagi-antenna.tsx"),
+    route("demos/inverted-v-antenna", "routes/demos/inverted-v-antenna.tsx"),
+    route("demos/gp-antenna", "routes/demos/gp-antenna.tsx"),
+    route("demos/positive-v-antenna", "routes/demos/positive-v-antenna.tsx"),
+    route("demos/quad-antenna", "routes/demos/quad-antenna.tsx"),
+    route("demos/moxon-antenna", "routes/demos/moxon-antenna.tsx"),
   ]),
 ] satisfies RouteConfig;

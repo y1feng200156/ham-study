@@ -208,8 +208,8 @@ export default function VerticalPolarizationScene() {
                         checked={showPattern}
                         onCheckedChange={setShowPattern}
                     />
-                    <Label htmlFor="show-pattern" className="text-white text-sm font-medium cursor-pointer">
-                        显示方向图
+                    <Label htmlFor="show-pattern" className="text-white text-xs cursor-pointer">
+                        方向图
                     </Label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -218,8 +218,8 @@ export default function VerticalPolarizationScene() {
                         checked={showWaves}
                         onCheckedChange={setShowWaves}
                     />
-                    <Label htmlFor="show-waves" className="text-white text-sm font-medium cursor-pointer">
-                        显示电波动画
+                    <Label htmlFor="show-waves" className="text-white text-xs cursor-pointer">
+                        电波
                     </Label>
                 </div>
             </div>

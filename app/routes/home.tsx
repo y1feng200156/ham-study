@@ -22,19 +22,19 @@ import YagiAntennaScene from "../components/yagi-antenna-scene";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "首页 | 业余无线电可视化" },
+    { title: "业余无线电可视化" },
     {
       name: "description",
       content:
         "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
     },
-    { property: "og:title", content: "首页 | 业余无线电可视化" },
+    { property: "og:title", content: "业余无线电可视化" },
     {
       property: "og:description",
       content:
         "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
     },
-    { name: "twitter:title", content: "首页 | 业余无线电可视化" },
+    { name: "twitter:title", content: "业余无线电可视化" },
     {
       name: "twitter:description",
       content:

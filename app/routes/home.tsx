@@ -7,6 +7,7 @@ import GPAntennaScene from "../components/gp-antenna-scene";
 import HorizontalPolarizationScene from "../components/horizontal-polarization-scene";
 import InvertedVAntennaScene from "../components/inverted-v-scene";
 import MoxonAntennaScene from "../components/moxon-antenna-scene";
+import EndFedAntennaScene from "../components/end-fed-antenna-scene";
 import PositiveVAntennaScene from "../components/positive-v-scene";
 import QuadAntennaScene from "../components/quad-antenna-scene";
 import { Button } from "../components/ui/button";
@@ -112,6 +113,12 @@ export default function Home() {
       description: "矩形紧凑型定向天线，拥有卓越的前后比和宽带宽。",
       href: "/demos/moxon-antenna",
       component: MoxonAntennaScene,
+    },
+    {
+      title: "端馈半波天线 (End-Fed Half Wave)",
+      description: "多波段便携天线，使用49:1阻抗变换器，一端馈电。",
+      href: "/demos/end-fed-antenna",
+      component: EndFedAntennaScene,
     },
   ];
 

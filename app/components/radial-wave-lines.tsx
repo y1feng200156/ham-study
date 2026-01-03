@@ -13,7 +13,8 @@ interface RadialWaveLinesProps {
     | "positive-v"
     | "quad"
     | "moxon"
-    | "elliptical";
+    | "elliptical"
+    | "end-fed";
   polarizationType: "vertical" | "horizontal" | "circular" | "elliptical";
   isThumbnail?: boolean;
 }
@@ -193,6 +194,11 @@ export function RadialWaveLines({
       case "circular":
       case "elliptical":
         gain = 1.0;
+        break;
+
+      case "end-fed":
+        // Similar to dipole (inverted-v/horizontal) pattern relation
+        gain = Math.sqrt(dirVec.y * dirVec.y + dirVec.z * dirVec.z);
         break;
     }
 

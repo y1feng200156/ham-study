@@ -72,7 +72,7 @@ function RadiationPattern() {
 
 			// Inverted V Pattern logic
 			const angleFromX = Math.acos(vertex.x);
-			let gain = 0.7 * Math.sin(angleFromX) + 0.3;
+			const gain = 0.7 * Math.sin(angleFromX) + 0.3;
 
 			vertex.multiplyScalar(gain * scale);
 			posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);

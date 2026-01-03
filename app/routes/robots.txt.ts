@@ -4,18 +4,17 @@ export const loader = ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   const origin = url.origin;
 
-  const content = `User-agent: *
+  const robots = `
+User-agent: *
 Allow: /
-Sitemap: ${origin}/sitemap.xml
-`;
 
-  return new Response(content, {
+Sitemap: ${origin}/sitemap.xml
+`.trim();
+
+  return new Response(robots, {
     status: 200,
     headers: {
       "Content-Type": "text/plain",
-      encoding: "UTF-8",
     },
   });
 };
-
-export default null;

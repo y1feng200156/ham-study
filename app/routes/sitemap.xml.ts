@@ -73,5 +73,3 @@ export const loader = ({ request }: Route.LoaderArgs) => {
     },
   });
 };
-
-export default null;

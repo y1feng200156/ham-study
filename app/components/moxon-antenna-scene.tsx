@@ -17,7 +17,7 @@ function MoxonAntenna() {
 			new THREE.Vector3(width / 2, 0, depth / 2), // Corner Right
 			new THREE.Vector3(0.05, 0, depth / 2), // Feedpoint Right
 		],
-		[width, depth],
+		[],
 	);
 
 	const drivenLeftPoints = useMemo(
@@ -26,7 +26,7 @@ function MoxonAntenna() {
 			new THREE.Vector3(-width / 2, 0, depth / 2), // Corner Left
 			new THREE.Vector3(-width / 2, 0, depth / 2 - 0.3), // Tip Left
 		],
-		[width, depth],
+		[],
 	);
 
 	const refPoints = useMemo(
@@ -36,7 +36,7 @@ function MoxonAntenna() {
 			new THREE.Vector3(-width / 2, 0, -depth / 2), // Corner Left
 			new THREE.Vector3(-width / 2, 0, -depth / 2 + 0.3), // Tip Left
 		],
-		[width, depth],
+		[],
 	);
 
 	const drivenRightGeo = useMemo(

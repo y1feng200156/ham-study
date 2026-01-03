@@ -186,7 +186,7 @@ export function RadialWaveLines({
 				break;
 
 			case "moxon":
-				gain = (1 + dirVec.x) * 0.5;
+				gain = (1 + dirVec.z) * 0.5;
 				if (gain < 0.2) gain = 0;
 				break;
 

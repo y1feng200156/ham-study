@@ -6,18 +6,27 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
-function MoxonAntenna() {
-	const width = 2;
-	const depth = 0.7;
+const width = 2;
+const depth = 0.7;
 
-	const drivenPoints = useMemo(
+function MoxonAntenna() {
+	// Split driven element to show feedpoint
+	const drivenRightPoints = useMemo(
 		() => [
 			new THREE.Vector3(width / 2, 0, depth / 2 - 0.3), // Tip Right
 			new THREE.Vector3(width / 2, 0, depth / 2), // Corner Right
+			new THREE.Vector3(0.05, 0, depth / 2), // Feedpoint Right
+		],
+		[width, depth],
+	);
+
+	const drivenLeftPoints = useMemo(
+		() => [
+			new THREE.Vector3(-0.05, 0, depth / 2), // Feedpoint Left
 			new THREE.Vector3(-width / 2, 0, depth / 2), // Corner Left
 			new THREE.Vector3(-width / 2, 0, depth / 2 - 0.3), // Tip Left
 		],
-		[],
+		[width, depth],
 	);
 
 	const refPoints = useMemo(
@@ -27,24 +36,41 @@ function MoxonAntenna() {
 			new THREE.Vector3(-width / 2, 0, -depth / 2), // Corner Left
 			new THREE.Vector3(-width / 2, 0, -depth / 2 + 0.3), // Tip Left
 		],
-		[],
+		[width, depth],
 	);
 
-	const drivenGeo = useMemo(
-		() => new THREE.BufferGeometry().setFromPoints(drivenPoints),
-		[drivenPoints],
+	const drivenRightGeo = useMemo(
+		() => new THREE.BufferGeometry().setFromPoints(drivenRightPoints),
+		[drivenRightPoints],
 	);
+
+	const drivenLeftGeo = useMemo(
+		() => new THREE.BufferGeometry().setFromPoints(drivenLeftPoints),
+		[drivenLeftPoints],
+	);
+
 	const refGeo = useMemo(
 		() => new THREE.BufferGeometry().setFromPoints(refPoints),
 		[refPoints],
 	);
 
-	const drivenLine = useMemo(() => {
-		return new THREE.Line(
-			drivenGeo,
-			new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
-		);
-	}, [drivenGeo]);
+	const drivenRightLine = useMemo(
+		() =>
+			new THREE.Line(
+				drivenRightGeo,
+				new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
+			),
+		[drivenRightGeo],
+	);
+
+	const drivenLeftLine = useMemo(
+		() =>
+			new THREE.Line(
+				drivenLeftGeo,
+				new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
+			),
+		[drivenLeftGeo],
+	);
 
 	const refLine = useMemo(() => {
 		return new THREE.Line(
@@ -67,8 +93,17 @@ function MoxonAntenna() {
 				<cylinderGeometry args={[0.08, 0.08, 4, 16]} />
 				<meshStandardMaterial color="#444" />
 			</mesh>
-			<primitive object={drivenLine} />
+
+			{/* Antenna Elements */}
+			<primitive object={drivenRightLine} />
+			<primitive object={drivenLeftLine} />
 			<primitive object={refLine} />
+
+			{/* Feedpoint Balun */}
+			<mesh position={[0, 0, depth / 2]}>
+				<boxGeometry args={[0.1, 0.08, 0.08]} />
+				<meshStandardMaterial color="#111" />
+			</mesh>
 		</group>
 	);
 }
@@ -85,8 +120,8 @@ function RadiationPattern() {
 			vertex.normalize();
 
 			// Moxon pattern: high front-to-back ratio
-			// Strong forward lobe in +X direction, very weak back lobe
-			let gain = (1 + vertex.x) * 0.6; // Ranges from 0 to 1.2
+			// Strong forward lobe in +Z direction (towards driven element), very weak back lobe
+			let gain = (1 + vertex.z) * 0.6; // Ranges from 0 to 1.2
 			if (gain < 0.2) {
 				gain = 0.05; // Minimal back lobe
 			}

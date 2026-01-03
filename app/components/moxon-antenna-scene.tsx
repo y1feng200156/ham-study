@@ -1,7 +1,13 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
-import * as THREE from "three";
+import {
+  BufferGeometry,
+  Line,
+  LineBasicMaterial,
+  SphereGeometry,
+  Vector3,
+} from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -13,69 +19,69 @@ function MoxonAntenna() {
   // Split driven element to show feedpoint
   const drivenRightPoints = useMemo(
     () => [
-      new THREE.Vector3(width / 2, 0, depth / 2 - 0.3), // Tip Right
-      new THREE.Vector3(width / 2, 0, depth / 2), // Corner Right
-      new THREE.Vector3(0.05, 0, depth / 2), // Feedpoint Right
+      new Vector3(width / 2, 0, depth / 2 - 0.3), // Tip Right
+      new Vector3(width / 2, 0, depth / 2), // Corner Right
+      new Vector3(0.05, 0, depth / 2), // Feedpoint Right
     ],
     [],
   );
 
   const drivenLeftPoints = useMemo(
     () => [
-      new THREE.Vector3(-0.05, 0, depth / 2), // Feedpoint Left
-      new THREE.Vector3(-width / 2, 0, depth / 2), // Corner Left
-      new THREE.Vector3(-width / 2, 0, depth / 2 - 0.3), // Tip Left
+      new Vector3(-0.05, 0, depth / 2), // Feedpoint Left
+      new Vector3(-width / 2, 0, depth / 2), // Corner Left
+      new Vector3(-width / 2, 0, depth / 2 - 0.3), // Tip Left
     ],
     [],
   );
 
   const refPoints = useMemo(
     () => [
-      new THREE.Vector3(width / 2, 0, -depth / 2 + 0.3), // Tip Right
-      new THREE.Vector3(width / 2, 0, -depth / 2), // Corner Right
-      new THREE.Vector3(-width / 2, 0, -depth / 2), // Corner Left
-      new THREE.Vector3(-width / 2, 0, -depth / 2 + 0.3), // Tip Left
+      new Vector3(width / 2, 0, -depth / 2 + 0.3), // Tip Right
+      new Vector3(width / 2, 0, -depth / 2), // Corner Right
+      new Vector3(-width / 2, 0, -depth / 2), // Corner Left
+      new Vector3(-width / 2, 0, -depth / 2 + 0.3), // Tip Left
     ],
     [],
   );
 
   const drivenRightGeo = useMemo(
-    () => new THREE.BufferGeometry().setFromPoints(drivenRightPoints),
+    () => new BufferGeometry().setFromPoints(drivenRightPoints),
     [drivenRightPoints],
   );
 
   const drivenLeftGeo = useMemo(
-    () => new THREE.BufferGeometry().setFromPoints(drivenLeftPoints),
+    () => new BufferGeometry().setFromPoints(drivenLeftPoints),
     [drivenLeftPoints],
   );
 
   const refGeo = useMemo(
-    () => new THREE.BufferGeometry().setFromPoints(refPoints),
+    () => new BufferGeometry().setFromPoints(refPoints),
     [refPoints],
   );
 
   const drivenRightLine = useMemo(
     () =>
-      new THREE.Line(
+      new Line(
         drivenRightGeo,
-        new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
+        new LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
       ),
     [drivenRightGeo],
   );
 
   const drivenLeftLine = useMemo(
     () =>
-      new THREE.Line(
+      new Line(
         drivenLeftGeo,
-        new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
+        new LineBasicMaterial({ color: "#ef4444", linewidth: 3 }),
       ),
     [drivenLeftGeo],
   );
 
   const refLine = useMemo(() => {
-    return new THREE.Line(
+    return new Line(
       refGeo,
-      new THREE.LineBasicMaterial({ color: "#3b82f6", linewidth: 3 }),
+      new LineBasicMaterial({ color: "#3b82f6", linewidth: 3 }),
     );
   }, [refGeo]);
 
@@ -110,9 +116,9 @@ function MoxonAntenna() {
 
 function RadiationPattern() {
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(1, 60, 40);
+    const geo = new SphereGeometry(1, 60, 40);
     const posAttribute = geo.attributes.position;
-    const vertex = new THREE.Vector3();
+    const vertex = new Vector3();
     const scale = 8;
 
     for (let i = 0; i < posAttribute.count; i++) {

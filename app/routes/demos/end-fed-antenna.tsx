@@ -1,37 +1,41 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import EndFedAntennaScene from "~/components/end-fed-antenna-scene";
+
+const EndFedAntennaScene = lazy(
+  () => import("~/components/end-fed-antenna-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "端馈半波天线 (EFHW) | 业余无线电可视化" },
+    { title: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化" },
     {
       name: "description",
       content:
-        "3D演示端馈半波天线 (EFHW) 的工作原理、电压/电流分布及电磁波辐射特性。",
+        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
     },
     {
       property: "og:title",
-      content: "端馈半波天线 (EFHW) | 业余无线电可视化",
+      content: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化",
     },
     {
       property: "og:description",
       content:
-        "3D演示端馈半波天线 (EFHW) 的工作原理、电压/电流分布及电磁波辐射特性。",
+        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
     },
     {
       name: "twitter:title",
-      content: "端馈半波天线 (EFHW) | 业余无线电可视化",
+      content: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化",
     },
     {
       name: "twitter:description",
       content:
-        "3D演示端馈半波天线 (EFHW) 的工作原理、电压/电流分布及电磁波辐射特性。",
+        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
     },
     {
       name: "keywords",
       content:
-        "端馈天线, EFHW, end-fed half wave, 49:1 unun, 长线天线, long wire antenna, 业余无线电, ham radio",
+        "端馈天线, EFHW, End-Fed Half Wave, 49:1 balun, 便携天线, portable antenna, 多波段天线",
     },
   ];
 };
@@ -42,7 +46,7 @@ export default function EndFedAntennaPage() {
       <div>
         <h1 className="text-2xl font-bold">端馈半波天线 (End-Fed Half Wave)</h1>
         <p className="text-muted-foreground">
-          多波段便携天线 (Multiband Portable Antenna)
+          天线理论可视化 (Antenna Theory Visualization)
         </p>
       </div>
 
@@ -54,11 +58,19 @@ export default function EndFedAntennaPage() {
             </div>
           }
         >
-          <EndFedAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <EndFedAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             端馈半波天线 (EFHW)
             是一种非常流行的多波段天线，特别适合野外便携架设。

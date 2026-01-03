@@ -1,7 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
-import * as THREE from "three";
+import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -61,9 +61,9 @@ function PositiveVAntenna() {
 function RadiationPattern() {
   // Consuming Inverted V Pattern
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(1, 40, 30);
+    const geo = new SphereGeometry(1, 40, 30);
     const posAttribute = geo.attributes.position;
-    const vertex = new THREE.Vector3();
+    const vertex = new Vector3();
     const scale = 5;
 
     for (let i = 0; i < posAttribute.count; i++) {

@@ -1,13 +1,18 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import MoxonAntennaScene from "~/components/moxon-antenna-scene";
+
+const MoxonAntennaScene = lazy(
+  () => import("~/components/moxon-antenna-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
     { title: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
     {
       name: "description",
-      content: "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+      content:
+        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
     },
     {
       property: "og:title",
@@ -15,7 +20,8 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:description",
-      content: "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+      content:
+        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
     },
     {
       name: "twitter:title",
@@ -23,12 +29,13 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "twitter:description",
-      content: "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+      content:
+        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
     },
     {
       name: "keywords",
       content:
-        "莫克森天线, moxon antenna, 矩形天线, rectangle antenna, 定向天线, directional antenna, 前后比, front-to-back ratio",
+        "莫克森天线, Moxon antenna, 长方形天线, 矩形天线, 高前后比, high F/B ratio",
     },
   ];
 };
@@ -38,7 +45,9 @@ export default function MoxonAntennaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold">莫克森天线 (Moxon Antenna)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -49,11 +58,19 @@ export default function MoxonAntennaPage() {
             </div>
           }
         >
-          <MoxonAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <MoxonAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             Moxon 矩形天线由 Les Moxon (G6XN)
             推广。它是一个两单元的导线天线，元件末端向内弯曲形成矩形。

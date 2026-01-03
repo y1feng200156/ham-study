@@ -1,13 +1,17 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import HorizontalPolarizationScene from "~/components/horizontal-polarization-scene";
+
+const HorizontalPolarizationScene = lazy(
+  () => import("~/components/horizontal-polarization-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
     { title: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
     {
       name: "description",
-      content: "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
     },
     {
       property: "og:title",
@@ -15,7 +19,7 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:description",
-      content: "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
     },
     {
       name: "twitter:title",
@@ -23,12 +27,12 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "twitter:description",
-      content: "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
     },
     {
       name: "keywords",
       content:
-        "水平极化, horizontal polarization, 偶极子, dipole, 电场, electric field, 天线方向性",
+        "水平极化, horizontal polarization, 偶极子, dipole, 水平天线, horizontal antenna, 极化损耗",
     },
   ];
 };
@@ -53,7 +57,15 @@ export default function HorizontalPolarizationPage() {
             </div>
           }
         >
-          <HorizontalPolarizationScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <HorizontalPolarizationScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">

@@ -1,6 +1,10 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import VerticalPolarizationScene from "~/components/vertical-polarization-scene";
+
+const VerticalPolarizationScene = lazy(
+  () => import("~/components/vertical-polarization-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
@@ -51,7 +55,15 @@ export default function VerticalPolarizationPage() {
             </div>
           }
         >
-          <VerticalPolarizationScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <VerticalPolarizationScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">

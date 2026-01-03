@@ -1,6 +1,8 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import GPAntennaScene from "~/components/gp-antenna-scene";
+
+const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,7 +10,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
     },
     {
       property: "og:title",
@@ -17,7 +19,7 @@ export const meta: MetaFunction = () => {
     {
       property: "og:description",
       content:
-        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
     },
     {
       name: "twitter:title",
@@ -26,12 +28,12 @@ export const meta: MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
     },
     {
       name: "keywords",
       content:
-        "GP天线, ground plane antenna, 垂直天线, vertical antenna, 地网, radials, 单极天线, monopole",
+        "GP天线, Ground Plane antenna, 垂直单极子, vertical monopole, 地网, radials, 1/4波长",
     },
   ];
 };
@@ -41,7 +43,9 @@ export default function GPAntennaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold">GP天线 (Ground Plane Antenna)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -52,11 +56,19 @@ export default function GPAntennaPage() {
             </div>
           }
         >
-          <GPAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <GPAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             GP 天线（Ground Plane，地网天线）是最基础、最常见的垂直天线。
             它由一根垂直的 1/4 波长振子和数根（通常 3-4

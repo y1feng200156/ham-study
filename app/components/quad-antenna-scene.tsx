@@ -1,7 +1,13 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
-import * as THREE from "three";
+import {
+  BufferGeometry,
+  Line,
+  LineBasicMaterial,
+  SphereGeometry,
+  Vector3,
+} from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -22,23 +28,23 @@ function QuadElement({
   const points = useMemo(() => {
     const half = size / 2;
     return [
-      new THREE.Vector3(-half, -half, 0),
-      new THREE.Vector3(half, -half, 0),
-      new THREE.Vector3(half, half, 0),
-      new THREE.Vector3(-half, half, 0),
-      new THREE.Vector3(-half, -half, 0),
+      new Vector3(-half, -half, 0),
+      new Vector3(half, -half, 0),
+      new Vector3(half, half, 0),
+      new Vector3(-half, half, 0),
+      new Vector3(-half, -half, 0),
     ];
   }, []);
 
   const lineGeo = useMemo(
-    () => new THREE.BufferGeometry().setFromPoints(points),
+    () => new BufferGeometry().setFromPoints(points),
     [points],
   );
 
   const lineObject = useMemo(() => {
-    const line = new THREE.Line(
+    const line = new Line(
       lineGeo,
-      new THREE.LineBasicMaterial({ color: color, linewidth: 2 }),
+      new LineBasicMaterial({ color: color, linewidth: 2 }),
     );
     return line;
   }, [lineGeo, color]);
@@ -87,9 +93,9 @@ function QuadAntenna() {
 
 function RadiationPattern() {
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(1, 60, 40);
+    const geo = new SphereGeometry(1, 60, 40);
     const posAttribute = geo.attributes.position;
-    const vertex = new THREE.Vector3();
+    const vertex = new Vector3();
     const scale = 8;
 
     for (let i = 0; i < posAttribute.count; i++) {

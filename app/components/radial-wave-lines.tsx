@@ -1,6 +1,14 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  BufferGeometry,
+  type Group,
+  Line,
+  LineBasicMaterial,
+  Vector3,
+} from "three";
 
 interface RadialWaveLinesProps {
   antennaType:
@@ -31,27 +39,24 @@ export function RadialWaveLines({
 
   // Create line objects with vertex colors
   const lines = useMemo(() => {
-    const linesArray: THREE.Line[] = [];
+    const linesArray: Line[] = [];
 
     for (let i = 0; i < lineCount; i++) {
-      const geometry = new THREE.BufferGeometry();
+      const geometry = new BufferGeometry();
       const positions = new Float32Array(segments * 3);
       const colors = new Float32Array(segments * 3);
 
-      geometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(positions, 3),
-      );
-      geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+      geometry.setAttribute("position", new BufferAttribute(positions, 3));
+      geometry.setAttribute("color", new BufferAttribute(colors, 3));
 
-      const material = new THREE.LineBasicMaterial({
+      const material = new LineBasicMaterial({
         vertexColors: true, // Enable vertex colors for pulse effect
-        blending: THREE.AdditiveBlending, // Additive blending for glow look
+        blending: AdditiveBlending, // Additive blending for glow look
         transparent: true,
         linewidth: 2,
       });
 
-      const line = new THREE.Line(geometry, material);
+      const line = new Line(geometry, material);
       const theta = (i / lineCount) * Math.PI * 2;
       line.userData = { theta };
       linesArray.push(line);
@@ -60,7 +65,7 @@ export function RadialWaveLines({
     return linesArray;
   }, []);
 
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<Group>(null);
 
   // Initialize static snapshot for thumbnails
   useState(() => {
@@ -82,14 +87,14 @@ export function RadialWaveLines({
     });
   });
 
-  function updateLinePositions(line: THREE.Line, time: number) {
+  function updateLinePositions(line: Line, time: number) {
     const positions = line.geometry.attributes.position.array as Float32Array;
     const colors = line.geometry.attributes.color.array as Float32Array;
     const theta = line.userData.theta;
 
     const dirX = Math.cos(theta);
     const dirZ = Math.sin(theta);
-    const dirVec = new THREE.Vector3(dirX, 0, dirZ).normalize();
+    const dirVec = new Vector3(dirX, 0, dirZ).normalize();
 
     const gain = calculateGain(dirVec);
 
@@ -163,7 +168,7 @@ export function RadialWaveLines({
     line.geometry.attributes.color.needsUpdate = true;
   }
 
-  function calculateGain(dirVec: THREE.Vector3): number {
+  function calculateGain(dirVec: Vector3): number {
     let gain = 1.0;
 
     switch (antennaType) {

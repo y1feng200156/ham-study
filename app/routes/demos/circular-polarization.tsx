@@ -1,14 +1,17 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
-import CircularPolarizationScene from "~/components/circular-polarization-scene";
 import { ClientOnly } from "~/components/client-only";
+
+const CircularPolarizationScene = lazy(
+  () => import("~/components/circular-polarization-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
     { title: "圆极化 (Circular Polarization) | 业余无线电可视化" },
     {
       name: "description",
-      content:
-        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
     },
     {
       property: "og:title",
@@ -16,8 +19,7 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:description",
-      content:
-        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
     },
     {
       name: "twitter:title",
@@ -25,13 +27,12 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "twitter:description",
-      content:
-        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
     },
     {
       name: "keywords",
       content:
-        "圆极化, circular polarization, RHCP, LHCP, 卫星通信, satellite communication, 螺旋天线, axial mode",
+        "圆极化, circular polarization, RHCP, LHCP, 螺旋天线, helical antenna, 卫星通信, satellite communication",
     },
   ];
 };
@@ -54,7 +55,15 @@ export default function CircularPolarizationPage() {
             </div>
           }
         >
-          <CircularPolarizationScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <CircularPolarizationScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">

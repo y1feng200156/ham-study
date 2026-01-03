@@ -1,7 +1,13 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
-import * as THREE from "three";
+import {
+  BufferGeometry,
+  Line,
+  LineBasicMaterial,
+  SphereGeometry,
+  Vector3,
+} from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -18,19 +24,19 @@ function HelicalAntenna() {
       const x = t * height;
       const y = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      pts.push(new THREE.Vector3(x, y, z));
+      pts.push(new Vector3(x, y, z));
     }
     return pts;
   }, []);
 
   const lineGeometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    const geo = new BufferGeometry().setFromPoints(points);
     return geo;
   }, [points]);
 
   const line = useMemo(() => {
-    const mat = new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 3 });
-    return new THREE.Line(lineGeometry, mat);
+    const mat = new LineBasicMaterial({ color: "#ef4444", linewidth: 3 });
+    return new Line(lineGeometry, mat);
   }, [lineGeometry]);
 
   return (
@@ -50,9 +56,9 @@ function HelicalAntenna() {
 
 function RadiationPattern() {
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(1, 60, 40);
+    const geo = new SphereGeometry(1, 60, 40);
     const posAttribute = geo.attributes.position;
-    const vertex = new THREE.Vector3();
+    const vertex = new Vector3();
     const scale = 8;
 
     for (let i = 0; i < posAttribute.count; i++) {

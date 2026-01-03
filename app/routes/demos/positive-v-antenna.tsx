@@ -1,34 +1,41 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import PositiveVAntennaScene from "~/components/positive-v-scene";
+
+const PositiveVAntennaScene = lazy(
+  () => import("~/components/positive-v-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化" },
+    { title: "正V天线 (Positive V Antenna) | 业余无线电可视化" },
     {
       name: "description",
-      content: "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+      content:
+        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
     },
     {
       property: "og:title",
-      content: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化",
+      content: "正V天线 (Positive V Antenna) | 业余无线电可视化",
     },
     {
       property: "og:description",
-      content: "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+      content:
+        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
     },
     {
       name: "twitter:title",
-      content: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化",
+      content: "正V天线 (Positive V Antenna) | 业余无线电可视化",
     },
     {
       name: "twitter:description",
-      content: "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+      content:
+        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
     },
     {
       name: "keywords",
       content:
-        "正V天线, positive v antenna, v-dipole, 旋转偶极子, rotatable dipole, 楼顶天线",
+        "正V天线, Positive V antenna, 偶极子, dipole, 楼顶天线, balcony antenna, 紧凑型天线",
     },
   ];
 };
@@ -37,8 +44,10 @@ export default function PositiveVAntennaPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">正V天线 (Positive V / V-Dipole)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <h1 className="text-2xl font-bold">正V天线 (Positive V Antenna)</h1>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -49,11 +58,19 @@ export default function PositiveVAntennaPage() {
             </div>
           }
         >
-          <PositiveVAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <PositiveVAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             正V天线 (Positive V) 是一种两臂向上翘起的偶极子天线，形状像一个 "V"
             字。 这与中心高、两端低的"倒V天线" (Inverted V) 正好相反。

@@ -1,6 +1,8 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import QuadAntennaScene from "~/components/quad-antenna-scene";
+
+const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,7 +10,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
     },
     {
       property: "og:title",
@@ -17,7 +19,7 @@ export const meta: MetaFunction = () => {
     {
       property: "og:description",
       content:
-        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
     },
     {
       name: "twitter:title",
@@ -26,12 +28,12 @@ export const meta: MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
     },
     {
       name: "keywords",
       content:
-        "方框天线, quad antenna, cubical quad, 回路天线, loop antenna, 高增益, high gain, 低底噪, low noise",
+        "方框天线, Quad antenna, 定向天线, directional antenna, DX利器, 高增益, high gain",
     },
   ];
 };
@@ -41,7 +43,9 @@ export default function QuadAntennaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold">方框天线 (Quad Antenna)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -52,11 +56,19 @@ export default function QuadAntennaPage() {
             </div>
           }
         >
-          <QuadAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <QuadAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             方框天线（通常指 Cubical Quad）由两个或多个方形回路元件组成。由
             Clarence Moore (W9LZX) 在 1940 年代为解决高海拔电晕放电问题而发明。

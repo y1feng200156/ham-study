@@ -1,15 +1,7 @@
-import { GithubLogo } from "@phosphor-icons/react";
+import { GithubLogoIcon } from "@phosphor-icons/react";
+import { lazy, Suspense } from "react";
 import { Link, type MetaFunction } from "react-router";
-import CircularPolarizationScene from "../components/circular-polarization-scene";
 import { ClientOnly } from "../components/client-only";
-import EllipticalPolarizationScene from "../components/elliptical-polarization-scene";
-import GPAntennaScene from "../components/gp-antenna-scene";
-import HorizontalPolarizationScene from "../components/horizontal-polarization-scene";
-import InvertedVAntennaScene from "../components/inverted-v-scene";
-import MoxonAntennaScene from "../components/moxon-antenna-scene";
-import EndFedAntennaScene from "../components/end-fed-antenna-scene";
-import PositiveVAntennaScene from "../components/positive-v-scene";
-import QuadAntennaScene from "../components/quad-antenna-scene";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -19,8 +11,35 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import VerticalPolarizationScene from "../components/vertical-polarization-scene";
-import YagiAntennaScene from "../components/yagi-antenna-scene";
+
+// Lazy load heavy 3D components
+const CircularPolarizationScene = lazy(
+  () => import("../components/circular-polarization-scene"),
+);
+const EllipticalPolarizationScene = lazy(
+  () => import("../components/elliptical-polarization-scene"),
+);
+const GPAntennaScene = lazy(() => import("../components/gp-antenna-scene"));
+const HorizontalPolarizationScene = lazy(
+  () => import("../components/horizontal-polarization-scene"),
+);
+const InvertedVAntennaScene = lazy(
+  () => import("../components/inverted-v-scene"),
+);
+const MoxonAntennaScene = lazy(
+  () => import("../components/moxon-antenna-scene"),
+);
+const EndFedAntennaScene = lazy(
+  () => import("../components/end-fed-antenna-scene"),
+);
+const PositiveVAntennaScene = lazy(
+  () => import("../components/positive-v-scene"),
+);
+const QuadAntennaScene = lazy(() => import("../components/quad-antenna-scene"));
+const VerticalPolarizationScene = lazy(
+  () => import("../components/vertical-polarization-scene"),
+);
+const YagiAntennaScene = lazy(() => import("../components/yagi-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
@@ -139,7 +158,7 @@ export default function Home() {
             rel="noopener noreferrer"
             className="flex items-center gap-2"
           >
-            <GithubLogo size={20} />
+            <GithubLogoIcon size={20} />
             <span>GitHub 仓库</span>
           </Link>
         </Button>
@@ -161,7 +180,13 @@ export default function Home() {
                     <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
                   }
                 >
-                  <demo.component isThumbnail={true} />
+                  <Suspense
+                    fallback={
+                      <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
+                    }
+                  >
+                    <demo.component isThumbnail={true} />
+                  </Suspense>
                 </ClientOnly>
               </div>
             </CardContent>

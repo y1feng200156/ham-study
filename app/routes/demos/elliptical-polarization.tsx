@@ -1,13 +1,17 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import EllipticalPolarizationScene from "~/components/elliptical-polarization-scene";
+
+const EllipticalPolarizationScene = lazy(
+  () => import("~/components/elliptical-polarization-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
     { title: "椭圆极化 (Elliptical Polarization) | 业余无线电可视化" },
     {
       name: "description",
-      content: "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+      content: "3D演示极化的一般形式——椭圆极化，介于线极化和圆极化之间。",
     },
     {
       property: "og:title",
@@ -15,7 +19,7 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:description",
-      content: "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+      content: "3D演示极化的一般形式——椭圆极化，介于线极化和圆极化之间。",
     },
     {
       name: "twitter:title",
@@ -23,12 +27,12 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "twitter:description",
-      content: "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+      content: "3D演示极化的一般形式——椭圆极化，介于线极化和圆极化之间。",
     },
     {
       name: "keywords",
       content:
-        "椭圆极化, elliptical polarization, 轴比, axial ratio, 极化损耗, polarization loss",
+        "椭圆极化, elliptical polarization, 极化, polarization, 无线电传播, radio propagation",
     },
   ];
 };
@@ -53,7 +57,15 @@ export default function EllipticalPolarizationPage() {
             </div>
           }
         >
-          <EllipticalPolarizationScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <EllipticalPolarizationScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">

@@ -1,7 +1,20 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useState, useRef } from "react";
-import * as THREE from "three";
+import { useMemo, useRef, useState } from "react";
+import {
+  BoxGeometry,
+  BufferGeometry,
+  CylinderGeometry,
+  InstancedMesh,
+  Line,
+  LineBasicMaterial,
+  LineCurve3,
+  MeshBasicMaterial,
+  Object3D,
+  SphereGeometry,
+  TorusGeometry,
+  Vector3,
+} from "three";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -10,30 +23,27 @@ const wireLength = 8;
 const wireHeight = 2;
 
 function EndFedAntenna() {
-  const ununBox = useMemo(() => new THREE.BoxGeometry(0.4, 0.4, 0.2), []);
+  const ununBox = useMemo(() => new BoxGeometry(0.4, 0.4, 0.2), []);
   const connectorGeo = useMemo(
-    () => new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16),
+    () => new CylinderGeometry(0.05, 0.05, 0.2, 16),
     [],
   );
   const insulatorBox = useMemo(
-    () => new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16),
+    () => new CylinderGeometry(0.05, 0.05, 0.2, 16),
     [],
   );
 
   // Antenna wire points: Unun at origin (ish), wire extending in -X
-  const startPoint = useMemo(() => new THREE.Vector3(0, 0, 0), []);
-  const endPoint = useMemo(
-    () => new THREE.Vector3(-wireLength, wireHeight, 0),
-    [],
-  ); // Sloper configuration
+  const startPoint = useMemo(() => new Vector3(0, 0, 0), []);
+  const endPoint = useMemo(() => new Vector3(-wireLength, wireHeight, 0), []); // Sloper configuration
 
   const wireCurve = useMemo(() => {
-    return new THREE.LineCurve3(startPoint, endPoint);
+    return new LineCurve3(startPoint, endPoint);
   }, [startPoint, endPoint]);
 
   const wireGeo = useMemo(() => {
     const points = wireCurve.getPoints(20);
-    return new THREE.BufferGeometry().setFromPoints(points);
+    return new BufferGeometry().setFromPoints(points);
   }, [wireCurve]);
 
   // E-Field and H-Field visualization
@@ -43,10 +53,10 @@ function EndFedAntenna() {
   // Create many instances for fields
   const segmentCount = 30;
   const eFieldInstances = useMemo(() => {
-    const tempObj = new THREE.Object3D();
-    const mesh = new THREE.InstancedMesh(
-      new THREE.CylinderGeometry(0.02, 0.02, 1, 8),
-      new THREE.MeshBasicMaterial({
+    const tempObj = new Object3D();
+    const mesh = new InstancedMesh(
+      new CylinderGeometry(0.02, 0.02, 1, 8),
+      new MeshBasicMaterial({
         color: "#ea580c",
         transparent: true,
         opacity: 0.8,
@@ -63,7 +73,7 @@ function EndFedAntenna() {
       // Calculate an up vector perpendicular to tangent
       // Tangent is roughly (-1, ~0.2, 0).
       // We want something perpendicular. Let's pick (0, 0, 1) x Tangent -> Y-ish
-      const normal = new THREE.Vector3(0, 0, 1).cross(tangent).normalize();
+      const normal = new Vector3(0, 0, 1).cross(tangent).normalize();
 
       tempObj.position.copy(pos);
       tempObj.lookAt(pos.clone().add(normal)); // Orient cylinder along 'normal'
@@ -76,14 +86,14 @@ function EndFedAntenna() {
   }, [wireCurve]);
 
   const hFieldInstances = useMemo(() => {
-    const tempObj = new THREE.Object3D();
-    const geometry = new THREE.TorusGeometry(0.3, 0.02, 8, 24);
-    const material = new THREE.MeshBasicMaterial({
+    const tempObj = new Object3D();
+    const geometry = new TorusGeometry(0.3, 0.02, 8, 24);
+    const material = new MeshBasicMaterial({
       color: "#3b82f6",
       transparent: true,
       opacity: 0.8,
     });
-    const mesh = new THREE.InstancedMesh(geometry, material, segmentCount);
+    const mesh = new InstancedMesh(geometry, material, segmentCount);
 
     for (let i = 0; i < segmentCount; i++) {
       const t = i / segmentCount;
@@ -100,12 +110,12 @@ function EndFedAntenna() {
   }, [wireCurve]);
 
   // Ref for animating fields
-  const eRef = useRef<THREE.InstancedMesh>(null);
-  const hRef = useRef<THREE.InstancedMesh>(null);
+  const eRef = useRef<InstancedMesh>(null);
+  const hRef = useRef<InstancedMesh>(null);
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime() * 3; // Oscillation speed
-    const tempObj = new THREE.Object3D();
+    const tempObj = new Object3D();
 
     if (eRef.current) {
       for (let i = 0; i < segmentCount; i++) {
@@ -121,7 +131,7 @@ function EndFedAntenna() {
 
         const pos = wireCurve.getPoint(t);
         const tangent = wireCurve.getTangent(t);
-        const normal = new THREE.Vector3(0, 0, 1).cross(tangent).normalize();
+        const normal = new Vector3(0, 0, 1).cross(tangent).normalize();
 
         // E-field scales with amplitude
         tempObj.position.copy(pos);
@@ -176,9 +186,9 @@ function EndFedAntenna() {
       {/* Wire */}
       <primitive
         object={
-          new THREE.Line(
+          new Line(
             wireGeo,
-            new THREE.LineBasicMaterial({ color: "#ef4444", linewidth: 2 }),
+            new LineBasicMaterial({ color: "#ef4444", linewidth: 2 }),
           )
         }
       />
@@ -210,9 +220,9 @@ function RadiationPattern() {
   // Let's assume 1/2 wave for simplicity -> Donut shape (Toroidal) but distorted due to sloper?
   // Let's just use a standard dipole pattern but aligned with wire.
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(1, 60, 40);
+    const geo = new SphereGeometry(1, 60, 40);
     const posAttribute = geo.attributes.position;
-    const vertex = new THREE.Vector3();
+    const vertex = new Vector3();
     const scale = 5;
 
     for (let i = 0; i < posAttribute.count; i++) {

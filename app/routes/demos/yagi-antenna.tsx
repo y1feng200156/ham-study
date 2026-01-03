@@ -1,13 +1,16 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import YagiAntennaScene from "~/components/yagi-antenna-scene";
+
+const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
     { title: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
     {
       name: "description",
-      content: "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+      content:
+        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
     },
     {
       property: "og:title",
@@ -15,7 +18,8 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:description",
-      content: "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+      content:
+        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
     },
     {
       name: "twitter:title",
@@ -23,12 +27,13 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "twitter:description",
-      content: "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+      content:
+        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
     },
     {
       name: "keywords",
       content:
-        "八木天线, yagi antenna, yagi-uda, 定向天线, directional antenna, 引向器, director, 反射器, reflector",
+        "八木天线, Yagi-Uda antenna, 定向天线, directional antenna, 引向器, director, 反射器, reflector",
     },
   ];
 };
@@ -38,7 +43,9 @@ export default function YagiAntennaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold">八木-宇田天线 (Yagi-Uda Antenna)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -49,11 +56,19 @@ export default function YagiAntennaPage() {
             </div>
           }
         >
-          <YagiAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <YagiAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             八木天线是由日本的八木秀次和宇田新太郎发明的。它是一种
             <strong>高增益、强方向性</strong>

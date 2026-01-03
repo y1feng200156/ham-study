@@ -1,6 +1,10 @@
+import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
-import InvertedVAntennaScene from "~/components/inverted-v-scene";
+
+const InvertedVAntennaScene = lazy(
+  () => import("~/components/inverted-v-scene"),
+);
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,7 +12,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
     },
     {
       property: "og:title",
@@ -17,7 +21,7 @@ export const meta: MetaFunction = () => {
     {
       property: "og:description",
       content:
-        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
     },
     {
       name: "twitter:title",
@@ -26,12 +30,12 @@ export const meta: MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
     },
     {
       name: "keywords",
       content:
-        "倒V天线, inverted v antenna, 偶极子, dipole, 阻抗匹配, impedance matching, 倒V架设",
+        "倒V天线, Inverted V antenna, 偶极子, dipole, 阻抗匹配, impedance matching, 便携天线",
     },
   ];
 };
@@ -41,7 +45,9 @@ export default function InvertedVAntennaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold">倒V天线 (Inverted V Antenna)</h1>
-        <p className="text-muted-foreground">著名天线系列 (Famous Antennas)</p>
+        <p className="text-muted-foreground">
+          天线理论可视化 (Antenna Theory Visualization)
+        </p>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -52,11 +58,19 @@ export default function InvertedVAntennaPage() {
             </div>
           }
         >
-          <InvertedVAntennaScene />
+          <Suspense
+            fallback={
+              <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
+                加载 3D 场景中...
+              </div>
+            }
+          >
+            <InvertedVAntennaScene />
+          </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此天线</h3>
+          <h3>关于此演示</h3>
           <p>
             倒V天线实际上就是中间架高、两端下垂的偶极子天线 (Dipole)。
             由于其架设简单（只需一根支撑杆），是业余无线电爱好者最常用的短波天线之一。

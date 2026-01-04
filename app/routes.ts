@@ -10,7 +10,7 @@ export default [
   route("sitemap.xml", "routes/sitemap.xml.ts"),
   route("robots.txt", "routes/robots.txt.ts"),
   // Demos
-  layout("routes/demos/layout.tsx", [
+  layout("routes/layout.tsx", [
     route(
       "demos/vertical-polarization",
       "routes/demos/vertical-polarization.tsx",

@@ -4,6 +4,8 @@ import { ClientOnly } from "~/components/client-only";
 
 const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "方框天线 (Quad Antenna) | 业余无线电可视化" },
@@ -96,6 +98,39 @@ export default function QuadAntennaPage() {
               立体结构导致受风面积大，抗风和结冰是主要挑战。
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    四方框天线 (Quad)
+                    是一个全波长闭合回路，相比于半波长偶极子，它具有更有效的辐射孔径。
+                    标准的 2 单元 Quad (有源振子 + 反射器) 通过临界耦合可提供约
+                    7dBi 的增益，相当于 3 单元八木。
+                    由于它是直流接地的闭合回路，能有效泄放雨雪静电
+                    (Precipitation Static)，因此接收背景噪音通常比八木更低。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "The closed-loop configuration of the Quad antenna results
+                    in a lower Q and wider bandwidth... and is less susceptible
+                    to static noise."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "w9lzx",
+                  text: "Moore, C. C., W9LZX. (1947). The Quad Antenna.",
+                },
+                {
+                  id: "cubical-quad",
+                  text: "Orr, W. I., W6SAI. (1959). All About Cubical Quad Antennas.",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

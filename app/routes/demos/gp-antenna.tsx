@@ -4,6 +4,9 @@ import { ClientOnly } from "~/components/client-only";
 
 const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 
+import { MathLambdaQuarter, MathOmega } from "~/components/math-inline";
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "GP天线 (Ground Plane Antenna) | 业余无线电可视化" },
@@ -87,19 +90,43 @@ export default function GPAntennaPage() {
           </ul>
 
           <h3>极化特性与应用</h3>
-          <ul>
-            <li>
-              <strong>垂直极化 (Vertical):</strong> 产生标准的垂直极化波。
-            </li>
-            <li>
-              <strong>全向性 (Omnidirectional):</strong>{" "}
-              在水平方向上360度均匀辐射，没有方向性。
-            </li>
-            <li>
-              <strong>应用:</strong> 本地 V/UHF 中继通讯、车载天线、以及作为 DX
-              通信的基础天线（特别是低波段如 40m/80m）。
-            </li>
-          </ul>
+          <ul></ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    GP 天线 (Ground Plane) 的原理基于
+                    <strong>镜像理论 (Image Theory)</strong>。
+                    导电平面（地网）充当反射面，使垂直单极子 (Monopole)
+                    产生的辐射场等效于一个完整的偶极子 (Dipole)。
+                    理想导电地面上的 <MathLambdaQuarter />
+                    单极子，其增益比自由空间偶极子高 3dB
+                    (因为能量仅集中在上半球)，其输入阻抗约为 37
+                    <MathOmega />
+                    (偶极子的一半)。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "A monopole above a perfect ground plane... radiates only in
+                    the upper half-space... It is equivalent to a dipole in free
+                    space."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "stutzman",
+                  text: "Stutzman, W. L., & Thiele, G. A. (2012). Antenna Theory and Design (3rd ed.). Wiley. Section 3.2: Monopole Antennas.",
+                },
+                {
+                  id: "balanis-mono",
+                  text: "Balanis, C. A. (2016). Antenna Theory. Section 4.7: Ground Plane Antennas.",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

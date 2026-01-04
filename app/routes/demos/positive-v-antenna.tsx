@@ -6,6 +6,8 @@ const PositiveVAntennaScene = lazy(
   () => import("~/components/positive-v-scene"),
 );
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "正V天线 (Positive V Antenna) | 业余无线电可视化" },
@@ -88,15 +90,37 @@ export default function PositiveVAntennaPage() {
           </ul>
 
           <h3>极化与方向图</h3>
-          <ul>
-            <li>
-              <strong>极化:</strong> 主要是水平极化（当水平安装时）。
-            </li>
-            <li>
-              <strong>方向图:</strong>{" "}
-              V形弯曲会稍微填充偶极子两端的零点，使得方向图略微变圆，但仍然具有明显的双向性。调节夹角可以改变馈电点阻抗（通常夹角越小阻抗越低）。
-            </li>
-          </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    正V天线 (Positive-V)
+                    将高电压点（天线末端）抬高并远离地面或屋顶结构。
+                    这显著减少了由周围物体引起的电容效应和介质损耗，从而保持了较高的辐射效率。
+                    同时，V形结构会轻微改变远场辐射方向图，使“8字形”凹陷变浅。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "Raising the ends of the dipole in a V-shape keeps the
+                    high-voltage points away from lossy structures... minimizing
+                    ground losses."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "rotatable-dipole",
+                  text: "Witt, F. J., AI1H. (2014). Broadband Rotatable Dipole. QST Magazine.",
+                },
+                {
+                  id: "balanis-dipole",
+                  text: "Balanis, C. A. Antenna Theory. Chapter 4: Linear Wire Antennas.",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

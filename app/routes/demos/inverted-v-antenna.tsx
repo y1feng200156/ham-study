@@ -6,6 +6,9 @@ const InvertedVAntennaScene = lazy(
   () => import("~/components/inverted-v-scene"),
 );
 
+import { MathOmega } from "~/components/math-inline";
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "倒V天线 (Inverted V Antenna) | 业余无线电可视化" },
@@ -91,13 +94,46 @@ export default function InvertedVAntennaPage() {
           <ul>
             <li>
               <strong>混合极化:</strong>{" "}
-              虽然主要是水平极化（在宽边方向），但由于两臂倾斜，也包含垂直分量。这使得它在某些角度比纯水平偶极子更接近全向。
+              虽然主要是水平极化（在宽边方向），但由于两臂下垂，也包含垂直极化分量。这使得它在某些角度比纯水平偶极子更接近全向。
             </li>
             <li>
               <strong>应用:</strong> 非常适合初学者作为第一个 HF (短波)
               天线，用于 40米、20米波段等。
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    倒V天线 (Inverted-V) 的两臂下垂会影响其辐射阻抗和方向图。
+                    随着夹角小于 180°，输入阻抗会降低（通常降至 50
+                    <MathOmega /> 附近），使其能直接匹配同轴电缆。
+                    此外，垂直辐射分量会有所增加，填充了水平偶极子两侧的零点，使方向图在全方位上更均匀。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "Dropping the ends of the dipole to form an Inverted-V
+                    lowers the resonant frequency and the feed-point
+                    impedance... somewhat more omnidirectional than a horizontal
+                    dipole."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "arrl-wire",
+                  text: "The ARRL Antenna Book. Chapter 6: Low-Frequency Antennas - The Inverted-V Dipole.",
+                },
+                {
+                  id: "cebik",
+                  text: "Cebik, L. B., W4RNL. (2000). The Inverted-V: Its Gain and Patterns.",
+                  url: "http://www.antentop.org/w4rnl.001/v1.html",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

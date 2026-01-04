@@ -65,11 +65,11 @@ function RadiationPattern() {
       vertex.fromBufferAttribute(posAttribute, i);
       vertex.normalize();
 
-      // Circular polarization: nearly omnidirectional (spherical)
-      const horizontalComponent = Math.sqrt(
-        vertex.x * vertex.x + vertex.z * vertex.z,
-      );
-      const gain = 0.8 + 0.2 * horizontalComponent;
+      // Circular polarization (Axial Mode): Highly directional beam along +X axis
+      // (Helix axis)
+      const cosAngle = vertex.x;
+      const gain = cosAngle > 0 ? cosAngle ** 3 * 1.5 : 0.1;
+      // const gain = 0.8 + 0.2 * horizontalComponent; // Old Omni pattern
 
       vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
@@ -127,7 +127,7 @@ export default function CircularPolarizationScene({
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
-          <span>电磁波</span>
+          <span>电场 (E-field)</span>
         </div>
       </div>
     </>

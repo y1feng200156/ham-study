@@ -94,7 +94,7 @@ export default function VerticalPolarizationScene({
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
-          <span>电磁波</span>
+          <span>电场 (E-field)</span>
         </div>
       </div>
     </>

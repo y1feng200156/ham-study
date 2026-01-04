@@ -6,6 +6,8 @@ const HorizontalPolarizationScene = lazy(
   () => import("~/components/horizontal-polarization-scene"),
 );
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
@@ -112,17 +114,41 @@ export default function HorizontalPolarizationPage() {
               (远距离通信)
               中，由于电离层反射经常改变极化方向，这种影响可能不如视距通信(VHF/UHF)那么显著，但在视距通信中是致命的。
             </li>
-            <li>
-              <strong>
-                水平发射 -&gt; 圆极化接收 (Horizontal to Circular):
-              </strong>
-              <span className="text-yellow-600 font-bold dark:text-yellow-400">
-                {" "}
-                3dB 损耗
-              </span>
-              。 损失一半能量。
-            </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    水平极化偶极子天线 (Horizontal Dipole)
+                    产生的电场矢量平行于地面。
+                    其辐射方向图在自由空间中是围绕导线的圆环
+                    (doughnut)，但受地面反射影响，实际辐射图通常呈现为从地面向上翘起的瓣状。
+                    水平极化在HF波段 DX
+                    通信中非常流行，部分原因是它比垂直极化受地面噪声干扰更小。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "Horizontally polarized antennas are less susceptible to
+                    man-made noise... The ground reflection factor reinforces
+                    the signal at certain takeoff angles."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "arrl-handbook",
+                  text: "Silver, H. W. (Ed.). (2023). The ARRL Handbook for Radio Communications. Chapter 21: Antennas.",
+                },
+                {
+                  id: "itu-r",
+                  text: "ITU-R P.372-14: Radio noise.",
+                  url: "https://www.itu.int/rec/R-REC-P.372/en",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

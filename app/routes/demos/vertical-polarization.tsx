@@ -6,6 +6,9 @@ const VerticalPolarizationScene = lazy(
   () => import("~/components/vertical-polarization-scene"),
 );
 
+import { MathETheta } from "~/components/math-inline";
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "垂直极化 (Vertical Polarization) | 业余无线电可视化" },
@@ -121,6 +124,44 @@ export default function VerticalPolarizationPage() {
               (3dB)。尽管有损耗，但考虑到极化失配的风险，这种组合在特定情况下（如移动通信）是可以接受的。
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    根据天线理论，垂直偶极子 (Vertical Dipole)
+                    产生的电场只有垂直分量 (<MathETheta />
+                    )。 其在水平面上的辐射强度是均匀的，形成全向方向图。
+                    这意味着“电场矢量”(Vertical) 与 “主辐射波瓣方向”(Horizontal
+                    Plane) 在几何上确实是正交的。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "The radiation pattern of a vertical dipole is
+                    omnidirectional in the horizontal plane... The E-field lines
+                    are vertical, parallel to the dipole axis."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "balanis",
+                  text: "Balanis, C. A. (2016). Antenna Theory: Analysis and Design (4th ed.). Wiley. pp. 170-172.",
+                  url: "https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061",
+                },
+                {
+                  id: "kraus",
+                  text: "Kraus, J. D., & Marhefka, R. J. (2002). Antennas for All Applications (3rd ed.). McGraw-Hill. Ch. 5.",
+                },
+                {
+                  id: "ieee",
+                  text: "IEEE Standard Definitions of Terms for Antennas (IEEE Std 145-2013).",
+                  url: "https://ieeexplore.ieee.org/document/6758443",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

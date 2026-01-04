@@ -6,6 +6,8 @@ const MoxonAntennaScene = lazy(
   () => import("~/components/moxon-antenna-scene"),
 );
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
@@ -100,6 +102,39 @@ export default function MoxonAntennaPage() {
               在阳台或屋顶空间不足以架设八木时，Moxon 是极佳的替代品。
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    Moxon 矩形天线利用了“临界耦合”原理。
+                    通过将元件末端向内弯曲并保持特定的间距，使得有源振子与反射器之间的互感耦合增强。
+                    这种特定的几何结构产生了近乎完美的心形 (Cardioid)
+                    辐射方向图，在保持前向增益的同时，极大程度地消除了后向辐射
+                    (极高的 F/B 比)。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "The Moxon Rectangle is a 2-element beam with the element
+                    tips folded towards each other... maximizing the
+                    front-to-back ratio."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "moxon-book",
+                  text: "Moxon, L. A., G6XN. (1993). HF Antennas for All Locations. RSGB. Chapter 6.",
+                },
+                {
+                  id: "cebik-moxon",
+                  text: "Cebik, L. B., W4RNL. The Moxon Rectangle: A Review.",
+                  url: "http://www.antentop.org/w4rnl.001/moxon1.html",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

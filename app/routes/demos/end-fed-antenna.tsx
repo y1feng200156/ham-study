@@ -6,6 +6,9 @@ const EndFedAntennaScene = lazy(
   () => import("~/components/end-fed-antenna-scene"),
 );
 
+import { MathOmega, MathZVI } from "~/components/math-inline";
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化" },
@@ -94,16 +97,42 @@ export default function EndFedAntennaPage() {
           </ul>
 
           <h3>极化与应用</h3>
-          <ul>
-            <li>
-              <strong>极化:</strong>{" "}
-              取决于使得方式。水平架设时为水平极化；倾斜架设（Sloper）或倒L形架设时包含垂直和水平分量。
-            </li>
-            <li>
-              <strong>应用:</strong> POTA (公园通联)、SOTA (山顶通联)
-              及受限空间的基地台常用天线。
-            </li>
-          </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    端馈半波天线 (EFHW)
+                    在谐振时，馈电点位于电压波腹（电压最大）和电流波节（电流最小）处。
+                    根据 <MathZVI />
+                    ，这意味着其输入阻抗极高（理论上无穷大，实际上约 2500-5000
+                    <MathOmega />
+                    ）。 因此必须使用高变比（如 49:1 或
+                    64:1）的宽带阻抗变换器将其降至 50
+                    <MathOmega />。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "An end-fed half-wave antenna presents a very high impedance
+                    at the feed point... requiring a matching network (unun) to
+                    transform the high impedance down to 50 ohms."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "hallas",
+                  text: "Hallas, J., W1ZR. (2019). The End-Fed Half-Wave Antenna. QST Magazine.",
+                },
+                {
+                  id: "aa5tb",
+                  text: "Yates, S., AA5TB. (2020). The End Fed Half Wave Antenna.",
+                  url: "https://www.aa5tb.com/efha.html",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

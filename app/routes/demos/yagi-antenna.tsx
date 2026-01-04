@@ -4,6 +4,8 @@ import { ClientOnly } from "~/components/client-only";
 
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
@@ -83,11 +85,6 @@ export default function YagiAntennaPage() {
               <strong>增益 (Gain):</strong>{" "}
               单元越多，引向器越长，增益越高，波束越窄。
             </li>
-            <li>
-              <strong>极化:</strong>{" "}
-              通常与元件方向一致（水平安装即水平极化，垂直安装即垂直极化）。DX
-              通信通常使用水平极化。
-            </li>
           </ul>
 
           <h3>极化特性与应用</h3>
@@ -106,6 +103,40 @@ export default function YagiAntennaPage() {
               </em>
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    八木天线的定向性源于寄生单元（反射器和引向器）上的感应电流与有源振子电流之间的
+                    <strong>相位差 (Phase Difference)</strong>。
+                    反射器通常比谐振长度略长 (呈感性)，电流滞后；引向器略短
+                    (呈容性)，电流超前。
+                    这种相位关系导致信号在前方叠加增强，在后方抵消。本演示正是通过在各单元上设置相应的相位偏移来模拟这一物理现象。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "The phase of the current in the parasitic element depends
+                    on its length... By proper spacing and length, the radiation
+                    from the parasitic element reinforces the radiation from the
+                    driven element in the forward direction."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "yagi-uda",
+                  text: "Yagi, H., & Uda, S. (1926). Projector of the Sharpest Beam of Electric Waves. Proceedings of the Imperial Academy, 2(2), 49-52.",
+                  url: "https://www.japan-acad.go.jp/en/activities/publications/proceedings.html",
+                },
+                {
+                  id: "arrl-yagi",
+                  text: "The ARRL Antenna Book (24th ed.). Chapter 11: HF Yagi Arrays.",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

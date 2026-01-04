@@ -127,7 +127,7 @@ export default function YagiAntennaScene({
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
-          <span>电磁波</span>
+          <span>电场 (E-field)</span>
         </div>
       </div>
     </>
@@ -165,11 +165,37 @@ export default function YagiAntennaScene({
           <YagiAntenna />
           {showPattern && <RadiationPattern />}
           {showWaves && (
-            <RadialWaveLines
-              antennaType="yagi"
-              polarizationType="horizontal"
-              isThumbnail={isThumbnail}
-            />
+            <>
+              {/* Driven Element (Main Beam) */}
+              <RadialWaveLines
+                antennaType="yagi"
+                polarizationType="horizontal"
+                isThumbnail={isThumbnail}
+                amplitudeScale={1.0}
+              />
+
+              {/* Reflector Radiation (Lagging phase) */}
+              <group position={[-1.5, 0, 0]}>
+                <RadialWaveLines
+                  antennaType="horizontal"
+                  polarizationType="horizontal"
+                  isThumbnail={isThumbnail}
+                  amplitudeScale={0.3}
+                  phaseOffset={-4.0}
+                />
+              </group>
+
+              {/* Director Radiation (Leading phase) */}
+              <group position={[1.5, 0, 0]}>
+                <RadialWaveLines
+                  antennaType="horizontal"
+                  polarizationType="horizontal"
+                  isThumbnail={isThumbnail}
+                  amplitudeScale={0.3}
+                  phaseOffset={-2.0}
+                />
+              </group>
+            </>
           )}
         </Canvas>
 

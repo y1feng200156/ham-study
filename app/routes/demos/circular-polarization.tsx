@@ -6,6 +6,8 @@ const CircularPolarizationScene = lazy(
   () => import("~/components/circular-polarization-scene"),
 );
 
+import { ScientificCitation } from "~/components/scientific-citation";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "圆极化 (Circular Polarization) | 业余无线电可视化" },
@@ -121,6 +123,39 @@ export default function CircularPolarizationPage() {
               这是打卫星时的常用策略（如果不想制作复杂的追踪圆极化天线），但会损失一半信号。
             </li>
           </ul>
+
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <ScientificCitation
+              title="物理原理验证 (Physics Validation)"
+              content={
+                <>
+                  <p className="mb-2">
+                    对于螺旋天线 (Helical
+                    Antenna)，当螺旋周长接近一个波长时，天线工作在
+                    <strong>轴向模式 (Axial Mode)</strong>。
+                    此时，天线沿螺旋轴向辐射最强，形成特定的方向性波束
+                    (Directional Beam)，且产生近似完美的圆极化波。
+                    本演示中的辐射方向图正是基于此模式绘制，而非侧向模式 (Normal
+                    Mode) 的全向辐射。
+                  </p>
+                  <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
+                    "The axial mode of radiation... maximum radiation is along
+                    the helix axis... The polarization is circularly polarized."
+                  </p>
+                </>
+              }
+              citations={[
+                {
+                  id: "kraus-helix",
+                  text: "Kraus, J. D. (1947). Helical Beam Antennas. Electronics, 20, 109-111.",
+                },
+                {
+                  id: "balanis-helix",
+                  text: "Balanis, C. A. (2016). Antenna Theory: Analysis and Design. Wiley. Chapter 10: Traveling Wave and Broadband Antennas.",
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

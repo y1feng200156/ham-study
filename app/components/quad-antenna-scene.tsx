@@ -12,13 +12,19 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
+interface QuadElementProps {
+  position: [number, number, number];
+  color?: string;
+  rotation?: [number, number, number];
+  feedPoint?: "bottom" | "side";
+}
+
 function QuadElement({
   position,
   color = "#ef4444",
-}: {
-  position: [number, number, number];
-  color?: string;
-}) {
+  rotation = [0, 0, 0],
+  feedPoint,
+}: QuadElementProps) {
   // A square loop diamond shape or square.
   // Let's do diamond shape (corners at top/bottom/left/right) or Square (flat).
   // Usually "Cubical Quad" is square.
@@ -50,7 +56,7 @@ function QuadElement({
   }, [lineGeo, color]);
 
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation as any}>
       {/* X shape spreaders support */}
       <mesh rotation={[0, 0, Math.PI / 4]}>
         <cylinderGeometry args={[0.02, 0.02, size * Math.sqrt(2), 8]} />
@@ -63,11 +69,29 @@ function QuadElement({
 
       {/* The Wire Loop */}
       <primitive object={lineObject} />
+
+      {/* Feed Point Visualization */}
+      {feedPoint === "bottom" && (
+        <mesh position={[0, -size / 2, 0]}>
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshBasicMaterial color="#fff" />
+        </mesh>
+      )}
+      {feedPoint === "side" && (
+        <mesh position={[size / 2, 0, 0]}>
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshBasicMaterial color="#fff" />
+        </mesh>
+      )}
     </group>
   );
 }
 
-function QuadAntenna() {
+function QuadAntenna({
+  polarization,
+}: {
+  polarization: "horizontal" | "vertical";
+}) {
   return (
     <group position={[0, 2, 0]}>
       {/* Boom */}
@@ -83,15 +107,28 @@ function QuadAntenna() {
       </mesh>
 
       {/* Reflector (Back) */}
-      <QuadElement position={[-1, 0, 0]} color="#3b82f6" />
+      <QuadElement
+        position={[-1, 0, 0]}
+        color="#3b82f6"
+        rotation={[0, Math.PI / 2, 0]}
+      />
 
       {/* Driven (Front/Middle) */}
-      <QuadElement position={[1, 0, 0]} color="#ef4444" />
+      <QuadElement
+        position={[1, 0, 0]}
+        color="#ef4444"
+        rotation={[0, Math.PI / 2, 0]}
+        feedPoint={polarization === "horizontal" ? "bottom" : "side"}
+      />
     </group>
   );
 }
 
-function RadiationPattern() {
+function RadiationPattern({
+  polarization,
+}: {
+  polarization: "horizontal" | "vertical";
+}) {
   const geometry = useMemo(() => {
     const geo = new SphereGeometry(1, 60, 40);
     const posAttribute = geo.attributes.position;
@@ -102,17 +139,26 @@ function RadiationPattern() {
       vertex.fromBufferAttribute(posAttribute, i);
       vertex.normalize();
 
-      // Quad/Loop pattern: bidirectional along Z axis (front and back)
-      // Nulls on the sides (X-Y plane)
-      // Gain proportional to |z|^0.7
-      const gain = Math.abs(vertex.z) ** 0.7;
+      // Quad pattern: bidirectional along X-axis (boom is X)?
+      // Wait, Yagi fires along X. Quad is YZ plane. Fires along X.
+      // Gain is highest along X.
+      // But polarization affects the E-field plane.
+      // Code was using Math.abs(vertex.z) for gain? That would beam along Z.
+      // If boom is X, we want beam along X.
+
+      const gain = Math.abs(vertex.x) ** 2; // Beaming along X axis
 
       vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
     return geo;
-  }, []);
+  }, []); // Pattern geometry is static for now, or could depend on polarization for minor shape changes?
+  // Usually Quad pattern is symmetric for both Pols, just rotated E-field.
+  // BUT, if I rotate element, the pattern logic was previously sending beam along Z?
+  // Previous code: gain = Math.abs(vertex.z)**0.7.
+  // If elements were in XY plane, beam would be Z. Correct.
+  // Now elements are in YZ plane, beam should be X. Correct.
 
   return (
     <group position={[0, 2, 0]}>
@@ -135,6 +181,9 @@ export default function QuadAntennaScene({
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
+  const [polarization, setPolarization] = useState<"horizontal" | "vertical">(
+    "horizontal",
+  );
 
   const LegendContent = () => (
     <>
@@ -156,16 +205,12 @@ export default function QuadAntennaScene({
           <span>反射环 (无源 / Reflector Loop)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-gray-400 rounded-sm" />
-          <span>支撑杆 (Support Rods)</span>
-        </div>
-        <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图 (Pattern)</span>
+          <span>辐射方向图 (Beams along Boom)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
-          <span>电磁波</span>
+          <span>电场 (E-field)</span>
         </div>
       </div>
     </>
@@ -205,13 +250,13 @@ export default function QuadAntennaScene({
             position={[0, 0, 0]}
           />
 
-          <QuadAntenna />
-          {showPattern && <RadiationPattern />}
+          <QuadAntenna polarization={polarization} />
+          {showPattern && <RadiationPattern polarization={polarization} />}
           {showWaves && (
             <group position={[1, 2, 0]}>
               <RadialWaveLines
                 antennaType="quad"
-                polarizationType="horizontal"
+                polarizationType={polarization}
                 isThumbnail={isThumbnail}
               />
             </group>
@@ -226,6 +271,20 @@ export default function QuadAntennaScene({
 
             <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
               <div className="flex flex-col space-y-3">
+                <div className="flex items-center justify-between space-x-4">
+                  <Label className="text-xs md:text-sm text-gray-300">
+                    极化:{" "}
+                    {polarization === "horizontal"
+                      ? "水平 (Horizontal)"
+                      : "垂直 (Vertical)"}
+                  </Label>
+                  <Switch
+                    checked={polarization === "vertical"}
+                    onCheckedChange={(c) =>
+                      setPolarization(c ? "vertical" : "horizontal")
+                    }
+                  />
+                </div>
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="wave-mode"

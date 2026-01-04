@@ -245,10 +245,11 @@ export function ElectricFieldInstanced({
         let normalizedGain = 0;
         let useHeatMap = false;
 
-        const isDirectionalStart =
+        const isVariableGain =
           antennaType === "yagi" ||
           antennaType === "quad" ||
-          antennaType === "moxon";
+          antennaType === "moxon" ||
+          polarizationType === "horizontal"; // Dipoles/V-antennas have nulls
 
         if (
           polarizationType === "circular" ||
@@ -261,7 +262,7 @@ export function ElectricFieldInstanced({
           normalizedGain = (cosDir + 1.0) * 0.5;
           // Apply some curve to make the "Red" zone more prominent?
           // pow(g, 0.5) pushes vals higher -> more red/yellow/green, less blue
-        } else if (isDirectionalStart) {
+        } else if (isVariableGain) {
           useHeatMap = true;
           // Linear Directional: dirGain ~0.1 to ~1.2
           // Map to 0..1

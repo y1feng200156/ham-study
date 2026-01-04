@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import { calculateYagi } from "../lib/yagi-calc";
+import { YagiSvgRenderer } from "../components/tools/yagi-calculator/YagiSvgRenderer";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
@@ -213,8 +215,25 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground">
-                <CalculatorIcon size={64} className="opacity-20" />
+              <div className="bg-slate-950 h-[200px] rounded-md overflow-hidden flex items-center justify-center relative">
+                <YagiSvgRenderer
+                  design={calculateYagi({
+                    frequency: 435.0,
+                    elementCount: 5,
+                    elementDiameter: 4.0,
+                    boomDiameter: 20.0,
+                    boomShape: "round",
+                    mountMethod: "bonded",
+                    feedGap: 10,
+                    drivenElementType: "folded",
+                    spacingType: "dl6wu",
+                    manualSpacing: 0,
+                    manualBCFactor: 0.7,
+                  })}
+                  width={600}
+                  height={350}
+                  minimal={true}
+                />
               </div>
             </CardContent>
             <CardFooter>

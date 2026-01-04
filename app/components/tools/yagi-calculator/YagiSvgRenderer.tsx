@@ -5,6 +5,7 @@ interface YagiSvgRendererProps {
   design: YagiDesign;
   width: number;
   height: number;
+  minimal?: boolean;
   ref?: React.Ref<SVGSVGElement>;
 }
 
@@ -13,17 +14,19 @@ export function YagiSvgRenderer({
   design,
   width,
   height,
+  minimal = false,
   ref,
 }: YagiSvgRendererProps) {
   // Layout Constants
-  const padX = 60;
+  const padX = minimal ? 30 : 60;
+  const vPad = minimal ? 40 : 160;
   const boomY = height / 2;
 
   // Scales
   const totalLen = design.totalBoomLength || 1;
   const maxElLen = design.elements[0].length * 1.2;
   const scaleX = (width - padX * 2) / totalLen;
-  const scaleY = (height - 160) / maxElLen; // Leave vertical padding
+  const scaleY = (height - vPad) / maxElLen; // Leave vertical padding
 
   return (
     <svg
@@ -150,92 +153,101 @@ export function YagiSvgRenderer({
               />
             )}
 
-            {/* Label */}
-            <text
-              x={cx}
-              y={y2 + 25}
-              textAnchor="middle"
-              fill="#64748b"
-              fontSize="12"
-              fontWeight="bold"
-            >
-              {el.name.split(" ")[0].replace("Director", "D")}
-            </text>
-
-            {/* Dimension Lines */}
-            {/* Width dim */}
-            <g opacity="0.6">
-              <line
-                x1={cx + 15}
-                y1={y1}
-                x2={cx + 15}
-                y2={y2}
-                stroke="#475569"
-                strokeWidth="1"
-                markerStart="url(#arrow)"
-                markerEnd="url(#arrow)"
-              />
-              <text
-                x={cx + 25}
-                y={boomY}
-                textAnchor="middle"
-                fill="#94a3b8"
-                fontSize="12"
-                fontFamily="monospace"
-                transform={`rotate(-90, ${cx + 25}, ${boomY})`}
-              >
-                {el.cutLength.toFixed(1)}
-              </text>
-            </g>
-
-            {/* Position Dim from prev (only if spacing > 0) */}
-            {idx > 0 && (
-              <g>
-                <line
-                  x1={cx}
-                  y1={y2 + 30}
-                  x2={cx}
-                  y2={height - 60}
-                  stroke="#334155"
-                  strokeWidth="1"
-                  strokeDasharray="2,2"
-                />
+            {/* Labels and Dimensions - Hide in minimal mode */}
+            {!minimal && (
+              <>
+                {/* Label */}
                 <text
                   x={cx}
-                  y={height - 50}
+                  y={y2 + 25}
                   textAnchor="middle"
-                  fill="#94a3b8"
+                  fill="#64748b"
                   fontSize="12"
-                  fontFamily="monospace"
+                  fontWeight="bold"
                 >
-                  {el.position.toFixed(0)}
+                  {el.name.split(" ")[0].replace("Director", "D")}
                 </text>
-              </g>
+
+                {/* Dimension Lines */}
+                {/* Width dim */}
+                <g opacity="0.6">
+                  <line
+                    x1={cx + 15}
+                    y1={y1}
+                    x2={cx + 15}
+                    y2={y2}
+                    stroke="#475569"
+                    strokeWidth="1"
+                    markerStart="url(#arrow)"
+                    markerEnd="url(#arrow)"
+                  />
+                  <text
+                    x={cx + 25}
+                    y={boomY}
+                    textAnchor="middle"
+                    fill="#94a3b8"
+                    fontSize="12"
+                    fontFamily="monospace"
+                    transform={`rotate(-90, ${cx + 25}, ${boomY})`}
+                  >
+                    {el.cutLength.toFixed(1)}
+                  </text>
+                </g>
+
+                {/* Position Dim from prev (only if spacing > 0) */}
+                {idx > 0 && (
+                  <g>
+                    <line
+                      x1={cx}
+                      y1={y2 + 30}
+                      x2={cx}
+                      y2={height - 60}
+                      stroke="#334155"
+                      strokeWidth="1"
+                      strokeDasharray="2,2"
+                    />
+                    <text
+                      x={cx}
+                      y={height - 50}
+                      textAnchor="middle"
+                      fill="#94a3b8"
+                      fontSize="12"
+                      fontFamily="monospace"
+                    >
+                      {el.position.toFixed(0)}
+                    </text>
+                  </g>
+                )}
+              </>
             )}
           </g>
         );
       })}
 
-      {/* Origin Mark */}
-      <text
-        x={padX}
-        y={height - 50}
-        textAnchor="middle"
-        fill="#94a3b8"
-        fontSize="12"
-        fontFamily="monospace"
-      >
-        0
-      </text>
-      <line
-        x1={padX}
-        y1={boomY + 60}
-        x2={padX}
-        y2={height - 60}
-        stroke="#334155"
-        strokeWidth="1"
-        strokeDasharray="2,2"
-      />
+      {/* Origin Mark - Hide in minimal mode */}
+      {!minimal && (
+        <>
+          <text
+            x={padX}
+            y={height - 50}
+            textAnchor="middle"
+            fill="#94a3b8"
+            fontSize="12"
+            fontFamily="monospace"
+          >
+            0
+          </text>
+          <line
+            x1={padX}
+            y1={boomY + 60}
+            x2={padX}
+            y2={height - 60}
+            stroke="#334155"
+            strokeWidth="1"
+            strokeDasharray="2,2"
+          />
+        </>
+      )}
     </svg>
   );
 }

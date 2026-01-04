@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import {
   BoxGeometry,
   BufferGeometry,
@@ -270,12 +271,12 @@ export default function EndFedAntennaScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  // Removed vizMode as we only have 'surface' + 'pattern' toggle now
 
   const speedMultiplier = {
     slow: 0.3,
@@ -287,29 +288,33 @@ export default function EndFedAntennaScene({
 
   const LegendContent = () => (
     <>
-      <h2 className="text-lg md:text-xl font-bold mb-2">端馈半波 (EFHW)</h2>
+      <h2 className="text-lg md:text-xl font-bold mb-2">
+        {t("endFedAntenna.title")}
+      </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        使用 49:1 巴伦的末端馈电半波天线。
-        <br />
-        End-Fed Half Wave with 49:1 Unun.
+        <Trans
+          ns="scene"
+          i18nKey="endFedAntenna.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子 (Radiator)</span>
+          <span>{t("endFedAntenna.radiator")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-orange-500 rounded-sm" />
-          <span>电场 (E-Field)</span>
+          <span>{t("endFedAntenna.eField")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-          <span>磁场 (H-Field)</span>
+          <span>{t("endFedAntenna.hField")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图 (Pattern)</span>
+          <span>{t("endFedAntenna.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Gradient Legend for Wave Strength */}
@@ -320,7 +325,7 @@ export default function EndFedAntennaScene({
                 "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
             }}
           />
-          <span>电波强度 (Waves)</span>
+          <span>{t("endFedAntenna.waves")}</span>
         </div>
       </div>
     </>
@@ -330,7 +335,7 @@ export default function EndFedAntennaScene({
     <div className="flex flex-col space-y-3">
       <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -344,7 +349,7 @@ export default function EndFedAntennaScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -358,7 +363,7 @@ export default function EndFedAntennaScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -366,7 +371,7 @@ export default function EndFedAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -384,7 +389,7 @@ export default function EndFedAntennaScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -397,7 +402,7 @@ export default function EndFedAntennaScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -410,7 +415,7 @@ export default function EndFedAntennaScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -477,7 +482,7 @@ export default function EndFedAntennaScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

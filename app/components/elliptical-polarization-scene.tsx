@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -79,6 +80,7 @@ export default function EllipticalPolarizationScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [ampY, setAmpY] = useState(1.5);
   const [ampZ, setAmpZ] = useState(0.8);
   const [phaseShift, setPhaseShift] = useState(90);
@@ -102,26 +104,28 @@ export default function EllipticalPolarizationScene({
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
-        椭圆极化 (Elliptical Polarization)
+        {t("ellipticalPolarization.title")}
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        最普遍的极化形式。垂直和水平分量的幅度和相位不完美时形成。
-        <br />
-        The general form where E-field traces an ellipse.
+        <Trans
+          ns="scene"
+          i18nKey="ellipticalPolarization.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子 (有源)</span>
+          <span>{t("ellipticalPolarization.active")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-gray-400 rounded-sm" />
-          <span>无源元件/地网</span>
+          <span>{t("ellipticalPolarization.passiveOrGround")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图</span>
+          <span>{t("ellipticalPolarization.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Gradient Legend for E-field Strength */}
@@ -132,7 +136,7 @@ export default function EllipticalPolarizationScene({
                 "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
             }}
           />
-          <span>电场强度 (强 &rarr; 弱)</span>
+          <span>{t("ellipticalPolarization.strength")}</span>
         </div>
       </div>
     </>
@@ -142,7 +146,7 @@ export default function EllipticalPolarizationScene({
     <div className="flex flex-col space-y-4">
       <div className="mb-2">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -156,7 +160,7 @@ export default function EllipticalPolarizationScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -170,7 +174,7 @@ export default function EllipticalPolarizationScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -178,7 +182,7 @@ export default function EllipticalPolarizationScene({
 
       <div className="space-y-1">
         <div className="flex justify-between text-white text-xs">
-          <Label>垂直幅度 (Amp Y)</Label>
+          <Label>{t("ellipticalPolarization.ampY")}</Label>
           <span>{ampY.toFixed(1)}</span>
         </div>
         <Slider
@@ -192,7 +196,7 @@ export default function EllipticalPolarizationScene({
 
       <div className="space-y-1">
         <div className="flex justify-between text-white text-xs">
-          <Label>水平幅度 (Amp Z)</Label>
+          <Label>{t("ellipticalPolarization.ampZ")}</Label>
           <span>{ampZ.toFixed(1)}</span>
         </div>
         <Slider
@@ -206,7 +210,7 @@ export default function EllipticalPolarizationScene({
 
       <div className="space-y-1">
         <div className="flex justify-between text-white text-xs">
-          <Label>相位差 (Phase Shift)</Label>
+          <Label>{t("ellipticalPolarization.phaseShift")}</Label>
           <span>{phaseShift.toFixed(0)}°</span>
         </div>
         <Slider
@@ -220,7 +224,7 @@ export default function EllipticalPolarizationScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -238,7 +242,7 @@ export default function EllipticalPolarizationScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -251,7 +255,7 @@ export default function EllipticalPolarizationScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -264,7 +268,7 @@ export default function EllipticalPolarizationScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -326,7 +330,7 @@ export default function EllipticalPolarizationScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

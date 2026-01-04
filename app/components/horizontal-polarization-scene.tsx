@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -70,12 +71,12 @@ export default function HorizontalPolarizationScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  // Removed vizMode as we only have 'surface' + 'pattern' toggle now
 
   const speedMultiplier = {
     slow: 0.3,
@@ -88,26 +89,28 @@ export default function HorizontalPolarizationScene({
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
-        水平极化 (Horizontal Polarization)
+        {t("horizontalPolarization.title")}
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        常用于短波 (HF) 远距离通信。地面反射对水平波的影响较小。
-        <br />
-        E-field oscillates horizontally. Common in HF DX communications.
+        <Trans
+          ns="scene"
+          i18nKey="horizontalPolarization.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子 (有源)</span>
+          <span>{t("horizontalPolarization.active")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-gray-400 rounded-sm" />
-          <span>无源元件/地网</span>
+          <span>{t("horizontalPolarization.passiveOrGround")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图</span>
+          <span>{t("horizontalPolarization.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Gradient Legend for E-field Strength */}
@@ -118,7 +121,7 @@ export default function HorizontalPolarizationScene({
                 "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
             }}
           />
-          <span>电场强度 (强 &rarr; 弱)</span>
+          <span>{t("horizontalPolarization.strength")}</span>
         </div>
       </div>
     </>
@@ -128,7 +131,7 @@ export default function HorizontalPolarizationScene({
     <div className="flex flex-col space-y-3">
       <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -142,7 +145,7 @@ export default function HorizontalPolarizationScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -156,7 +159,7 @@ export default function HorizontalPolarizationScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -164,7 +167,7 @@ export default function HorizontalPolarizationScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -182,7 +185,7 @@ export default function HorizontalPolarizationScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -195,7 +198,7 @@ export default function HorizontalPolarizationScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -208,7 +211,7 @@ export default function HorizontalPolarizationScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -269,7 +272,7 @@ export default function HorizontalPolarizationScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

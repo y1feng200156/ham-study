@@ -3,9 +3,11 @@ import {
   GithubLogoIcon,
   HandWavingIcon,
 } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 
 export function Footer() {
+  const { t } = useTranslation("common");
   return (
     <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mt-auto">
       <div className="container mx-auto px-4 py-8">
@@ -15,10 +17,10 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
               <HandWavingIcon size={20} weight="duotone" />
-              <span>有想法或建议？</span>
+              <span>{t("footer.feedback.title")}</span>
             </h3>
             <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <span>欢迎随时反馈，帮助改进这个项目</span>
+              <span>{t("footer.feedback.subtitle")}</span>
               <Button
                 asChild
                 size="icon"
@@ -27,7 +29,7 @@ export function Footer() {
               >
                 <a
                   href="mailto:ham@charlesify.com"
-                  title="发送邮件给 ham@charlesify.com"
+                  title={t("footer.feedback.emailTitle")}
                 >
                   <EnvelopeIcon weight="duotone" />
                 </a>
@@ -42,7 +44,7 @@ export function Footer() {
                   href="https://github.com/y1feng200156/ham-study"
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="View on GitHub"
+                  title={t("footer.feedback.githubTitle")}
                 >
                   <GithubLogoIcon weight="duotone" size={20} />
                 </a>
@@ -60,7 +62,7 @@ export function Footer() {
 
         <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-900 flex justify-center">
           <p className="text-xs text-zinc-400 dark:text-zinc-600">
-            © {new Date().getFullYear()} BG8ROM. All rights reserved.
+            {t("footer.copyright", { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { data } from "react-router";
 import resources from "~/locales";
 
 const supportedLngs = ["zh", "zh-HK", "en-US"] as const;
-const supportedNs = ["common"] as const;
+const supportedNs = ["common", "demos", "scene"] as const;
 
 type SupportedLng = (typeof supportedLngs)[number];
 type SupportedNs = (typeof supportedNs)[number];

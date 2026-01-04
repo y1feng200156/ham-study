@@ -75,6 +75,16 @@ export default {
     },
   },
 
+  footer: {
+    feedback: {
+      title: "有想法或建議？",
+      subtitle: "歡迎隨時反饋，幫助改進這個項目",
+      emailTitle: "發送郵件給 ham@charlesify.com",
+      githubTitle: "View on GitHub",
+    },
+    copyright: "© {{year}} BG8ROM. All rights reserved.",
+  },
+
   meta: {
     siteName: "業餘無線電可視化",
     keywords:

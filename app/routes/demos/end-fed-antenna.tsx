@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
 import type { MetaFunction } from "react-router";
+import { useTranslation, Trans } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 
 const EndFedAntennaScene = lazy(
   () => import("~/components/end-fed-antenna-scene"),
 );
 
-import { MathOmega, MathZVI } from "~/components/math-inline";
 import { ScientificCitation } from "~/components/scientific-citation";
 
 export const meta: MetaFunction = () => {
@@ -44,27 +44,28 @@ export const meta: MetaFunction = () => {
 };
 
 export default function EndFedAntennaPage() {
+  const { t } = useTranslation("demos");
+  const ef = "endFedAntenna";
+
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">端馈半波天线 (End-Fed Half Wave)</h1>
-        <p className="text-muted-foreground">
-          天线理论可视化 (Antenna Theory Visualization)
-        </p>
+        <h1 className="text-2xl font-bold">{t(`${ef}.title`)}</h1>
+        <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
       <div className="flex flex-col gap-6">
         <ClientOnly
           fallback={
             <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
-              加载 3D 场景中...
+              {t("loading")}
             </div>
           }
         >
           <Suspense
             fallback={
               <div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">
-                加载 3D 场景中...
+                {t("loading")}
               </div>
             }
           >
@@ -73,62 +74,60 @@ export default function EndFedAntennaPage() {
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
-          <h3>关于此演示</h3>
-          <p>
-            端馈半波天线 (EFHW)
-            是一种非常流行的多波段天线，特别适合野外便携架设。
-            它本质上是一根长度为工作的一半波长的导线，一端馈电。
-          </p>
+          <h3>{t("aboutTitle")}</h3>
+          <p>{t(`${ef}.about`)}</p>
           <ul>
             <li>
-              <strong>阻抗变换:</strong> 由于在半波长末端馈电，阻抗极高（约
-              2000-4000 欧姆），因此需要一个 49:1 或 64:1 的阻抗变换器 (Unun)
-              将其匹配到 50 欧姆。
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.impedance`}
+                components={{ strong: <strong /> }}
+              />
             </li>
             <li>
-              <strong>结构:</strong> 主要由一个 Unun
-              盒子、一根长振子线（Radiator）和一段同轴电缆组成。同轴电缆的屏蔽层通常充当反向地（Counterpoise）。
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.structure`}
+                components={{ strong: <strong /> }}
+              />
             </li>
             <li>
-              <strong>多波段:</strong>{" "}
-              在基频的谐波频率上也能自然谐振，无需天调即可工作在多个波段（如
-              40m, 20m, 15m, 10m）。
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.multiband`}
+                components={{ strong: <strong /> }}
+              />
             </li>
           </ul>
 
-          <h3>极化与应用</h3>
+          <h3>{t(`${ef}.polarizationTitle`)}</h3>
+          <ul></ul>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation
-              title="物理原理验证 (Physics Validation)"
+              title={t("physicsValidation")}
               content={
                 <>
                   <p className="mb-2">
-                    端馈半波天线 (EFHW)
-                    在谐振时，馈电点位于电压波腹（电压最大）和电流波节（电流最小）处。
-                    根据 <MathZVI />
-                    ，这意味着其输入阻抗极高（理论上无穷大，实际上约 2500-5000
-                    <MathOmega />
-                    ）。 因此必须使用高变比（如 49:1 或
-                    64:1）的宽带阻抗变换器将其降至 50
-                    <MathOmega />。
+                    <Trans
+                      ns="demos"
+                      i18nKey={`${ef}.physicsContent`}
+                      components={{ strong: <strong /> }}
+                    />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    "An end-fed half-wave antenna presents a very high impedance
-                    at the feed point... requiring a matching network (unun) to
-                    transform the high impedance down to 50 ohms."
+                    {t(`${ef}.physicsQuote`)}
                   </p>
                 </>
               }
               citations={[
                 {
                   id: "hallas",
-                  text: "Hallas, J., W1ZR. (2019). The End-Fed Half-Wave Antenna. QST Magazine.",
+                  text: "Hallas, J., W1ZR. (2012). The End-Fed Half-Wave Antenna. QST Magazine.",
                 },
                 {
-                  id: "aa5tb",
-                  text: "Yates, S., AA5TB. (2020). The End Fed Half Wave Antenna.",
-                  url: "https://www.aa5tb.com/efha.html",
+                  id: "yaeger",
+                  text: "Yager, A. (2010). Driven Elements: The End-Fed Half-Wave. QEX.",
                 },
               ]}
             />

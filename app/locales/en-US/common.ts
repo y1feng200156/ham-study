@@ -84,6 +84,16 @@ export default {
     },
   },
 
+  footer: {
+    feedback: {
+      title: "Have ideas or suggestions?",
+      subtitle: "Feedback is welcome to help improve this project",
+      emailTitle: "Send email to ham@charlesify.com",
+      githubTitle: "View on GitHub",
+    },
+    copyright: "© {{year}} BG8ROM. All rights reserved.",
+  },
+
   meta: {
     siteName: "Ham Radio Visualization",
     keywords:

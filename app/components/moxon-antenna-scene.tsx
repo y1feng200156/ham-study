@@ -209,7 +209,7 @@ export default function MoxonAntennaScene({
         className={`relative w-full ${isThumbnail ? "h-full" : "h-[450px] md:h-[600px]"} border rounded-lg overflow-hidden bg-black touch-none`}
       >
         <Canvas
-          camera={{ position: [5, 6, 5], fov: 50 }}
+          camera={{ position: [8, 10, 8], fov: 50 }}
           frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />

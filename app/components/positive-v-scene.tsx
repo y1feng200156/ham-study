@@ -108,7 +108,7 @@ export default function PositiveVAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
+  // Removed vizMode logic
 
   const speedMultiplier = {
     slow: 0.3,
@@ -181,10 +181,9 @@ export default function PositiveVAntennaScene({
           />
 
           <PositiveVAntenna />
-          {vizMode === "pattern" && showPattern && <RadiationPattern />}
-
+          {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
-          {vizMode === "surface" && showWaves && (
+          {showWaves && (
             <ElectricFieldInstanced
               antennaType="positive-v"
               polarizationType="horizontal"
@@ -207,47 +206,33 @@ export default function PositiveVAntennaScene({
                   <div className="mb-2 text-xs md:text-sm font-medium">
                     显示模式 (Visualization)
                   </div>
-                  <RadioGroup
-                    value={vizMode}
-                    onValueChange={(v: "surface" | "pattern") => setVizMode(v)}
-                    className="flex flex-row space-x-1 bg-muted/50 p-1 rounded-lg"
-                  >
-                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
-                      <RadioGroupItem value="surface" id="viz-surface" />
-                      <Label htmlFor="viz-surface" className="cursor-pointer">
-                        Field
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="wave-mode"
+                        checked={showWaves}
+                        onCheckedChange={setShowWaves}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                      />
+                      <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                        显示电波 (Show Waves)
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
-                      <RadioGroupItem value="pattern" id="viz-pattern" />
-                      <Label htmlFor="viz-pattern" className="cursor-pointer">
-                        Pattern
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="pattern-mode"
+                        checked={showPattern}
+                        onCheckedChange={setShowPattern}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                      />
+                      <Label
+                        htmlFor="pattern-mode"
+                        className="text-xs md:text-sm"
+                      >
+                        显示方向图 (Show Pattern)
                       </Label>
                     </div>
-                  </RadioGroup>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="wave-mode"
-                    checked={showWaves}
-                    onCheckedChange={setShowWaves}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                    显示电波 (Show Waves)
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="pattern-mode"
-                    checked={showPattern}
-                    onCheckedChange={setShowPattern}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
-                    显示方向图 (Show Pattern)
-                  </Label>
+                  </div>
                 </div>
 
                 <div className="pt-3 border-t border-white/10">

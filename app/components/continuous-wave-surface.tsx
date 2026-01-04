@@ -1,12 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import {
-  BufferAttribute,
-  DoubleSide,
-  type Mesh,
-  PlaneGeometry,
-  Vector3,
-} from "three";
+import { BufferAttribute, DoubleSide, type Mesh, PlaneGeometry } from "three";
 
 interface ContinuousWaveSurfaceProps {
   antennaType:
@@ -28,7 +22,6 @@ interface ContinuousWaveSurfaceProps {
 
 export function ContinuousWaveSurface({
   antennaType,
-  polarizationType,
   speed = 1.0,
   amplitudeScale = 1.0,
 }: ContinuousWaveSurfaceProps) {

@@ -14,6 +14,7 @@ interface ElectricFieldInstancedProps {
   speed?: number;
   amplitudeScale?: number;
   isRHCP?: boolean;
+  axialRatio?: number;
 }
 
 export function ElectricFieldInstanced({
@@ -147,22 +148,37 @@ export function ElectricFieldInstanced({
         meshRef.current.setMatrixAt(i, dummy.matrix);
 
         // Color Logic: Pulse Wave
-        // Base Color: Handedness
         const color = new Color();
-        if (cosDir > 0) {
-          // Front: Reddish/Orange
-          color.setHSL(0.0 + (1 - cosDir) * 0.15, 1.0, 0.5);
-        } else {
-          // Back: Blueish/Cyan
-          color.setHSL(0.6 - (1 + cosDir) * 0.1, 1.0, 0.5);
-        }
 
-        // Side: Linear -> Greenish?
-        if (Math.abs(cosDir) < 0.3) {
-          // Blend to Green
-          const t = 1.0 - Math.abs(cosDir) / 0.3;
-          const baseC = new Color().setHSL(0.3, 1.0, 0.5); // Green
-          color.lerp(baseC, t);
+        // Base Color based on Polarization Mode
+        if (
+          polarizationType === "circular" ||
+          polarizationType === "elliptical"
+        ) {
+          // Directional Color for Helical/CP
+          // Front: Reddish, Back: Blueish
+          if (cosDir > 0) {
+            color.setHSL(0.0 + (1 - cosDir) * 0.15, 1.0, 0.5);
+          } else {
+            color.setHSL(0.6 - (1 + cosDir) * 0.1, 1.0, 0.5);
+          }
+          // Side blend
+          if (Math.abs(cosDir) < 0.3) {
+            const t = 1.0 - Math.abs(cosDir) / 0.3;
+            const baseC = new Color().setHSL(0.3, 1.0, 0.5);
+            color.lerp(baseC, t);
+          }
+        } else {
+          // Linear Polarization (Vertical / Horizontal)
+          // Should be uniform color, representing the "Type"
+          // Vertical: Cyan/Blueish for "Electric"? Or Green?
+          // Let's use a nice energetic Blue-Cyan (0.55).
+          if (polarizationType === "vertical") {
+            color.setHSL(0.55, 0.9, 0.5);
+          } else {
+            // Horizontal
+            color.setHSL(0.1, 0.9, 0.5); // Orange/Yellowish for Horizontal
+          }
         }
 
         // Brightness Pulse

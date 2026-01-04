@@ -75,7 +75,7 @@ export default function HorizontalPolarizationScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
+  // Removed vizMode as we only have 'surface' + 'pattern' toggle now
 
   const speedMultiplier = {
     slow: 0.3,
@@ -145,9 +145,9 @@ export default function HorizontalPolarizationScene({
           />
 
           <Antenna />
-          {vizMode === "pattern" && showPattern && <RadiationPattern />}
+          {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
-          {vizMode === "surface" && (
+          {showWaves && (
             <ElectricFieldInstanced
               antennaType="horizontal"
               polarizationType="horizontal"
@@ -170,67 +170,36 @@ export default function HorizontalPolarizationScene({
                   <div className="mb-2 text-xs md:text-sm font-medium">
                     显示模式 (Visualization)
                   </div>
-                  <RadioGroup
-                    defaultValue="surface"
-                    value={vizMode}
-                    onValueChange={(v) =>
-                      setVizMode(v as "surface" | "pattern")
-                    }
-                    className="flex gap-4"
-                  >
+                  <div className="flex flex-col space-y-2">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="surface"
-                        id="v-surface"
-                        className="border-zinc-400 text-primary-foreground"
+                      <Switch
+                        id="wave-mode"
+                        checked={showWaves}
+                        onCheckedChange={setShowWaves}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                       />
-                      <Label
-                        htmlFor="v-surface"
-                        className="text-xs cursor-pointer"
-                      >
-                        场面 (Surface)
+                      <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                        显示电波 (Show Waves)
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="pattern"
-                        id="v-pattern"
-                        className="border-zinc-400 text-primary-foreground"
+                      <Switch
+                        id="pattern-mode"
+                        checked={showPattern}
+                        onCheckedChange={setShowPattern}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                       />
                       <Label
-                        htmlFor="v-pattern"
-                        className="text-xs cursor-pointer"
+                        htmlFor="pattern-mode"
+                        className="text-xs md:text-sm"
                       >
-                        方向图 (Pattern)
+                        显示方向图 (Show Pattern)
                       </Label>
                     </div>
-                  </RadioGroup>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="wave-mode"
-                    checked={showWaves}
-                    onCheckedChange={setShowWaves}
-                    disabled={vizMode !== "surface"}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                    显示电波 (Show Waves)
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="pattern-mode"
-                    checked={showPattern}
-                    onCheckedChange={setShowPattern}
-                    disabled={vizMode !== "pattern"}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
-                    显示方向图 (Show Pattern)
-                  </Label>
-                </div>
+                <div className="flex items-center space-x-2"></div>
 
                 <div className="pt-3 border-t border-white/10">
                   <div className="mb-2 text-xs md:text-sm font-medium">

@@ -82,11 +82,14 @@ export default function EllipticalPolarizationScene({
   const [ampY, setAmpY] = useState(1.5);
   const [ampZ, setAmpZ] = useState(0.8);
   const [phaseShift, setPhaseShift] = useState(90);
+
+  const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
+  const [isRHCP, setIsRHCP] = useState(true);
+  const [axialRatio, setAxialRatio] = useState(0.7);
 
   const speedMultiplier = {
     slow: 0.3,
@@ -157,13 +160,14 @@ export default function EllipticalPolarizationScene({
 
           <GenericAntenna />
           {showPattern && <RadiationPattern ampY={ampY} ampZ={ampZ} />}
-          {/* Surface/Field Mode */}
-          {vizMode === "surface" && (
+          {showWaves && (
             <ElectricFieldInstanced
-              antennaType="elliptical"
+              antennaType="helical" // Reusing helical type for now as elliptical is similar in implementation
               polarizationType="elliptical"
               speed={speedMultiplier}
               amplitudeScale={1.5}
+              isRHCP={isRHCP}
+              axialRatio={axialRatio}
             />
           )}
         </Canvas>
@@ -176,57 +180,37 @@ export default function EllipticalPolarizationScene({
 
             <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto max-w-xs">
               <div className="flex flex-col space-y-4">
-                {/* Visualization Mode */}
                 <div className="mb-2">
                   <div className="mb-2 text-xs md:text-sm font-medium">
                     显示模式 (Visualization)
                   </div>
-                  <RadioGroup
-                    defaultValue="surface"
-                    value={vizMode}
-                    onValueChange={(v) =>
-                      setVizMode(v as "surface" | "pattern")
-                    }
-                    className="flex gap-4"
-                  >
+                  <div className="flex flex-col space-y-2">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="surface"
-                        id="v-surface"
-                        className="border-zinc-400 text-primary-foreground"
+                      <Switch
+                        id="wave-mode"
+                        checked={showWaves}
+                        onCheckedChange={setShowWaves}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                       />
-                      <Label
-                        htmlFor="v-surface"
-                        className="text-xs cursor-pointer"
-                      >
-                        场面 (Surface)
+                      <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                        显示电波 (Show Waves)
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="pattern"
-                        id="v-pattern"
-                        className="border-zinc-400 text-primary-foreground"
+                      <Switch
+                        id="pattern-mode"
+                        checked={showPattern}
+                        onCheckedChange={setShowPattern}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                       />
                       <Label
-                        htmlFor="v-pattern"
-                        className="text-xs cursor-pointer"
+                        htmlFor="pattern-mode"
+                        className="text-xs md:text-sm"
                       >
-                        方向图 (Pattern)
+                        显示方向图 (Show Pattern)
                       </Label>
                     </div>
-                  </RadioGroup>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="pattern-mode"
-                    checked={showPattern}
-                    onCheckedChange={setShowPattern}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
-                    显示方向图 (Show Pattern)
-                  </Label>
+                  </div>
                 </div>
 
                 <div className="space-y-1">

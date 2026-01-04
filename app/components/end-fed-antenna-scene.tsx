@@ -425,27 +425,32 @@ export default function EndFedAntennaScene({
                   </RadioGroup>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="wave-mode"
-                    checked={showWaves}
-                    onCheckedChange={setShowWaves}
-                    className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                    显示电波 (Show Waves)
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="pattern-mode"
-                    checked={showPattern}
-                    onCheckedChange={setShowPattern}
-                    className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
-                    显示方向图 (Show Pattern)
-                  </Label>
+                <div className="flex flex-col space-y-2 mt-2">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="wave-mode"
+                      checked={showWaves}
+                      onCheckedChange={setShowWaves}
+                      className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                    />
+                    <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                      显示电波 (Show Waves)
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="pattern-mode"
+                      checked={showPattern}
+                      onCheckedChange={setShowPattern}
+                      className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                    />
+                    <Label
+                      htmlFor="pattern-mode"
+                      className="text-xs md:text-sm"
+                    >
+                      显示方向图 (Show Pattern)
+                    </Label>
+                  </div>
                 </div>
               </div>
 

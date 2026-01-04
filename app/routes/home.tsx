@@ -3,6 +3,7 @@ import { lazy, Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, type MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Button } from "~/components/ui/button";
 import {
@@ -99,15 +100,15 @@ function ToolCard({ tool, actionText }: { tool: Tool; actionText: string }) {
         <CardDescription>{tool.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to={tool.href} className="flex-1 flex flex-col gap-y-6">
+        <LocaleLink to={tool.href} className="flex-1 flex flex-col gap-y-6">
           <div className="bg-slate-950 h-[200px] rounded-md overflow-hidden flex items-center justify-center relative">
             {tool.preview}
           </div>
-        </Link>
+        </LocaleLink>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={tool.href}>{actionText}</Link>
+          <LocaleLink to={tool.href}>{actionText}</LocaleLink>
         </Button>
       </CardFooter>
     </Card>
@@ -130,7 +131,7 @@ function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
         <CardDescription>{demo.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to={demo.href} className="flex-1 flex flex-col gap-y-6">
+        <LocaleLink to={demo.href} className="flex-1 flex flex-col gap-y-6">
           <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative">
             <ClientOnly
               fallback={
@@ -151,11 +152,11 @@ function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
               }`}
             />
           </div>
-        </Link>
+        </LocaleLink>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={demo.href}>{actionText}</Link>
+          <LocaleLink to={demo.href}>{actionText}</LocaleLink>
         </Button>
       </CardFooter>
     </Card>

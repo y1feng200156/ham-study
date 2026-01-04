@@ -164,16 +164,78 @@ export function RadialWaveLines({
       positions[j * 3 + 2] = z;
 
       // --- Pulse Color Logic ---
-      // High intensity at wave peaks, transparent at nodes
-      let intensity = Math.abs(waveVal) ** 3.0;
-      intensity *= Math.min(1.0, r * 0.5); // Prevent start artifact
-      intensity *= endEnvelope;
-      intensity *= amplitudeScale;
+      // Intensity based on wave amplitude (peaks) AND Directional Gain
+      // Gain determines if we are in the "beam" or the "null"
+      // Stronger signal = Brighter/Warmer color + Higher Opacity
 
-      // Cyan color (0, 1, 1)
-      colors[j * 3] = 0.0 * intensity; // R
-      colors[j * 3 + 1] = 1.0 * intensity; // G
-      colors[j * 3 + 2] = 1.0 * intensity; // B
+      let intensity = Math.abs(waveVal); // Basic wave shape
+      if (intensity < 0.1) intensity = 0.1; // Min visibility for continuity? Or let it fade?
+
+      // Modulate by gain (Directionality)
+      // If gain is 0 (null), visualIntensity should be 0 (invisible).
+      const visualGain = gain * amplitudeScale;
+
+      // Combined Envelope
+      const combinedEnvelope = endEnvelope * Math.min(1.0, r * 0.5); // Fade in/out edges
+
+      // Visual Strength (0..1)
+      // High gain + High wave Peak = 1.0
+      const strength = visualGain * intensity * combinedEnvelope;
+
+      // Color Gradient based on Strength/Gain
+      // We want the *Beam* to be a certain color, and *Nulls* to be another (or invisible).
+      // Let's base color primarily on 'gain' so the beam has a consistent "hot" core,
+      // creating a "Heatmap" effect.
+      // High Gain (~1.0) -> Red/Orange
+      // Medium Gain (~0.5) -> Green
+      // Low Gain (~0.0) -> Blue/Transparent
+
+      // HSL Ramp:
+      // Red (~0.0 or 1.0) -> Green (~0.3) -> Blue (~0.66)
+      // Let's map Gain 0..1 to Hue 0.66..0.0 (Blue -> Red)
+      // const hue = (1.0 - gain) * 0.66;
+
+      // Saturation: 1.0
+      // Lightness: 0.5 (Normal) to 0.8 (Bright/Hot) ?
+      // Let's do simple RGB interpolation for performance? Vector3 lerp? No, manual is faster.
+
+      // Simple Heatmap Ramp (Cold to Hot):
+      // 0.0: Blue (0, 0, 1)
+      // 0.5: Green (0, 1, 0)
+      // 1.0: Red (1, 0, 0)
+
+      let rCol = 0,
+        gCol = 0,
+        bCol = 0;
+
+      if (gain < 0.5) {
+        // Blue to Green
+        const t = gain * 2.0; // 0..1
+        rCol = 0.0;
+        gCol = t;
+        bCol = 1.0 - t;
+      } else {
+        // Green to Red
+        const t = (gain - 0.5) * 2.0; // 0..1
+        rCol = t;
+        gCol = 1.0 - t;
+        bCol = 0.0;
+      }
+
+      // Force cyan/white aesthetic if user prefers?
+      // The user asked for "Strength / Directionality by Color".
+      // Let's try this Heatmap approach.
+
+      // Apply Pulse/Wave intensity to the Alpha/Brightness
+      // We are using AdditiveBlending, so "Black" is transparent.
+      // We modulate the calculated Color by the 'strength' (Wave Shape).
+
+      // Boost the peak brightness
+      const brightness = strength * strength * 3.0;
+
+      colors[j * 3] = rCol * brightness;
+      colors[j * 3 + 1] = gCol * brightness;
+      colors[j * 3 + 2] = bCol * brightness;
     }
 
     line.geometry.attributes.position.needsUpdate = true;

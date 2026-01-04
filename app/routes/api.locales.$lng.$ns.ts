@@ -20,10 +20,12 @@ export async function loader({
     return data({ error: "Unsupported language" }, { status: 400 });
   }
 
-  const langResources = resources[lng];
-  if (!langResources || !langResources[ns]) {
+  if (!supportedNs.includes(ns)) {
     return data({ error: "Unsupported namespace" }, { status: 400 });
   }
+
+  const langResources = resources[lng as keyof typeof resources];
+  const nsResource = langResources[ns as keyof typeof langResources];
 
   const headers = new Headers();
 
@@ -40,5 +42,5 @@ export async function loader({
     );
   }
 
-  return data(langResources[ns], { headers });
+  return data(nsResource, { headers });
 }

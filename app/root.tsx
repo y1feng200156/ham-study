@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   data,
   isRouteErrorResponse,
@@ -10,14 +11,12 @@ import {
   ScrollRestoration,
   useLocation,
 } from "react-router";
-import { useTranslation } from "react-i18next";
+import type { Route } from "./+types/root";
 import {
   getLocale,
   i18nextMiddleware,
   localeCookie,
 } from "./middleware/i18next";
-
-import type { Route } from "./+types/root";
 import "./app.css";
 
 export const middleware = [i18nextMiddleware];

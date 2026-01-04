@@ -1,24 +1,12 @@
 import {
   CalculatorIcon,
+  CompassToolIcon,
   DownloadIcon,
   InfoIcon,
   LightningIcon,
-  CompassToolIcon,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MetaFunction } from "react-router";
-import { Button } from "~/components/ui/button";
-import { TooltipProvider } from "~/components/ui/tooltip";
-
-import {
-  type BoomShape,
-  calculateYagi,
-  type DrivenElementType,
-  type MountMethod,
-  type SpacingType,
-  type YagiConfig,
-} from "~/lib/yagi-calc";
-
 import { BasicSpecsCard } from "~/components/tools/yagi-calculator/BasicSpecsCard";
 import { ProModePanel } from "~/components/tools/yagi-calculator/ProModePanel";
 import {
@@ -27,6 +15,16 @@ import {
 } from "~/components/tools/yagi-calculator/QuickModePanel";
 import { ResultsTable } from "~/components/tools/yagi-calculator/ResultsTable";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
+import { Button } from "~/components/ui/button";
+import { TooltipProvider } from "~/components/ui/tooltip";
+import {
+  type BoomShape,
+  calculateYagi,
+  type DrivenElementType,
+  type MountMethod,
+  type SpacingType,
+  type YagiConfig,
+} from "~/lib/yagi-calc";
 
 export const meta: MetaFunction = () => {
   return [

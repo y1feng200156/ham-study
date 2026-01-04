@@ -1,11 +1,9 @@
-import { CopyIcon, ApproximateEqualsIcon } from "@phosphor-icons/react";
-import { Button } from "~/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+  ApproximateEqualsIcon,
+  CopyIcon,
+  QuestionIcon,
+} from "@phosphor-icons/react";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,6 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import type { YagiDesign } from "~/lib/yagi-calc";
 
 interface ResultsTableProps {
@@ -105,20 +109,21 @@ export function ResultsTable({ design, copyTable }: ResultsTableProps) {
         <span className="font-medium">
           总臂长: {(design.totalBoomLength + 60).toFixed(0)} mm
         </span>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="font-medium text-sky-600 flex items-center gap-1 cursor-help underline decoration-dotted underline-offset-4">
-                预估增益
-                <ApproximateEqualsIcon className="w-4 h-4" />
-                {design.estimatedGain.toFixed(1)} dBi
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>预估公式: (单元数 × 1.2) + 2.15 dBi</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="font-medium text-sky-600 flex items-center gap-1">
+          预估增益
+          <ApproximateEqualsIcon className="w-4 h-4" />
+          {design.estimatedGain.toFixed(1)} dBi
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <QuestionIcon className="w-4 h-4 text-sky-400 cursor-help ml-1" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>预估公式: (单元数 × 1.2) + 2.15 dBi</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </span>
       </div>
     </Card>
   );

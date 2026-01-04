@@ -88,8 +88,8 @@ export default function EllipticalPolarizationScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  const [isRHCP, setIsRHCP] = useState(true);
-  const [axialRatio, setAxialRatio] = useState(0.7);
+  const [isRHCP, _setIsRHCP] = useState(true);
+  const [axialRatio, _setAxialRatio] = useState(0.7);
 
   const speedMultiplier = {
     slow: 0.3,

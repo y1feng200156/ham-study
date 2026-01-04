@@ -1,12 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import {
-  CylinderGeometry,
-  InstancedMesh,
-  Object3D,
-  SphereGeometry,
-  Color,
-} from "three";
+import { Color, type InstancedMesh, Object3D, SphereGeometry } from "three";
 
 interface ElectricFieldInstancedProps {
   antennaType: string;
@@ -41,7 +35,7 @@ export function ElectricFieldInstanced({
 
   const timeRef = useRef(0);
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     if (!meshRef.current) return;
 
     timeRef.current += delta * 1.0 * speed;
@@ -93,8 +87,8 @@ export function ElectricFieldInstanced({
 
           // Model: Main Lobe (Front) + Small Back Lobe
           // Power usually cos^n. Let's start linear for visibility.
-          dirGain = Math.pow(front, 1.5) + 0.3 * back + 0.1;
-          dirGain = Math.pow(front, 1.5) + 0.3 * back + 0.1;
+          dirGain = front ** 1.5 + 0.3 * back + 0.1;
+          dirGain = front ** 1.5 + 0.3 * back + 0.1;
         } else if (
           antennaType === "yagi" ||
           antennaType === "quad" ||
@@ -106,8 +100,8 @@ export function ElectricFieldInstanced({
             // Yagi/Quad: X-axis Beam (+X is forward)
             // Need strong lobes in +X, weak in -X
             const front = Math.max(0, cosDir);
-            const back = Math.max(0, -cosDir);
-            dirGain = Math.pow(front, 2.0) + 0.1; // Sharper beam
+            const _back = Math.max(0, -cosDir);
+            dirGain = front ** 2.0 + 0.1; // Sharper beam
           } else if (antennaType === "moxon") {
             // Moxon: Handled slightly differently?
             // Actually Moxon scene has geometry along X/Z?
@@ -123,7 +117,7 @@ export function ElectricFieldInstanced({
             // Angle is from X. sin(angle) ~ Z.
             const sinDir = Math.sin(angle);
             const front = Math.max(0, sinDir);
-            dirGain = Math.pow(front, 2.0) + 0.1;
+            dirGain = front ** 2.0 + 0.1;
           }
 
           // Apply Polarization Pattern (E-field orientation)
@@ -285,7 +279,7 @@ export function ElectricFieldInstanced({
         // The wave peaks are bright, troughs are dim
         const wavePulse = (Math.sin(phase) + 1.0) * 0.5; // 0 to 1
         // Make it sharper?
-        const sharpness = Math.pow(wavePulse, 2.0);
+        const sharpness = wavePulse ** 2.0;
 
         // MODIFIED: Scale brightness by dirGain so that "weak" directions are visible dimmer
         // We clamp dirGain to not overbook brightness in main lobe (max 1.0 usually)

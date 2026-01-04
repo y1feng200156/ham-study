@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/react";
+import { useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -9,12 +10,14 @@ import {
   useLoaderData,
   useLocation,
 } from "react-router";
-import { useChangeLanguage } from "remix-i18next/react";
+import { useTranslation } from "react-i18next";
 import { dir } from "i18next";
 import i18next from "./i18n.server";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+
+export const handle = { i18n: "common" };
 
 export async function loader({ request }: Route.LoaderArgs) {
   const locale = await i18next.getLocale(request);
@@ -92,8 +95,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const locale = data?.locale || "zh";
   const image = `${origin}/og.webp`;
   const url = origin + location.pathname;
+  const { i18n } = useTranslation();
 
-  useChangeLanguage(locale);
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
   return (
     <html lang={locale} dir={dir(locale)} className="h-full">

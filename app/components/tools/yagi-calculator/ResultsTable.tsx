@@ -1,6 +1,12 @@
 import { CopyIcon, ApproximateEqualsIcon } from "@phosphor-icons/react";
 import { Button } from "~/components/ui/button";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -99,11 +105,20 @@ export function ResultsTable({ design, copyTable }: ResultsTableProps) {
         <span className="font-medium">
           总臂长: {(design.totalBoomLength + 60).toFixed(0)} mm
         </span>
-        <span className="font-medium text-sky-600 flex items-center gap-1">
-          预估增益
-          <ApproximateEqualsIcon className="w-4 h-4" />
-          {design.estimatedGain.toFixed(1)} dBi
-        </span>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="font-medium text-sky-600 flex items-center gap-1 cursor-help underline decoration-dotted underline-offset-4">
+                预估增益
+                <ApproximateEqualsIcon className="w-4 h-4" />
+                {design.estimatedGain.toFixed(1)} dBi
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>预估公式: (单元数 × 1.2) + 2.15 dBi</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </Card>
   );

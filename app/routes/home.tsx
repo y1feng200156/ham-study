@@ -1,6 +1,7 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense, useState } from "react";
 import { Link, type MetaFunction } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Button } from "~/components/ui/button";
@@ -165,16 +166,17 @@ function DemoCard({ demo }: { demo: Demo }) {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const demos = [
     {
-      title: "垂直极化 (Vertical Polarization)",
+      title: t("demos.vertical", "垂直极化 (Vertical Polarization)"),
       description:
         "可视化垂直极化天线的电场传播 (Electric Field Propagation)。",
       href: "/demos/vertical-polarization",
       component: VerticalPolarizationScene,
     },
     {
-      title: "水平极化 (Horizontal Polarization)",
+      title: t("demos.horizontal", "水平极化 (Horizontal Polarization)"),
       description:
         "可视化水平极化天线的电场传播 (Electric Field Propagation)。",
       href: "/demos/horizontal-polarization",
@@ -267,11 +269,9 @@ export default function Home() {
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-6">
-      <h1 className="text-3xl font-bold mb-4">业余无线电可视化</h1>
+      <h1 className="text-3xl font-bold mb-4">{t("title")}</h1>
       <p className="text-muted-foreground text-lg mb-6 max-w-[800px]">
-        欢迎来到业余无线电可视化实验室。这里汇集了各种经典天线和电磁波极化的 3D
-        仿真演示。通过交互式的 3D
-        场景，您可以直观地探索天线原理与电波传播特性，深入理解无线电通信背后的物理机制。
+        {t("description")}
       </p>
 
       <div className="mb-8 flex gap-4">

@@ -1,0 +1,8 @@
+title: "Ham Radio Visualization"
+description: "Interactive 3D visualization of amateur radio antenna polarization and propagation."
+nav:
+  home: "Home"
+  about: "About"
+demos:
+  vertical: "Vertical Polarization"
+  horizontal: "Horizontal Polarization"

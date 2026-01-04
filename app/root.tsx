@@ -9,12 +9,19 @@ import {
   useLoaderData,
   useLocation,
 } from "react-router";
+import { useChangeLanguage } from "remix-i18next/react";
+import { dir } from "i18next";
+import i18next from "./i18n.server";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  return { origin: new URL(request.url).origin };
+  const locale = await i18next.getLocale(request);
+  return {
+    origin: new URL(request.url).origin,
+    locale,
+  };
 }
 
 export const meta: Route.MetaFunction = () => {
@@ -82,11 +89,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
   const location = useLocation();
   const origin = data?.origin || "";
+  const locale = data?.locale || "zh";
   const image = `${origin}/og.webp`;
   const url = origin + location.pathname;
 
+  useChangeLanguage(locale);
+
   return (
-    <html lang="zh-CN" className="h-full">
+    <html lang={locale} dir={dir(locale)} className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -141,6 +151,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
+
+// Re-export i18n config for client side usage if needed, though usually not needed here if initialized in entry.client
 
 export default function App() {
   return <Outlet />;

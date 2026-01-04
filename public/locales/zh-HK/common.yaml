@@ -1,0 +1,8 @@
+title: "業餘無線電可視化"
+description: "3D可視化演示各類（垂直、水平、圓極化等）天線電磁波傳播原理。"
+nav:
+  home: "首頁"
+  about: "關於"
+demos:
+  vertical: "垂直極化"
+  horizontal: "水平極化"

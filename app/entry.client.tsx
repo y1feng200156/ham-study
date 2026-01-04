@@ -1,47 +1,35 @@
-import { HydratedRouter } from "react-router/dom";
+import Fetch from "i18next-fetch-backend";
+import i18next from "i18next";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import i18next from "i18next";
 import { I18nextProvider, initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import Backend from "i18next-http-backend";
-import { getInitialNamespaces } from "remix-i18next/client";
-import yaml from "js-yaml";
-import i18n from "./i18n";
+import { HydratedRouter } from "react-router/dom";
+import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 
-async function hydrate() {
+async function main() {
   await i18next
     .use(initReactI18next)
-    .use(LanguageDetector)
-    .use(Backend)
+    .use(Fetch)
+    .use(I18nextBrowserLanguageDetector)
     .init({
-      ...i18n,
-      ns: getInitialNamespaces(),
-      backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.yaml",
-        parse: (data: string) => yaml.load(data),
-      },
-      detection: {
-        order: ["htmlTag"],
-        caches: [],
-      },
+      fallbackLng: "zh",
+      supportedLngs: ["zh", "zh-HK", "en-US"],
+      defaultNS: "common",
+      ns: ["common"],
+      detection: { order: ["htmlTag"], caches: [] },
+      backend: { loadPath: "/api/locales/{{lng}}/{{ns}}" },
     });
 
   startTransition(() => {
     hydrateRoot(
       document,
-      <StrictMode>
-        <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={i18next}>
+        <StrictMode>
           <HydratedRouter />
-        </I18nextProvider>
-      </StrictMode>,
+        </StrictMode>
+      </I18nextProvider>,
     );
   });
 }
 
-if (window.requestIdleCallback) {
-  window.requestIdleCallback(hydrate);
-} else {
-  // @ts-ignore
-  window.setTimeout(hydrate, 1);
-}
+main().catch((error) => console.error(error));

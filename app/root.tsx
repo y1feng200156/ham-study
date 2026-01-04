@@ -1,30 +1,33 @@
 import { Analytics } from "@vercel/analytics/react";
 import { useEffect } from "react";
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useLocation,
 } from "react-router";
 import { useTranslation } from "react-i18next";
-import { dir } from "i18next";
-import i18next from "./i18n.server";
+import {
+  getLocale,
+  i18nextMiddleware,
+  localeCookie,
+} from "./middleware/i18next";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 
-export const handle = { i18n: "common" };
+export const middleware = [i18nextMiddleware];
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const locale = await i18next.getLocale(request);
-  return {
-    origin: new URL(request.url).origin,
-    locale,
-  };
+export async function loader({ context }: Route.LoaderArgs) {
+  const locale = getLocale(context);
+  return data(
+    { locale },
+    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
+  );
 }
 
 export const meta: Route.MetaFunction = () => {
@@ -89,60 +92,26 @@ export const links: Route.LinksFunction = () => [
 import { Footer } from "./components/footer";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
-  const location = useLocation();
-  const origin = data?.origin || "";
-  const locale = data?.locale || "zh";
-  const image = `${origin}/og.webp`;
-  const url = origin + location.pathname;
   const { i18n } = useTranslation();
-
-  useEffect(() => {
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
+  const location = useLocation();
 
   return (
-    <html lang={locale} dir={dir(locale)} className="h-full">
+    <html lang={i18n.language} dir={i18n.dir(i18n.language)} className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {/* Common Meta Tags placed here to persist across all routes */}
+        {/* Common Meta Tags */}
         <meta property="og:site_name" content="业余无线电可视化" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content={image} />
+        <meta property="og:url" content={location.pathname} />
+        <meta property="og:image" content="/og.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={image} />
+        <meta name="twitter:image" content="/og.webp" />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href={url} />
-
-        {/* JSON-LD Structured Data for WebSite - Only on Homepage */}
-        {location.pathname === "/" && (
-          <script
-            type="application/ld+json"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires this
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "业余无线电可视化 (Ham Radio Visualization)",
-                url: origin,
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: `${origin}/?q={search_term_string}`,
-                  },
-                  "query-input": "required name=search_term_string",
-                },
-              }),
-            }}
-          />
-        )}
+        <link rel="canonical" href={location.pathname} />
 
         <Meta />
         <Links />
@@ -158,9 +127,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Re-export i18n config for client side usage if needed, though usually not needed here if initialized in entry.client
+export default function App({ loaderData: { locale } }: Route.ComponentProps) {
+  const { i18n } = useTranslation();
 
-export default function App() {
+  useEffect(() => {
+    if (i18n.language !== locale) i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+
   return <Outlet />;
 }
 

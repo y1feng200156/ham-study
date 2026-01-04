@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, HouseIcon } from "@phosphor-icons/react";
-import { Link, Outlet, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
+import { Link, Outlet, useLocation } from "react-router";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -36,7 +36,10 @@ export default function DemosLayout() {
 
   const currentPath = location.pathname.split("/").pop() || "";
   const translationKey = demoKeyMap[currentPath] || toolKeyMap[currentPath];
-  const currentName = translationKey ? t(translationKey) : currentPath;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentName = translationKey
+    ? (t as (key: string) => string)(translationKey)
+    : currentPath;
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">

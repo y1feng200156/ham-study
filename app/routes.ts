@@ -1,8 +1,8 @@
 import {
   index,
   layout,
-  route,
   type RouteConfig,
+  route,
 } from "@react-router/dev/routes";
 
 // Helper to generate demo routes with unique IDs
@@ -57,6 +57,9 @@ export default [
   // Global utility routes
   route("sitemap.xml", "routes/sitemap.xml.ts", { id: "sitemap" }),
   route("robots.txt", "routes/robots.txt.ts", { id: "robots" }),
+  route("api/locales/:lng/:ns", "routes/api.locales.$lng.$ns.ts", {
+    id: "api-locales",
+  }),
 
   // Root routes (Default Language)
   index("routes/home.tsx", { id: "root-home" }),

@@ -17,16 +17,19 @@ export default defineConfig(({ isSsrBuild }) => ({
     }),
   ],
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks: isSsrBuild
-          ? undefined
-          : {
+    sourcemap: process.env.NODE_ENV !== "production",
+    rollupOptions: isSsrBuild
+      ? {
+          input: "./server/app.ts",
+        }
+      : {
+          output: {
+            manualChunks: {
               "vendor-three": ["three"],
               "vendor-react-three-fiber": ["@react-three/fiber"],
               "vendor-react-three-drei": ["@react-three/drei"],
             },
-      },
-    },
+          },
+        },
   },
 }));

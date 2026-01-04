@@ -1,7 +1,7 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense, useState } from "react";
-import { Link, type MetaFunction } from "react-router";
 import { useTranslation } from "react-i18next";
+import { Link, type MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Button } from "~/components/ui/button";

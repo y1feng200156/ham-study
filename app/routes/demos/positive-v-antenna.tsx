@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/positive-v-antenna";
 
 const PositiveVAntennaScene = lazy(
   () => import("~/components/positive-v-scene"),
@@ -9,37 +10,25 @@ const PositiveVAntennaScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.positiveV.title"),
+    description: t("demos.positiveV.description"),
+    keywords: t("demos.positiveV.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "正V天线 (Positive V Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
-    },
-    {
-      property: "og:title",
-      content: "正V天线 (Positive V Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
-    },
-    {
-      name: "twitter:title",
-      content: "正V天线 (Positive V Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示正V天线（Positive V）的结构特点，展示为何它是受限空间下理想的楼顶天线。",
-    },
-    {
-      name: "keywords",
-      content:
-        "正V天线, Positive V antenna, 偶极子, dipole, 楼顶天线, balcony antenna, 紧凑型天线",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

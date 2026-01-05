@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/inverted-v-antenna";
 
 const InvertedVAntennaScene = lazy(
   () => import("~/components/inverted-v-scene"),
@@ -9,37 +10,25 @@ const InvertedVAntennaScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.invertedV.title"),
+    description: t("demos.invertedV.description"),
+    keywords: t("demos.invertedV.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "倒V天线 (Inverted V Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
-    },
-    {
-      property: "og:title",
-      content: "倒V天线 (Inverted V Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
-    },
-    {
-      name: "twitter:title",
-      content: "倒V天线 (Inverted V Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示倒V天线（Inverted-V）的结构与辐射特性，解释其阻抗特性与架设优势。",
-    },
-    {
-      name: "keywords",
-      content:
-        "倒V天线, Inverted V antenna, 偶极子, dipole, 阻抗匹配, impedance matching, 便携天线",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/moxon-antenna";
 
 const MoxonAntennaScene = lazy(
   () => import("~/components/moxon-antenna-scene"),
@@ -9,37 +10,25 @@ const MoxonAntennaScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.moxon.title"),
+    description: t("demos.moxon.description"),
+    keywords: t("demos.moxon.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
-    },
-    {
-      property: "og:title",
-      content: "莫克森天线 (Moxon Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
-    },
-    {
-      name: "twitter:title",
-      content: "莫克森天线 (Moxon Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示莫克森天线（Moxon Rectangle）的紧凑结构，展示其高前后比和卓越的指向性。",
-    },
-    {
-      name: "keywords",
-      content:
-        "莫克森天线, Moxon antenna, 长方形天线, 矩形天线, 高前后比, high F/B ratio",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

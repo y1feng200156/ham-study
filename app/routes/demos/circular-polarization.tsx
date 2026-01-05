@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/circular-polarization";
 
 const CircularPolarizationScene = lazy(
   () => import("~/components/circular-polarization-scene"),
@@ -9,34 +10,25 @@ const CircularPolarizationScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.circular.title"),
+    description: t("demos.circular.description"),
+    keywords: t("demos.circular.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "圆极化 (Circular Polarization) | 业余无线电可视化" },
-    {
-      name: "description",
-      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
-    },
-    {
-      property: "og:title",
-      content: "圆极化 (Circular Polarization) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
-    },
-    {
-      name: "twitter:title",
-      content: "圆极化 (Circular Polarization) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content: "3D演示圆极化电波的传播特性，包括右旋(RHCP)和左旋(LHCP)。",
-    },
-    {
-      name: "keywords",
-      content:
-        "圆极化, circular polarization, RHCP, LHCP, 螺旋天线, helical antenna, 卫星通信, satellite communication",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

@@ -1,43 +1,32 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/yagi-antenna";
 
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.yagi.title"),
+    description: t("demos.yagi.description"),
+    keywords: t("demos.yagi.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
-    },
-    {
-      property: "og:title",
-      content: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
-    },
-    {
-      name: "twitter:title",
-      content: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示八木天线的工作原理，展示引向器、有源振子和反射器的作用及辐射方向图。",
-    },
-    {
-      name: "keywords",
-      content:
-        "八木天线, Yagi-Uda antenna, 定向天线, directional antenna, 引向器, director, 反射器, reflector",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

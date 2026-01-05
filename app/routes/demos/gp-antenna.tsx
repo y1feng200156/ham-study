@@ -1,43 +1,32 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/gp-antenna";
 
 const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.gp.title"),
+    description: t("demos.gp.description"),
+    keywords: t("demos.gp.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "GP天线 (Ground Plane Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
-    },
-    {
-      property: "og:title",
-      content: "GP天线 (Ground Plane Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
-    },
-    {
-      name: "twitter:title",
-      content: "GP天线 (Ground Plane Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示GP天线（Ground Plane）的垂直单极子结构、地网作用及辐射图。",
-    },
-    {
-      name: "keywords",
-      content:
-        "GP天线, Ground Plane antenna, 垂直单极子, vertical monopole, 地网, radials, 1/4波长",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

@@ -1,43 +1,32 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/quad-antenna";
 
 const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.quad.title"),
+    description: t("demos.quad.description"),
+    keywords: t("demos.quad.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "方框天线 (Quad Antenna) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
-    },
-    {
-      property: "og:title",
-      content: "方框天线 (Quad Antenna) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
-    },
-    {
-      name: "twitter:title",
-      content: "方框天线 (Quad Antenna) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示方框天线（Quad Antenna）的回路结构，展示其高增益和低辐射仰角的特性。",
-    },
-    {
-      name: "keywords",
-      content:
-        "方框天线, Quad antenna, 定向天线, directional antenna, DX利器, 高增益, high gain",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

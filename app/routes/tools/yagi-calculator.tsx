@@ -6,7 +6,6 @@ import {
   LightningIcon,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MetaFunction } from "react-router";
 import { BasicSpecsCard } from "~/components/tools/yagi-calculator/BasicSpecsCard";
 import { ProModePanel } from "~/components/tools/yagi-calculator/ProModePanel";
 import {
@@ -25,14 +24,28 @@ import {
   type SpacingType,
   type YagiConfig,
 } from "~/lib/yagi-calc";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/yagi-calculator";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("tools.yagiCalculator.title"),
+    description: t("tools.yagiCalculator.description"),
+    keywords: t("tools.yagiCalculator.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "DL6WU 八木天线专业计算器 | Ham Tools" },
-    {
-      name: "description",
-      content: "专业 Yagi-Uda 天线设计工具，内置 DL6WU 和 VK5DJ 修正模型。",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

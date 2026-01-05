@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/horizontal-polarization";
 
 const HorizontalPolarizationScene = lazy(
   () => import("~/components/horizontal-polarization-scene"),
@@ -9,34 +10,25 @@ const HorizontalPolarizationScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.horizontal.title"),
+    description: t("demos.horizontal.description"),
+    keywords: t("demos.horizontal.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
-    {
-      name: "description",
-      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      property: "og:title",
-      content: "水平极化 (Horizontal Polarization) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      name: "twitter:title",
-      content: "水平极化 (Horizontal Polarization) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content: "3D演示水平极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      name: "keywords",
-      content:
-        "水平极化, horizontal polarization, 偶极子, dipole, 水平天线, horizontal antenna, 极化损耗",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

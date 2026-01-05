@@ -23,56 +23,71 @@ export default {
       title: "Vertical Polarization",
       description:
         "Visualize electric field propagation of a vertically polarized antenna.",
+      keywords: "vertical polarization, electric field, dipole, antenna theory",
     },
     horizontal: {
       title: "Horizontal Polarization",
       description:
         "Visualize electric field propagation of a horizontally polarized antenna.",
+      keywords:
+        "horizontal polarization, electric field, dipole, antenna theory",
     },
     circular: {
       title: "Circular Polarization",
       description:
         "Visualize the rotating electric field vector in circular polarization.",
+      keywords:
+        "circular polarization, rotating vector, satellite communication",
     },
     elliptical: {
       title: "Elliptical Polarization",
       description:
         "The general form of polarization, between linear and circular.",
+      keywords: "elliptical polarization, polarization types",
     },
     yagi: {
       title: "Yagi-Uda Antenna",
       description:
         "A famous directional antenna composed of directors, driven element, and reflector.",
+      keywords: "yagi-uda antenna, directional antenna, directors, reflector",
     },
     invertedV: {
       title: "Inverted V Antenna",
       description:
         "An easy-to-install dipole variant, higher in the middle and lower at the ends.",
+      keywords: "inverted v antenna, dipole variant, wire antenna",
     },
     gp: {
       title: "Ground Plane Antenna",
       description:
         "A vertical monopole antenna with horizontal or downward-sloping radials.",
+      keywords: "ground plane antenna, monopole, radials, vertical antenna",
     },
     positiveV: {
       title: "Positive V Antenna",
       description:
         "A dipole with upward-angled arms, suitable for rooftop installation.",
+      keywords: "positive v antenna, dipole, rooftop antenna, V-dipole",
     },
     quad: {
       title: "Quad Antenna",
       description:
         "A directional antenna made of square loops, featuring high gain and low noise.",
+      keywords: "quad antenna, loop antenna, high gain, low noise",
     },
     moxon: {
       title: "Moxon Antenna",
       description:
         "A compact rectangular directional antenna with excellent front-to-back ratio.",
+      keywords:
+        "moxon antenna, rectangular antenna, directional, front-to-back",
     },
     endFed: {
       title: "End-Fed Half Wave",
       description:
         "A multi-band portable antenna using a 49:1 impedance transformer, fed at one end.",
+      keywords:
+        "end-fed half wave, EFHW, portable antenna, impedance transformer",
     },
   },
 
@@ -81,6 +96,7 @@ export default {
       title: "Yagi Calculator",
       description:
         "A Yagi antenna design tool based on the DL6WU long boom model & VK5DJ correction algorithm.",
+      keywords: "yagi calculator, antenna design, DL6WU, VK5DJ",
     },
   },
 
@@ -99,5 +115,12 @@ export default {
     siteName: "Ham Radio Visualization",
     keywords:
       "ham radio, antenna demos, 3D visualization, vertical polarization, horizontal polarization, circular polarization, Yagi antenna, GP antenna, inverted V antenna, positive V antenna, quad antenna, Moxon antenna",
+    home: {
+      title: "Amateur Radio Visualization",
+      description:
+        "A collection of amateur radio antenna visualizations: including 3D polarization and radiation demos for classic antennas such as Vertical/Horizontal/Circular Polarization, Yagi, Inverted V, GP, Positive V, Quad, Moxon, etc.",
+      keywords:
+        "amateur radio, antenna demos, 3D visualization, vertical polarization, horizontal polarization, circular polarization, Yagi antenna, GP antenna, Inverted V antenna, Positive V antenna, Quad antenna, Moxon antenna, ham radio demos, antenna visualization",
+    },
   },
 } satisfies typeof import("~/locales/zh/common").default;

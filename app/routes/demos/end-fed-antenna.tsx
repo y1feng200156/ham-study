@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/end-fed-antenna";
 
 const EndFedAntennaScene = lazy(
   () => import("~/components/end-fed-antenna-scene"),
@@ -9,37 +10,25 @@ const EndFedAntennaScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.endFed.title"),
+    description: t("demos.endFed.description"),
+    keywords: t("demos.endFed.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化" },
-    {
-      name: "description",
-      content:
-        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
-    },
-    {
-      property: "og:title",
-      content: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content:
-        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
-    },
-    {
-      name: "twitter:title",
-      content: "端馈半波天线 (End-Fed Half Wave) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "3D演示端馈天线（EFHW）的便携性与多波段谐振特性，展示49:1阻抗变换器原理。",
-    },
-    {
-      name: "keywords",
-      content:
-        "端馈天线, EFHW, End-Fed Half Wave, 49:1 balun, 便携天线, portable antenna, 多波段天线",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

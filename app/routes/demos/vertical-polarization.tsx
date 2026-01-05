@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/vertical-polarization";
 
 const VerticalPolarizationScene = lazy(
   () => import("~/components/vertical-polarization-scene"),
@@ -9,34 +10,25 @@ const VerticalPolarizationScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const meta: MetaFunction = () => {
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+  return {
+    title: t("demos.vertical.title"),
+    description: t("demos.vertical.description"),
+    keywords: t("demos.vertical.keywords"),
+  };
+};
+
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "垂直极化 (Vertical Polarization) | 业余无线电可视化" },
-    {
-      name: "description",
-      content: "3D演示垂直极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      property: "og:title",
-      content: "垂直极化 (Vertical Polarization) | 业余无线电可视化",
-    },
-    {
-      property: "og:description",
-      content: "3D演示垂直极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      name: "twitter:title",
-      content: "垂直极化 (Vertical Polarization) | 业余无线电可视化",
-    },
-    {
-      name: "twitter:description",
-      content: "3D演示垂直极化偶极子天线的电场传播与极化匹配原理。",
-    },
-    {
-      name: "keywords",
-      content:
-        "垂直极化, vertical polarization, 偶极子, dipole, 垂直天线, vertical antenna, 极化损耗",
-    },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "keywords", content: keywords },
   ];
 };
 

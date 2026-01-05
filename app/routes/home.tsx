@@ -1,7 +1,7 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, type MetaFunction } from "react-router";
+import { Link } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { calculateYagi } from "~/lib/yagi-calc";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/home";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
@@ -45,32 +47,39 @@ const VerticalPolarizationScene = lazy(
 );
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
-export const meta: MetaFunction = () => {
+export const meta = ({ loaderData }: Route.MetaArgs) => {
+  const { title, description, keywords } = loaderData;
   return [
-    { title: "业余无线电可视化" },
+    { title },
     {
       name: "description",
-      content:
-        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+      content: description,
     },
-    { property: "og:title", content: "业余无线电可视化" },
+    { property: "og:title", content: title },
     {
       property: "og:description",
-      content:
-        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+      content: description,
     },
-    { name: "twitter:title", content: "业余无线电可视化" },
+    { name: "twitter:title", content: title },
     {
       name: "twitter:description",
-      content:
-        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+      content: description,
     },
     {
       name: "keywords",
-      content:
-        "业余无线电, 天线演示, 3D可视化, 垂直极化, 水平极化, 圆极化, 八木天线, GP天线, 倒V天线, 正V天线, 方框天线, 莫克森天线, ham radio demos, antenna visualization",
+      content: keywords,
     },
   ];
+};
+
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const { t } = getInstance(context);
+
+  return {
+    title: t("meta.home.title"),
+    description: t("meta.home.description"),
+    keywords: t("meta.home.keywords"),
+  };
 };
 
 interface Demo {

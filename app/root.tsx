@@ -16,8 +16,10 @@ import {
   getLocale,
   i18nextMiddleware,
   localeCookie,
-} from "./middleware/i18next";
-import "./app.css";
+} from "~/middleware/i18next";
+import "~/app.css";
+import { Header } from "~/components/header";
+import { Footer } from "~/components/footer";
 
 export const middleware = [i18nextMiddleware];
 
@@ -88,8 +90,6 @@ export const links: Route.LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
 ];
 
-import { Footer } from "./components/footer";
-
 export function Layout({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
   const location = useLocation();
@@ -116,6 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col min-h-full">
+        <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <ScrollRestoration />

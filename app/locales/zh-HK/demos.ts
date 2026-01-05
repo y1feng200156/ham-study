@@ -10,14 +10,14 @@ export default {
     metaTitle: "圓極化 (Circular Polarization) | 業餘無線電可視化",
     metaDescription: "3D演示圓極化電波的傳播特性，包括右旋(RHCP)和左旋(LHCP)。",
     metaKeywords:
-      "圓極化, circular polarization, RHCP, LHCP, 螺旋天線, helical antenna, 衛星通信, satellite communication",
+      "圓極化, circular polarization, RHCP, LHCP, 螺旋天線, helical antenna, 衞星通訊, satellite communication",
     title: "圓極化 (Circular Polarization)",
     about:
-      "本可視化演示了<b>圓極化 (Circular Polarization)</b> 的電磁波傳播。在這種極化方式中，電場矢量隨著波的傳播而不斷旋轉，描繪出一個螺旋形狀。",
-    rhcp: "<strong>右旋圓極化 (RHCP):</strong> 電場矢量沿傳播方向順時針旋轉（符合右手法則）。",
-    lhcp: "<strong>左旋圓極化 (LHCP):</strong> 電場矢量沿傳播方向逆時針旋轉。",
+      "本可視化演示了<b>圓極化 (Circular Polarization)</b> 的電磁波傳播。在這種極化方式中，電場向量隨著波的傳播而不斷旋轉，描繪出一個螺旋形狀。",
+    rhcp: "<strong>右旋圓極化 (RHCP):</strong> 電場向量沿傳播方向順時針旋轉（符合右手法則）。",
+    lhcp: "<strong>左旋圓極化 (LHCP):</strong> 電場向量沿傳播方向逆時針旋轉。",
     application:
-      "<strong>應用:</strong> 圓極化廣泛用於<b>衛星通信</b>，因為它可以抵抗法拉第旋轉（信號穿過電離層時極化面的改變），並且不要求接收天線與發射天線的極化角度精確對齊。",
+      "<strong>應用:</strong> 圓極化廣泛用於<b>衞星通訊</b>，因為它可以抵抗法拉第旋轉（訊號穿過電離層時極化面的改變），並且不要求接收天線與發射天線的極化角度精確對齊。",
     matchRhcpToRhcp: "<strong>RHCP 發射 -> RHCP 接收:</strong>",
     matchRhcpToLhcp: "<strong>RHCP 發射 -> LHCP 接收 (交叉極化):</strong>",
     matchCircularToLinear:
@@ -27,9 +27,9 @@ export default {
     loss3db: "3dB 損耗",
     rhcpToLhcpNote: "理論上有無限大損耗，實際通常 >20dB。",
     reflectionNote:
-      "注意：當圓極化信號從表面反射時，其旋轉方向通常會翻轉 (例如 RHCP 變成 LHCP)。",
+      "注意：當圓極化訊號從表面反射時，其旋轉方向通常會翻轉 (例如 RHCP 變成 LHCP)。",
     circularToLinearNote:
-      "這是打衛星時的常用策略（如果不想製作複雜的追蹤圓極化天線），但會損失一半信號。",
+      "這是打衛星時的常用策略（如果不想製作複雜的追蹤圓極化天線），但會損失一半訊號。",
     physicsContent:
       "對於螺旋天線 (Helical Antenna)，當螺旋周長接近一個波長時，天線工作在<strong>軸向模式 (Axial Mode)</strong>。此時，天線沿螺旋軸向輻射最強，形成特定的方向性波束 (Directional Beam)，且產生近似完美的圓極化波。",
     physicsQuote:
@@ -51,7 +51,7 @@ export default {
     elliptical: "<strong>橢圓極化 (Elliptical):</strong> 其他所有情況。",
     generalRulesTitle: "關於極化匹配的一般規則",
     generalRules:
-      "實際上，大多數無線電信號在傳播過程中都會變成某種程度的橢圓極化（由於反射、折射等）。極化失配損耗 (Polarization Mismatch Loss) 取決於兩個橢圓極化波的<strong>軸比 (Axial Ratio)</strong> 和 <strong>傾角 (Tilt Angle)</strong> 的差異。",
+      "實際上，大多數無線電訊號在傳播過程中都會變成某種程度的橢圓極化（由於反射、折射等）。極化失配損耗 (Polarization Mismatch Loss) 取決於兩個橢圓極化波的<strong>軸比 (Axial Ratio)</strong> 和 <strong>傾角 (Tilt Angle)</strong> 的差異。",
     physicsContent:
       "橢圓極化是電磁波極化的一般形式，線極化和圓極化只是其特例。從數學上講，它是兩個正交線極化分量的疊加，且這兩個分量具有任意的幅度比和相位差。<strong>軸比 (Axial Ratio, AR)</strong> 是衡量橢圓扁平程度的關鍵指標：AR=1 (0dB) 為圓極化，AR=∞ 為線極化。",
     physicsQuote:
@@ -65,24 +65,24 @@ export default {
       "垂直極化, vertical polarization, 偶極子, dipole, 垂直天線, vertical antenna, 極化損耗",
     title: "垂直極化 (Vertical Polarization)",
     about:
-      "本可視化演示了來自垂直極化偶極子天線 (Dipole Antenna) 的電磁波傳播。觀察電場 (E-field) 矢量如何在波向外傳播時上下（垂直）振盪。",
+      "本可視化演示了來自垂直極化偶極子天線 (Dipole Antenna) 的電磁波傳播。觀察電場 (E-field) 向量如何在波向外傳播時上下（垂直）振盪。",
     polarization:
-      "<strong>極化 (Polarization):</strong> 由電場 (E-field) 矢量的方向定義。",
+      "<strong>極化 (Polarization):</strong> 由電場 (E-field) 向量的方向定義。",
     verticalDipole:
       "<strong>垂直偶極子 (Vertical Dipole):</strong> 產生垂直極化的波。",
     propagation:
       "<strong>傳播 (Propagation):</strong> 在水平面 (Azimuth) 上是全向的 (Omnidirectional)。",
     vToV: "<strong>垂直發射 -> 垂直接收 (Vertical to Vertical):</strong>",
-    vToVNote: "信號強度最大，無額外極化損耗。",
+    vToVNote: "訊號強度最大，無額外極化損耗。",
     vToH: "<strong>垂直發射 -> 水平接收 (Vertical to Horizontal):</strong>",
     crossPolarization: "極化隔離 (Cross-polarization)",
     vToHNote:
-      "理論上接收不到任何信號 (無限大損耗)。實際上由於反射和多徑效應，通常會有 <strong>-20dB 到 -30dB</strong> 的巨大損耗。",
+      "理論上接收不到任何訊號 (無限大損耗)。實際上由於反射和多徑效應，通常會有 <strong>-20dB 到 -30dB</strong> 的巨大損耗。",
     crossPolNote:
       "這也是為什麼這兩種極化方式可以複用同一頻率而不容易互相干擾。",
     vToC: "<strong>垂直發射 -> 圓極化接收 (Vertical to Circular):</strong>",
     vToCNote:
-      "線性極化波可以分解為兩個相反旋轉的圓極化波，接收天線只能接收其中一個分量，因此損失一半能量 (3dB)。",
+      "線性極化波可以分解為兩個相反旋轉的圓極化波，接收天線只能接收其中一個分量，因此損失一半能量 (3dB)。儘管有損耗，但考慮到極化失配的風險，這種組合在特定情況下（如流動通訊）是可以接受的。",
     physicsContent:
       "根據天線理論，垂直偶極子 (Vertical Dipole) 產生的電場只有垂直分量。其在水平面上的輻射強度是均勻的，形成全向方向圖。",
     physicsQuote:
@@ -96,19 +96,20 @@ export default {
       "水平極化, horizontal polarization, 偶極子, dipole, 水平天線, horizontal antenna, 極化損耗",
     title: "水平極化 (Horizontal Polarization)",
     about:
-      "本可視化演示了來自水平極化偶極子天線 (Horizontal Dipole Antenna) 的電磁波傳播。觀察電場 (E-field) 矢量如何在波向外傳播時左右（水平）振盪。",
+      "本可視化演示了來自水平極化偶極子天線 (Horizontal Dipole Antenna) 的電磁波傳播。觀察電場 (E-field) 向量如何在波向外傳播時左右（水平）振盪。",
     polarization:
-      "<strong>極化 (Polarization):</strong> 由電場 (E-field) 矢量的方向定義。",
+      "<strong>極化 (Polarization):</strong> 由電場 (E-field) 向量的方向定義。",
     horizontalDipole:
       "<strong>水平偶極子 (Horizontal Dipole):</strong> 產生水平極化的波。",
     propagation:
       "<strong>傳播 (Propagation):</strong> 雖然在垂直於導線的方向最強，但通常我們關注其相對於地面的水平特性。",
     hToH: "<strong>水平發射 -> 水平接收 (Horizontal to Horizontal):</strong>",
-    hToHNote: "信號強度最大。",
+    hToHNote: "訊號強度最大。",
     hToV: "<strong>水平發射 -> 垂直接收 (Horizontal to Vertical):</strong>",
-    hToVNote: "巨大的信號損耗 (約 <strong>-20dB 到 -30dB</strong>)。",
+    hToVNote:
+      "巨大的訊號損耗 (約 <strong>-20dB 到 -30dB</strong>)。在短波 DX (遠距離通訊) 中，由於電離層反射經常改變極化方向，這種影響可能不如視距通訊(VHF/UHF)那麼顯著，但在視距通訊中是致命的。",
     physicsContent:
-      "水平極化偶極子天線 (Horizontal Dipole) 產生的電場矢量平行於地面。其輻射方向圖在自由空間中是圍繞導線的圓環 (doughnut)，但受地面反射影響，實際輻射圖通常呈現為從地面向上翹起的瓣狀。",
+      "水平極化偶極子天線 (Horizontal Dipole) 產生的電場向量平行於地面。其輻射方向圖在自由空間中是圍繞導線的圓環 (doughnut)，但受地面反射影響，實際輻射圖通常呈現為從地面向上翹起的瓣狀。水平極化在HF波段 DX 通訊中非常流行，部分原因是它比垂直極化受地面噪聲干擾更小。",
     physicsQuote:
       '"Horizontally polarized antennas are less susceptible to man-made noise... The ground reflection factor reinforces the signal at certain takeoff angles."',
   },
@@ -125,7 +126,7 @@ export default {
     artificialGround:
       "<strong>人造地網:</strong> 那些徑向伸出的金屬桿模擬了一個完美的'地面'，就像鏡子一樣反射出另一半天線（鏡像），從而形成了等效的偶極子。",
     takeoffAngle:
-      "<strong>發射仰角:</strong> 具有較低的發射仰角，這意味著大部分能量是貼著地面或水平方向發射出去的，非常適合 DX (遠距離) 通信和本地覆蓋。",
+      "<strong>發射仰角:</strong> 具有較低的發射仰角，這意味著大部分能量是貼著地面或水平方向發射出去的，非常適合 DX (遠距離) 通訊和本地覆蓋。",
     physicsContent:
       "GP 天線 (Ground Plane) 的原理基於<strong>鏡像理論 (Image Theory)</strong>。導電平面（地網）充當反射面，使垂直單極子 (Monopole) 產生的輻射場等效於一個完整的偶極子 (Dipole)。",
     physicsQuote:
@@ -165,14 +166,14 @@ export default {
     about:
       "Moxon 矩形天線由 Les Moxon (G6XN) 推廣。它是一個兩單元的導線天線，元件末端向內彎曲形成矩形。",
     fbRatio:
-      "<strong>卓越的前後比 (F/B):</strong> Moxon 的最大特點是其極高的前後比，能極其有效地抑制來自背後的干擾信號。",
+      "<strong>卓越的前後比 (F/B):</strong> Moxon 的最大特點是其極高的前後比，能極其有效地抑制來自背後的干擾訊號。",
     compact:
       "<strong>緊湊尺寸:</strong> 其跨度僅為同頻段全尺寸八木的 70% 左右，非常適合空間受限的場合。",
     bandwidth:
-      "<strong>寬帶寬:</strong> 可以在很寬的頻率範圍內保持良好的駐波比。",
+      "<strong>寬頻寬:</strong> 可以在很寬的頻率範圍內保持良好的駐波比。",
     applicationTitle: "應用",
     foxHunting:
-      "<strong>手持測向:</strong> 由於其極好的方向性和前後比，常用於無線電測向 (Fox Hunting)。",
+      "<strong>手提測向:</strong> 由於其極好的方向性和前後比，常用於無線電測向 (Fox Hunting)。",
     limitedSpace:
       "<strong>受限空間 DX:</strong> 在陽台或屋頂空間不足以架設八木時，Moxon 是極佳的替代品。",
     physicsContent:
@@ -213,7 +214,7 @@ export default {
     highGain:
       "<strong>高增益:</strong> 2 單元的 Quad 天線通常相當於 3 單元的八木天線增益。",
     lowNoise:
-      "<strong>低噪音:</strong> 閉合回路結構有助於減少接收時的靜電噪音，聽感通常比八木更安靜。",
+      "<strong>低雜訊:</strong> 閉合回路結構有助於減少接收時的靜電雜訊，聽感通常比八木更安靜。",
     polarizationTitle: "極化與特性",
     polarization: "<strong>極化:</strong> 取決於饋電點位置。",
     horizontalFeed: "底部或頂部中心饋電 → 水平極化。",
@@ -234,18 +235,18 @@ export default {
       "八木天線, Yagi-Uda antenna, 定向天線, directional antenna, 引向器, director, 反射器, reflector",
     title: "八木-宇田天線 (Yagi-Uda Antenna)",
     about:
-      "八木天線是由日本的八木秀次和宇田新太郎發明的。它是一種<strong>高增益、強方向性</strong>的天線，廣泛用於短波通信、電視接收和雷達。",
+      "八木天線是由日本的八木秀次和宇田新太郎發明的。它是一種<strong>高增益、強方向性</strong>的天線，廣泛用於短波通訊、電視接收和雷達。",
     principle:
-      "<strong>工作原理:</strong> 通過寄生振子（反射器和引向器）與有源振子之間的互感耦合，改變電流相位，從而在單一方向疊加增強信號，在反方向抵消信號。",
+      "<strong>工作原理:</strong> 通過寄生元件（反射器和引向器）與驅動元件之間的互感耦合，改變電流相位，從而在單一方向疊加增強訊號，在反方向抵消訊號。",
     gain: "<strong>增益 (Gain):</strong> 單元越多，引向器越長，增益越高，波束越窄。",
     application:
-      "<strong>應用:</strong> 最常見的 DX (遠距離) 通信天線。將你的信號集中發射給遠方的特定電台。",
+      "<strong>應用:</strong> 最常見的 DX (遠距離) 通訊天線。將你的訊號集中發射給遠方的特定電台。",
     polarizationMatch:
       "<strong>極化匹配:</strong> 大多數短波八木是水平安裝，產生水平極化。",
     polarizationNote:
-      "注意：對於本地 VHF/UHF FM 通信，通常垂直安裝以匹配手台和車載台的垂直極化。",
+      "注意：對於本地 VHF/UHF FM 通訊，通常垂直安裝以匹配手提機和車機的垂直極化。",
     physicsContent:
-      "八木天線的定向性源於寄生單元（反射器和引向器）上的感應電流與有源振子電流之間的<strong>相位差 (Phase Difference)</strong>。",
+      "八木天線的定向性源於寄生單元（反射器和引向器）上的感應電流與驅動元件電流之間的<strong>相位差 (Phase Difference)</strong>。",
     physicsQuote:
       '"The phase of the current in the parasitic element depends on its length... By proper spacing and length, the radiation from the parasitic element reinforces the radiation from the driven element in the forward direction."',
   },

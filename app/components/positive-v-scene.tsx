@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -103,6 +104,7 @@ export default function PositiveVAntennaScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
@@ -121,25 +123,28 @@ export default function PositiveVAntennaScene({
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
-        正V天线 (Positive V)
+        {t("positiveVAntenna.title")}
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        两端向上倾斜的偶极子天线。通常安装在桅杆顶部，以避开地面障碍物。
-        <br />A dipole with ends tilted upwards. Usually mounted high on a mast.
+        <Trans
+          ns="scene"
+          i18nKey="positiveVAntenna.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子 (有源)</span>
+          <span>{t("positiveVAntenna.active")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-gray-400 rounded-sm" />
-          <span>无源元件/地网</span>
+          <span>{t("positiveVAntenna.passiveOrGround")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图</span>
+          <span>{t("positiveVAntenna.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Gradient Legend for E-field Strength */}
@@ -150,7 +155,7 @@ export default function PositiveVAntennaScene({
                 "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
             }}
           />
-          <span>电场强度 (强 &rarr; 弱)</span>
+          <span>{t("positiveVAntenna.strength")}</span>
         </div>
       </div>
     </>
@@ -161,7 +166,7 @@ export default function PositiveVAntennaScene({
       {/* Visualization Mode */}
       <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -175,7 +180,7 @@ export default function PositiveVAntennaScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -189,7 +194,7 @@ export default function PositiveVAntennaScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -197,7 +202,7 @@ export default function PositiveVAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -215,7 +220,7 @@ export default function PositiveVAntennaScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -228,7 +233,7 @@ export default function PositiveVAntennaScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -241,7 +246,7 @@ export default function PositiveVAntennaScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -306,7 +311,7 @@ export default function PositiveVAntennaScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

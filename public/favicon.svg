@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <style>
+    :root {
+      --border-color: rgba(0, 0, 0, 0.05);
+      --bg-opacity: 0.1;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --border-color: rgba(255, 255, 255, 0.1);
+        --bg-opacity: 0.2;
+      }
+    }
+    .container-rect {
+      stroke: var(--border-color);
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.1" />
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.1" />
+    </linearGradient>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <rect
+    x="0.5"
+    y="0.5"
+    width="39"
+    height="39"
+    rx="10"
+    fill="url(#bg-gradient)"
+    class="container-rect"
+    stroke-width="1"
+  />
+  <g transform="translate(8 8)">
+    <path
+      d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"
+      stroke="url(#logo-gradient)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"
+      stroke="url(#logo-gradient)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.7"
+    />
+    <circle cx="12" cy="12" r="2.5" fill="url(#logo-gradient)" />
+    <path
+      d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"
+      stroke="url(#logo-gradient)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.7"
+    />
+    <path
+      d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"
+      stroke="url(#logo-gradient)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

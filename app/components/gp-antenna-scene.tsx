@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -110,12 +111,12 @@ export default function GPAntennaScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  // Removed vizMode logic
 
   const speedMultiplier = {
     slow: 0.3,
@@ -128,29 +129,32 @@ export default function GPAntennaScene({
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
-        GP天线 (Ground Plane)
+        {t("gpAntenna.title")}
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        最常见的垂直全向天线。由一根垂直振子和若干根地网 (Radials) 组成。
-        <br />A vertical radiator with radials acting as a ground plane.
+        <Trans
+          ns="scene"
+          i18nKey="gpAntenna.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>垂直接地振子 (有源 / Radiator)</span>
+          <span>{t("gpAntenna.radiator")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-          <span>地网 (无源 / Radials)</span>
+          <span>{t("gpAntenna.radials")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图 (Pattern)</span>
+          <span>{t("gpAntenna.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-16 h-3 rounded-sm bg-cyan-400 shadow-[0_0_5px_rgba(34,211,238,0.8)]" />
-          <span>电场 (E-field)</span>
+          <span>{t("gpAntenna.eField")}</span>
         </div>
       </div>
     </>
@@ -160,7 +164,7 @@ export default function GPAntennaScene({
     <div className="flex flex-col space-y-3">
       <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -174,7 +178,7 @@ export default function GPAntennaScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -188,7 +192,7 @@ export default function GPAntennaScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -196,7 +200,7 @@ export default function GPAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -214,7 +218,7 @@ export default function GPAntennaScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -227,7 +231,7 @@ export default function GPAntennaScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -240,7 +244,7 @@ export default function GPAntennaScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -306,7 +310,7 @@ export default function GPAntennaScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

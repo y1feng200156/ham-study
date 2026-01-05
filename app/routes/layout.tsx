@@ -1,4 +1,5 @@
 import { ArrowLeftIcon, HouseIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router";
 import {
   Breadcrumb,
@@ -13,28 +14,32 @@ import { Separator } from "~/components/ui/separator";
 
 export default function DemosLayout() {
   const location = useLocation();
+  const { t } = useTranslation();
 
-  // Simple mapping for demo names, in a real app this might be dynamic or route handle based
-  const demoNameMap: Record<string, string> = {
-    "vertical-polarization": "垂直极化 (Vertical Polarization)",
-    "horizontal-polarization": "水平极化 (Horizontal Polarization)",
-    "circular-polarization": "圆极化 (Circular Polarization)",
-    "elliptical-polarization": "椭圆极化 (Elliptical Polarization)",
-    "yagi-antenna": "八木-宇田天线 (Yagi-Uda Antenna)",
-    "inverted-v-antenna": "倒V天线 (Inverted V Antenna)",
-    "gp-antenna": "GP天线 (Ground Plane Antenna)",
-    "positive-v-antenna": "正V天线 (Positive V Antenna)",
-    "quad-antenna": "方框天线 (Quad Antenna)",
-    "moxon-antenna": "莫克森天线 (Moxon Antenna)",
-    "quad-array-antenna": "四阵列天线 (Quad Array Antenna)",
+  // Demo key mapping for translation lookup
+  const demoKeyMap: Record<string, string> = {
+    "vertical-polarization": "demos.vertical.title",
+    "horizontal-polarization": "demos.horizontal.title",
+    "circular-polarization": "demos.circular.title",
+    "elliptical-polarization": "demos.elliptical.title",
+    "yagi-antenna": "demos.yagi.title",
+    "inverted-v-antenna": "demos.invertedV.title",
+    "gp-antenna": "demos.gp.title",
+    "positive-v-antenna": "demos.positiveV.title",
+    "quad-antenna": "demos.quad.title",
+    "moxon-antenna": "demos.moxon.title",
+    "end-fed-antenna": "demos.endFed.title",
   };
-  const toolNameMap: Record<string, string> = {
-    "yagi-calculator": "八木天线计算器 (Yagi Calculator)",
+  const toolKeyMap: Record<string, string> = {
+    "yagi-calculator": "tools.yagiCalculator.title",
   };
 
   const currentPath = location.pathname.split("/").pop() || "";
-  const currentName =
-    demoNameMap[currentPath] || toolNameMap[currentPath] || "演示";
+  const translationKey = demoKeyMap[currentPath] || toolKeyMap[currentPath];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentName = translationKey
+    ? (t as (key: string) => string)(translationKey)
+    : currentPath;
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">
@@ -43,7 +48,7 @@ export default function DemosLayout() {
           <Button variant="outline" size="icon" asChild className="h-8 w-8">
             <Link to="/">
               <ArrowLeftIcon className="h-4 w-4" weight="bold" />
-              <span className="sr-only">返回</span>
+              <span className="sr-only">{t("nav.back")}</span>
             </Link>
           </Button>
 
@@ -55,7 +60,7 @@ export default function DemosLayout() {
                 <BreadcrumbLink asChild>
                   <Link to="/" className="flex items-center gap-2">
                     <HouseIcon className="h-4 w-4" weight="bold" />
-                    首页
+                    {t("nav.home")}
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -84,7 +89,7 @@ export default function DemosLayout() {
               {
                 "@type": "ListItem",
                 position: 1,
-                name: "首页",
+                name: t("nav.home"),
                 item: "https://ham.charlesify.com/",
               },
               {

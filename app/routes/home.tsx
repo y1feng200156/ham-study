@@ -1,7 +1,9 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, type MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
+import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Button } from "~/components/ui/button";
 import {
@@ -88,7 +90,7 @@ interface Tool {
   preview: React.ReactNode;
 }
 
-function ToolCard({ tool }: { tool: Tool }) {
+function ToolCard({ tool, actionText }: { tool: Tool; actionText: string }) {
   return (
     <Card className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg group">
       <CardHeader className="flex-1">
@@ -98,22 +100,22 @@ function ToolCard({ tool }: { tool: Tool }) {
         <CardDescription>{tool.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to={tool.href} className="flex-1 flex flex-col gap-y-6">
+        <LocaleLink to={tool.href} className="flex-1 flex flex-col gap-y-6">
           <div className="bg-slate-950 h-[200px] rounded-md overflow-hidden flex items-center justify-center relative">
             {tool.preview}
           </div>
-        </Link>
+        </LocaleLink>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={tool.href}>打开工具</Link>
+          <LocaleLink to={tool.href}>{actionText}</LocaleLink>
         </Button>
       </CardFooter>
     </Card>
   );
 }
 
-function DemoCard({ demo }: { demo: Demo }) {
+function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -129,7 +131,7 @@ function DemoCard({ demo }: { demo: Demo }) {
         <CardDescription>{demo.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to={demo.href} className="flex-1 flex flex-col gap-y-6">
+        <LocaleLink to={demo.href} className="flex-1 flex flex-col gap-y-6">
           <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative">
             <ClientOnly
               fallback={
@@ -144,20 +146,17 @@ function DemoCard({ demo }: { demo: Demo }) {
                 <demo.component isThumbnail={true} isHovered={isHovered} />
               </Suspense>
             </ClientOnly>
-            {/* Overlay hint */}
             <div
               className={`absolute inset-0 bg-black/5 flex items-center justify-center transition-opacity duration-300 ${
                 isHovered ? "opacity-0" : "opacity-0"
               }`}
-            >
-              {/* Optional: Add icon or text if needed, but the animation itself is the feedback */}
-            </div>
+            />
           </div>
-        </Link>
+        </LocaleLink>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={demo.href}>查看演示</Link>
+          <LocaleLink to={demo.href}>{actionText}</LocaleLink>
         </Button>
       </CardFooter>
     </Card>
@@ -165,72 +164,71 @@ function DemoCard({ demo }: { demo: Demo }) {
 }
 
 export default function Home() {
-  const demos = [
+  const { t } = useTranslation();
+  const demos: Demo[] = [
     {
-      title: "垂直极化 (Vertical Polarization)",
-      description:
-        "可视化垂直极化天线的电场传播 (Electric Field Propagation)。",
+      title: t("demos.vertical.title"),
+      description: t("demos.vertical.description"),
       href: "/demos/vertical-polarization",
       component: VerticalPolarizationScene,
     },
     {
-      title: "水平极化 (Horizontal Polarization)",
-      description:
-        "可视化水平极化天线的电场传播 (Electric Field Propagation)。",
+      title: t("demos.horizontal.title"),
+      description: t("demos.horizontal.description"),
       href: "/demos/horizontal-polarization",
       component: HorizontalPolarizationScene,
     },
     {
-      title: "圆极化 (Circular Polarization)",
-      description: "可视化电场矢量旋转的圆极化传播 (Circular Polarization)。",
+      title: t("demos.circular.title"),
+      description: t("demos.circular.description"),
       href: "/demos/circular-polarization",
       component: CircularPolarizationScene,
     },
     {
-      title: "椭圆极化 (Elliptical Polarization)",
-      description: "极化的一般形式，介于线极化和圆极化之间。",
+      title: t("demos.elliptical.title"),
+      description: t("demos.elliptical.description"),
       href: "/demos/elliptical-polarization",
       component: EllipticalPolarizationScene,
     },
     {
-      title: "八木-宇田天线 (Yagi-Uda Antenna)",
-      description: "著名的定向天线，由引向器、有源振子和反射器组成。",
+      title: t("demos.yagi.title"),
+      description: t("demos.yagi.description"),
       href: "/demos/yagi-antenna",
       component: YagiAntennaScene,
     },
     {
-      title: "倒V天线 (Inverted V Antenna)",
-      description: "架设简便的偶极子变种，中间高两端低。",
+      title: t("demos.invertedV.title"),
+      description: t("demos.invertedV.description"),
       href: "/demos/inverted-v-antenna",
       component: InvertedVAntennaScene,
     },
     {
-      title: "GP天线 (Ground Plane Antenna)",
-      description: "垂直单极天线，带有水平或下倾的地网 (Radials)。",
+      title: t("demos.gp.title"),
+      description: t("demos.gp.description"),
       href: "/demos/gp-antenna",
       component: GPAntennaScene,
     },
     {
-      title: "正V天线 (Positive V Antenna)",
-      description: "两臂向上翘起的偶极子，适合楼顶架设，更加安全紧凑。",
+      title: t("demos.positiveV.title"),
+      description: t("demos.positiveV.description"),
       href: "/demos/positive-v-antenna",
       component: PositiveVAntennaScene,
     },
     {
-      title: "方框天线 (Quad Antenna)",
-      description: "方形回路构成的定向天线，具有高增益和低底噪的特点。",
+      title: t("demos.quad.title"),
+      description: t("demos.quad.description"),
       href: "/demos/quad-antenna",
       component: QuadAntennaScene,
     },
     {
-      title: "莫克森天线 (Moxon Antenna)",
-      description: "矩形紧凑型定向天线，拥有卓越的前后比和宽带宽。",
+      title: t("demos.moxon.title"),
+      description: t("demos.moxon.description"),
       href: "/demos/moxon-antenna",
       component: MoxonAntennaScene,
     },
     {
-      title: "端馈半波天线 (End-Fed Half Wave)",
-      description: "多波段便携天线，使用49:1阻抗变换器，一端馈电。",
+      title: t("demos.endFed.title"),
+      description: t("demos.endFed.description"),
       href: "/demos/end-fed-antenna",
       component: EndFedAntennaScene,
     },
@@ -238,9 +236,8 @@ export default function Home() {
 
   const tools: Tool[] = [
     {
-      title: "八木天线计算器 (Yagi Calculator)",
-      description:
-        "基于 DL6WU 长动臂设计模型 & VK5DJ 修正算法的八木天线设计工具。",
+      title: t("tools.yagiCalculator.title"),
+      description: t("tools.yagiCalculator.description"),
       href: "/tools/yagi-calculator",
       preview: (
         <YagiSvgRenderer
@@ -267,11 +264,9 @@ export default function Home() {
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-6">
-      <h1 className="text-3xl font-bold mb-4">业余无线电可视化</h1>
+      <h1 className="text-3xl font-bold mb-4">{t("title")}</h1>
       <p className="text-muted-foreground text-lg mb-6 max-w-[800px]">
-        欢迎来到业余无线电可视化实验室。这里汇集了各种经典天线和电磁波极化的 3D
-        仿真演示。通过交互式的 3D
-        场景，您可以直观地探索天线原理与电波传播特性，深入理解无线电通信背后的物理机制。
+        {t("description")}
       </p>
 
       <div className="mb-8 flex gap-4">
@@ -283,24 +278,32 @@ export default function Home() {
             className="flex items-center gap-2"
           >
             <GithubLogoIcon size={20} />
-            <span>GitHub 仓库</span>
+            <span>{t("actions.github")}</span>
           </Link>
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {demos.map((demo) => (
-          <DemoCard key={demo.href} demo={demo} />
+          <DemoCard
+            key={demo.href}
+            demo={demo}
+            actionText={t("actions.viewDemo")}
+          />
         ))}
       </div>
 
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
           <CalculatorIcon className="w-8 h-8 text-primary" />
-          实用工具 (Tools)
+          {t("sections.tools")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tools.map((tool) => (
-            <ToolCard key={tool.href} tool={tool} />
+            <ToolCard
+              key={tool.href}
+              tool={tool}
+              actionText={t("actions.openTool")}
+            />
           ))}
         </div>
       </div>
@@ -313,15 +316,14 @@ export default function Home() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "业余无线电天线可视化合集",
-            description:
-              "包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+            name: t("title"),
+            description: t("description"),
             url: "https://ham.charlesify.com/",
             hasPart: demos.map((demo) => ({
               "@type": "CreativeWork",
               name: demo.title,
               description: demo.description,
-              url: `https://ham.charlesify.com${demo.href}`, // Assuming absolute URL required for best practice, or relative if base is set
+              url: `https://ham.charlesify.com${demo.href}`,
             })),
           }),
         }}

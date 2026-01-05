@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import {
   BufferGeometry,
   Line,
@@ -146,6 +147,7 @@ function RadiationPattern({
       // But polarization affects the E-field plane.
       // Code was using Math.abs(vertex.z) for gain? That would beam along Z.
       // If boom is X, we want beam along X.
+      // Now elements are in YZ plane, beam should be X. Correct.
 
       const gain = Math.abs(vertex.x) ** 2; // Beaming along X axis
 
@@ -155,11 +157,6 @@ function RadiationPattern({
     geo.computeVertexNormals();
     return geo;
   }, []); // Pattern geometry is static for now, or could depend on polarization for minor shape changes?
-  // Usually Quad pattern is symmetric for both Pols, just rotated E-field.
-  // BUT, if I rotate element, the pattern logic was previously sending beam along Z?
-  // Previous code: gain = Math.abs(vertex.z)**0.7.
-  // If elements were in XY plane, beam would be Z. Correct.
-  // Now elements are in YZ plane, beam should be X. Correct.
 
   return (
     <group position={[0, 2, 0]}>
@@ -182,6 +179,7 @@ export default function QuadAntennaScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [polarization, setPolarization] = useState<"horizontal" | "vertical">(
@@ -203,25 +201,28 @@ export default function QuadAntennaScene({
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
-        方框天线 (Quad Antenna)
+        {t("quadAntenna.title")}
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        也称立方体方框天线 (Cubical Quad)。由两个或多个方形回路组成。
-        <br />A directional beam antenna made of wire loops.
+        <Trans
+          ns="scene"
+          i18nKey="quadAntenna.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子环 (有源 / Driven Loop)</span>
+          <span>{t("quadAntenna.drivenLoop")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-          <span>反射环 (无源 / Reflector Loop)</span>
+          <span>{t("quadAntenna.reflectorLoop")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图 (Beams along Boom)</span>
+          <span>{t("quadAntenna.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Gradient Legend for E-field Strength */}
@@ -232,7 +233,7 @@ export default function QuadAntennaScene({
                 "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
             }}
           />
-          <span>电场强度 (强 &rarr; 弱)</span>
+          <span>{t("quadAntenna.strength")}</span>
         </div>
       </div>
     </>
@@ -242,10 +243,10 @@ export default function QuadAntennaScene({
     <div className="flex flex-col space-y-3">
       <div className="flex items-center justify-between space-x-4">
         <Label className="text-xs md:text-sm text-gray-300">
-          极化:{" "}
+          {t("quadAntenna.polarization")}{" "}
           {polarization === "horizontal"
-            ? "水平 (Horizontal)"
-            : "垂直 (Vertical)"}
+            ? t("quadAntenna.horizontal")
+            : t("quadAntenna.vertical")}
         </Label>
         <Switch
           checked={polarization === "vertical"}
@@ -258,7 +259,7 @@ export default function QuadAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          显示模式 (Visualization)
+          {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
@@ -272,7 +273,7 @@ export default function QuadAntennaScene({
               htmlFor="wave-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示电波 (Show Waves)
+              {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -286,7 +287,7 @@ export default function QuadAntennaScene({
               htmlFor="pattern-mode"
               className="text-xs md:text-sm text-zinc-300"
             >
-              显示方向图 (Show Pattern)
+              {t("common.controls.showPattern")}
             </Label>
           </div>
         </div>
@@ -294,7 +295,7 @@ export default function QuadAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          电波速度 (Speed)
+          {t("common.controls.speed")}
         </div>
         <RadioGroup
           defaultValue="medium"
@@ -312,7 +313,7 @@ export default function QuadAntennaScene({
               htmlFor="r-slow"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              慢
+              {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -325,7 +326,7 @@ export default function QuadAntennaScene({
               htmlFor="r-medium"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              中
+              {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -338,7 +339,7 @@ export default function QuadAntennaScene({
               htmlFor="r-fast"
               className="text-xs cursor-pointer text-zinc-300"
             >
-              快
+              {t("common.controls.fast")}
             </Label>
           </div>
         </RadioGroup>
@@ -406,7 +407,7 @@ export default function QuadAntennaScene({
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}

@@ -1,20 +1,46 @@
 import { Analytics } from "@vercel/analytics/react";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useLocation,
 } from "react-router";
-
 import type { Route } from "./+types/root";
-import "./app.css";
+import {
+  getLocale,
+  i18nextMiddleware,
+  localeCookie,
+} from "~/middleware/i18next";
+import "~/app.css";
+import { Header } from "~/components/header";
+import { Footer } from "~/components/footer";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return { origin: new URL(request.url).origin };
+export const middleware = [i18nextMiddleware];
+
+import { redirect } from "react-router";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const segments = url.pathname.split("/").filter(Boolean);
+
+  // Redirect /zh/... to /... (Remove 'zh' prefix for default language)
+  if (segments.length > 0 && segments[0] === "zh") {
+    segments.shift(); // Remove 'zh'
+    const newPath = `/${segments.join("/")}${url.search}`;
+    throw redirect(newPath, 301); // 301 Permanent Redirect
+  }
+
+  const locale = getLocale(context);
+  return data(
+    { locale },
+    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
+  );
 }
 
 export const meta: Route.MetaFunction = () => {
@@ -47,7 +73,7 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
-  { rel: "icon", href: "/favicon.ico", sizes: "any" },
+  { rel: "icon", href: "/favicon.svg", sizes: "any" },
   {
     rel: "icon",
     type: "image/png",
@@ -76,62 +102,33 @@ export const links: Route.LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
 ];
 
-import { Footer } from "./components/footer";
-
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
+  const { i18n } = useTranslation();
   const location = useLocation();
-  const origin = data?.origin || "";
-  const image = `${origin}/og.webp`;
-  const url = origin + location.pathname;
 
   return (
-    <html lang="zh-CN" className="h-full">
+    <html lang={i18n.language} dir={i18n.dir(i18n.language)} className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {/* Common Meta Tags placed here to persist across all routes */}
+        {/* Common Meta Tags */}
         <meta property="og:site_name" content="业余无线电可视化" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content={image} />
+        <meta property="og:url" content={location.pathname} />
+        <meta property="og:image" content="/og.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={image} />
+        <meta name="twitter:image" content="/og.webp" />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href={url} />
-
-        {/* JSON-LD Structured Data for WebSite - Only on Homepage */}
-        {location.pathname === "/" && (
-          <script
-            type="application/ld+json"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires this
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "业余无线电可视化 (Ham Radio Visualization)",
-                url: origin,
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: `${origin}/?q={search_term_string}`,
-                  },
-                  "query-input": "required name=search_term_string",
-                },
-              }),
-            }}
-          />
-        )}
+        <link rel="canonical" href={location.pathname} />
 
         <Meta />
         <Links />
       </head>
       <body className="flex flex-col min-h-full">
+        <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <ScrollRestoration />
@@ -142,7 +139,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+export default function App({ loaderData: { locale } }: Route.ComponentProps) {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    if (i18n.language !== locale) i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+
   return <Outlet />;
 }
 

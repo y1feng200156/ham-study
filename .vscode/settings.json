@@ -1,3 +1,23 @@
 {
-  "i18n-ally.localesPaths": ["app/locales"]
+  // 1. 明确告诉插件去哪里找
+  "i18n-ally.localesPaths": ["app/locales"],
+
+  // 2. 【关键修复】使用路径匹配器强制指定文件结构
+  // 解释：在 localesPaths 下，第一层目录是语言代码(locale)，第二层文件名是命名空间(namespaces)
+  "i18n-ally.pathMatcher": "{locale}/{namespaces}.ts",
+
+  // 3. 启用 TypeScript 解析器
+  "i18n-ally.enabledParsers": ["ts"],
+
+  // 4. 开启命名空间支持
+  "i18n-ally.namespace": true,
+  // 设置默认命名空间为 common
+  "i18n-ally.defaultNamespace": "common",
+
+  // 5. 设置源语言为 'zh' (必须匹配文件夹名)
+  "i18n-ally.sourceLanguage": "zh",
+  "i18n-ally.displayLanguage": "zh",
+
+  // 6. 设为嵌套结构
+  "i18n-ally.keystyle": "nested"
 }

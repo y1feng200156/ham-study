@@ -80,6 +80,12 @@ export default {
       description: "多波段便攜天線，使用49:1阻抗變換器，一端饋電。",
       keywords: "端饋天線, 半波天線, EFHW, end-fed half wave",
     },
+    longWireAntenna: {
+      title: "長線天線 (Long Wire Antenna)",
+      description: "3D演示長線天線的多瓣輻射特性，展示長度與方向性的關係。",
+      keywords:
+        "長線天線, Long Wire Antenna, 隨機線天線, random wire, 多瓣方向圖",
+    },
   },
 
   tools: {

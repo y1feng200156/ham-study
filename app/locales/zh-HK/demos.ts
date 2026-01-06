@@ -272,4 +272,23 @@ export default {
     physicsQuote:
       '"An end-fed half-wave antenna presents a very high impedance at the feed point... requiring a matching network (unun) to transform the high impedance down to 50 ohms."',
   },
+
+  longWireAntenna: {
+    metaTitle: "長線天線 (Long Wire Antenna) | 業餘無線電可視化",
+    metaDescription: "3D演示長線天線的多瓣輻射特性，展示長度與方向性的關係。",
+    metaKeywords:
+      "長線天線, Long Wire Antenna, 隨機線天線, random wire, 多瓣方向圖, multi-lobed pattern, 駐波",
+    title: "長線天線 (Long Wire Antenna)",
+    about:
+      "長線天線是指長度至少為一個波長（通常更長）的天線。它不同於半波偶極子，其輻射方向圖會隨著長度的增加而變得複雜。",
+    gain: "<strong>增益與方向性:</strong> 隨著天線長度的增加（以波長為單位），主波束會越來越貼近導線方向，且增益會增加。",
+    lobes:
+      "<strong>多瓣特性:</strong> 長線天線會產生多個輻射瓣。長度越長，瓣數越多。",
+    ground:
+      "<strong>接地系統:</strong> 對於非諧振的長線（如 Random Wire），良好的接地是必不可少的，它是天線系統的一部分。",
+    physicsContent:
+      "長線天線上的電流分佈通常被視為駐波（若末端開路）或行波（若末端終止）。對於末端開路的長線，其輻射方向圖是典型的多瓣狀。",
+    physicsQuote:
+      '"As the wire is made longer, the major lobes of radiation align more closely with the wire... creating a directional effect along the wire axis."',
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

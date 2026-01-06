@@ -11,9 +11,9 @@ import { ScientificCitation } from "~/components/scientific-citation";
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos.yagi.title"),
-    description: t("demos.yagi.description"),
-    keywords: t("demos.yagi.keywords"),
+    title: t("demos:yagiAntenna.metaTitle"),
+    description: t("demos:yagiAntenna.metaDescription"),
+    keywords: t("demos:yagiAntenna.metaKeywords"),
   };
 };
 

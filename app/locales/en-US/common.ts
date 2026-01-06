@@ -89,6 +89,12 @@ export default {
       keywords:
         "end-fed half wave, EFHW, portable antenna, impedance transformer",
     },
+    longWireAntenna: {
+      title: "Long Wire Antenna",
+      description:
+        "3D demonstration of Long Wire Antenna multi-lobed radiation characteristics.",
+      keywords: "Long Wire Antenna, random wire, multi-lobed pattern",
+    },
   },
 
   tools: {

@@ -109,4 +109,13 @@ export default {
     pattern: "輻射方向圖 (Pattern)",
     waves: "電波強度 (Waves)",
   },
-} satisfies Record<string, unknown>;
+  longWireAntenna: {
+    title: "長線天線 (Long Wire)",
+    desc: "長度大於一個波長的天線。具有多瓣輻射方向圖。<br/>An antenna longer than a wavelength. Has a multi-lobed radiation pattern.",
+    radiator: "振子 (Radiator)",
+    eField: "電場 (E-Field)",
+    hField: "磁場 (H-Field)",
+    pattern: "輻射方向圖 (Pattern)",
+    waves: "電波強度 (Waves)",
+  },
+} satisfies typeof import("~/locales/zh/scene").default;

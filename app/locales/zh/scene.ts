@@ -109,4 +109,13 @@ export default {
     pattern: "辐射方向图 (Pattern)",
     waves: "电波强度 (Waves)",
   },
+  longWireAntenna: {
+    title: "长线天线 (Long Wire)",
+    desc: "长度大于一个波长的天线。具有多瓣辐射方向图。<br/>An antenna longer than a wavelength. Has a multi-lobed radiation pattern.",
+    radiator: "振子 (Radiator)",
+    eField: "电场 (E-Field)",
+    hField: "磁场 (H-Field)",
+    pattern: "辐射方向图 (Pattern)",
+    waves: "电波强度 (Waves)",
+  },
 } satisfies Record<string, unknown>;

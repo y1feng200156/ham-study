@@ -29,6 +29,7 @@ export default function DemosLayout() {
     "quad-antenna": "demos.quad.title",
     "moxon-antenna": "demos.moxon.title",
     "end-fed-antenna": "demos.endFed.title",
+    "long-wire-antenna": "demos.longWireAntenna.title",
   };
   const toolKeyMap: Record<string, string> = {
     "yagi-calculator": "tools.yagiCalculator.title",

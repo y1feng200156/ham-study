@@ -13,9 +13,9 @@ import { ScientificCitation } from "~/components/scientific-citation";
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos.vertical.title"),
-    description: t("demos.vertical.description"),
-    keywords: t("demos.vertical.keywords"),
+    title: t("demos:verticalPolarization.metaTitle"),
+    description: t("demos:verticalPolarization.metaDescription"),
+    keywords: t("demos:verticalPolarization.metaKeywords"),
   };
 };
 

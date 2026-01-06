@@ -277,4 +277,24 @@ export default {
     physicsQuote:
       '"An end-fed half-wave antenna presents a very high impedance at the feed point... requiring a matching network (unun) to transform the high impedance down to 50 ohms."',
   },
+
+  longWireAntenna: {
+    metaTitle: "Long Wire Antenna | Ham Radio Visualization",
+    metaDescription:
+      "3D demonstration of Long Wire Antenna multi-lobed radiation characteristics and how length affects directionality.",
+    metaKeywords:
+      "Long Wire Antenna, random wire, multi-lobed pattern, standing wave",
+    title: "Long Wire Antenna",
+    about:
+      "A long wire antenna is one that is at least one wavelength long (usually much longer). Unlike a half-wave dipole, its radiation pattern becomes complex as length increases.",
+    gain: "<strong>Gain & Directivity:</strong> As the antenna length (in wavelengths) increases, the main lobes align more closely with the wire axis, and gain increases.",
+    lobes:
+      "<strong>Multi-Lobed:</strong> Long wire antennas produce multiple radiation lobes. The longer the wire, the more lobes appear.",
+    ground:
+      "<strong>Ground System:</strong> For non-resonant long wires (like Random Wire), a good ground system is essential as it is part of the antenna system.",
+    physicsContent:
+      "Current distribution on a long wire is typically treated as a standing wave (if open-ended) or traveling wave (if terminated). For an open-ended long wire, the radiation pattern is characteristically multi-lobed.",
+    physicsQuote:
+      '"As the wire is made longer, the major lobes of radiation align more closely with the wire... creating a directional effect along the wire axis."',
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

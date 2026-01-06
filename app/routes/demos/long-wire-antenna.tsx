@@ -1,19 +1,20 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
-import type { Route } from "./+types/quad-antenna";
-
-const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
-
 import { ScientificCitation } from "~/components/scientific-citation";
+import { getInstance } from "~/middleware/i18next";
+import type { Route } from "./+types/long-wire-antenna";
+
+const LongWireAntennaScene = lazy(
+  () => import("~/components/long-wire-antenna-scene"),
+);
 
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos:quadAntenna.metaTitle"),
-    description: t("demos:quadAntenna.metaDescription"),
-    keywords: t("demos:quadAntenna.metaKeywords"),
+    title: t("demos:longWireAntenna.metaTitle"),
+    description: t("demos:longWireAntenna.metaDescription"),
+    keywords: t("demos:longWireAntenna.metaKeywords"),
   };
 };
 
@@ -30,14 +31,14 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
   ];
 };
 
-export default function QuadAntennaPage() {
+export default function LongWireAntennaPage() {
   const { t } = useTranslation("demos");
-  const qa = "quadAntenna";
+  const lw = "longWireAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${qa}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t(`${lw}.title`)}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -56,45 +57,32 @@ export default function QuadAntennaPage() {
               </div>
             }
           >
-            <QuadAntennaScene />
+            <LongWireAntennaScene />
           </Suspense>
         </ClientOnly>
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${qa}.about`)}</p>
+          <p>{t(`${lw}.about`)}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${qa}.highGain`}
+                i18nKey={`${lw}.gain`}
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${qa}.lowNoise`}
+                i18nKey={`${lw}.lobes`}
                 components={{ strong: <strong /> }}
               />
-            </li>
-          </ul>
-
-          <h3>{t(`${qa}.polarizationTitle`)}</h3>
-          <ul>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${qa}.polarization`}
-                components={{ strong: <strong /> }}
-              />
-              <br />- {t(`${qa}.horizontalFeed`)}
-              <br />- {t(`${qa}.verticalFeed`)}
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${qa}.challenge`}
+                i18nKey={`${lw}.ground`}
                 components={{ strong: <strong /> }}
               />
             </li>
@@ -105,20 +93,26 @@ export default function QuadAntennaPage() {
               title={t("physicsValidation")}
               content={
                 <>
-                  <p className="mb-2">{t(`${qa}.physicsContent`)}</p>
+                  <p className="mb-2">
+                    <Trans
+                      ns="demos"
+                      i18nKey={`${lw}.physicsContent`}
+                      components={{ strong: <strong /> }}
+                    />
+                  </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${qa}.physicsQuote`)}
+                    {t(`${lw}.physicsQuote`)}
                   </p>
                 </>
               }
               citations={[
                 {
-                  id: "w9lzx",
-                  text: "Moore, C. C., W9LZX. (1947). The Quad Antenna.",
+                  id: "arrl",
+                  text: "ARRL Antenna Book. Chapter on Long Wire and Traveling Wave Antennas.",
                 },
                 {
-                  id: "cubical-quad",
-                  text: "Orr, W. I., W6SAI. (1959). All About Cubical Quad Antennas.",
+                  id: "kraus",
+                  text: "Kraus, J. D. Antennas. McGraw-Hill.",
                 },
               ]}
             />

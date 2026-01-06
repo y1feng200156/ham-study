@@ -109,4 +109,13 @@ export default {
     pattern: "Radiation Pattern",
     waves: "Wave Intensity",
   },
-} satisfies Record<string, unknown>;
+  longWireAntenna: {
+    title: "Long Wire Antenna",
+    desc: "An antenna longer than a wavelength. Has a multi-lobed radiation pattern.",
+    radiator: "Radiator",
+    eField: "E-Field",
+    hField: "H-Field",
+    pattern: "Radiation Pattern",
+    waves: "Wave Intensity",
+  },
+} satisfies typeof import("~/locales/zh/scene").default;

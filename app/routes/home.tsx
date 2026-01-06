@@ -46,6 +46,9 @@ const VerticalPolarizationScene = lazy(
   () => import("~/components/vertical-polarization-scene"),
 );
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
+const LongWireAntennaScene = lazy(
+  () => import("~/components/long-wire-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -240,6 +243,12 @@ export default function Home() {
       description: t("demos.endFed.description"),
       href: "/demos/end-fed-antenna",
       component: EndFedAntennaScene,
+    },
+    {
+      title: t("demos.longWireAntenna.title"),
+      description: t("demos.longWireAntenna.description"),
+      href: "/demos/long-wire-antenna",
+      component: LongWireAntennaScene,
     },
   ];
 

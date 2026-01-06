@@ -13,9 +13,9 @@ import { ScientificCitation } from "~/components/scientific-citation";
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos.moxon.title"),
-    description: t("demos.moxon.description"),
-    keywords: t("demos.moxon.keywords"),
+    title: t("demos:moxonAntenna.metaTitle"),
+    description: t("demos:moxonAntenna.metaDescription"),
+    keywords: t("demos:moxonAntenna.metaKeywords"),
   };
 };
 

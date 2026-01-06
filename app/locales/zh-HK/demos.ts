@@ -226,6 +226,10 @@ export default {
       "四方框天線 (Quad) 是一個全波長閉合回路，相比於半波長偶極子，它具有更有效的輻射孔徑。",
     physicsQuote:
       '"The closed-loop configuration of the Quad antenna results in a lower Q and wider bandwidth... and is less susceptible to static noise."',
+    theoryTitle: "理論分析 (Theoretical Analysis)",
+    theoryFormula:
+      "對於兩單元方框天線，其歸一化方向圖函數可近似表示為心形線 (Cardioid)：",
+    theoryFormulaExpl: "其中 <M>\\theta</M> 是方向角。",
   },
 
   yagiAntenna: {

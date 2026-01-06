@@ -226,6 +226,10 @@ export default {
       "四方框天线 (Quad) 是一个全波长闭合回路，相比于半波长偶极子，它具有更有效的辐射孔径。标准的 2 单元 Quad (有源振子 + 反射器) 通过临界耦合可提供约 7dBi 的增益，相当于 3 单元八木。由于它是直流接地的闭合回路，能有效泄放雨雪静电 (Precipitation Static)，因此接收背景噪音通常比八木更低。",
     physicsQuote:
       '"The closed-loop configuration of the Quad antenna results in a lower Q and wider bandwidth... and is less susceptible to static noise."',
+    theoryTitle: "理论分析 (Theoretical Analysis)",
+    theoryFormula:
+      "对于两单元方框天线，其归一化方向图函数可近似表示为心形线 (Cardioid)：",
+    theoryFormulaExpl: "其中 <M>\\theta</M> 是方向角。",
   },
 
   yagiAntenna: {

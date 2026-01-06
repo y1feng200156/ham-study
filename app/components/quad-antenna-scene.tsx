@@ -149,7 +149,10 @@ function RadiationPattern({
       // If boom is X, we want beam along X.
       // Now elements are in YZ plane, beam should be X. Correct.
 
-      const gain = Math.abs(vertex.x) ** 2; // Beaming along X axis
+      // Directional cardioid pattern for 2-element Quad (Front-to-back ratio)
+      // Normalized cardioid: (1 + cos(theta)) / 2
+      // vertex is normalized, so vertex.x is cos(theta) where theta is angle from X-axis
+      const gain = Math.pow((1 + vertex.x) / 2, 2); // Beaming along +X axis
 
       vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);

@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
+import { BlockMath, InlineMath } from "~/components/math";
+import { ScientificCitation } from "~/components/scientific-citation";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/quad-antenna";
 
 const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
-
-import { ScientificCitation } from "~/components/scientific-citation";
 
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
@@ -99,6 +99,27 @@ export default function QuadAntennaPage() {
               />
             </li>
           </ul>
+
+          <div className="prose dark:prose-invert max-w-none mb-8">
+            <h4 className="font-bold mt-4 mb-2">{t(`${qa}.theoryTitle`)}</h4>
+            <p>
+              <Trans
+                ns="demos"
+                i18nKey={`${qa}.theoryFormula`}
+                components={{ M: <InlineMath /> }}
+              />
+            </p>
+            <div className="my-4">
+              <BlockMath math="G(\theta) \approx \left(\frac{1 + \cos\theta}{2}\right)^2" />
+            </div>
+            <p>
+              <Trans
+                ns="demos"
+                i18nKey={`${qa}.theoryFormulaExpl`}
+                components={{ M: <InlineMath /> }}
+              />
+            </p>
+          </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation

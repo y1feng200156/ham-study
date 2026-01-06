@@ -246,6 +246,7 @@ export default {
     gain: "<strong>Gain:</strong> More elements and longer directors mean higher gain and narrower beam.",
     application:
       "<strong>Application:</strong> The most common DX (long-distance) communication antenna. Focuses your signal toward a specific distant station.",
+    polarizationTitle: "Polarization Matching",
     polarizationMatch:
       "<strong>Polarization Matching:</strong> Most HF Yagis are mounted horizontally, producing horizontal polarization.",
     polarizationNote:

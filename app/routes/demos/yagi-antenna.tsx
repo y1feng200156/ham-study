@@ -93,7 +93,7 @@ export default function YagiAntennaPage() {
             </li>
           </ul>
 
-          <h3>{t(`${yagi}.polarizationMatch`)}</h3>
+          <h3>{t(`${yagi}.polarizationTitle`)}</h3>
           <ul>
             <li>
               <Trans

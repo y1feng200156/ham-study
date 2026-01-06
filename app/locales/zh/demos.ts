@@ -241,6 +241,7 @@ export default {
     gain: "<strong>增益 (Gain):</strong> 单元越多，引向器越长，增益越高，波束越窄。",
     application:
       "<strong>应用:</strong> 最常见的 DX (远距离) 通信天线。将你的信号集中发射给远方的特定电台。",
+    polarizationTitle: "极化匹配",
     polarizationMatch:
       "<strong>极化匹配:</strong> 大多数短波八木是水平安装，产生水平极化。",
     polarizationNote:

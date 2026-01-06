@@ -300,10 +300,10 @@ export default {
     theoryDesc:
       "The Long Wire Antenna, particularly when operating at multiple wavelengths, exhibits a complex radiation pattern governed by the standing wave distribution along the wire.",
     theoryFormulaIntro:
-      "For a Standing Wave Long Wire Antenna of length L with an odd number of half-wavelengths ($n$ is odd), the normalized electric field radiation pattern $E(\\theta)$ is given by:",
+      "For a Standing Wave Long Wire Antenna of length L with an odd number of half-wavelengths (<M>n</M> is odd), the normalized electric field radiation pattern <M>E(\\theta)</M> is given by:",
     theoryFormulaExpl:
-      "Where $\\theta$ is the angle with respect to the wire axis. In our simulation, we model a wire of length $L = 2.5\\lambda$, which corresponds to:",
+      "Where <M>\\theta</M> is the angle with respect to the wire axis. In our simulation, we model a wire of length <M>L = 2.5\\lambda</M>, which corresponds to:",
     theoryResult:
-      "Since $n=5$ is an odd number, the term $\\cos(\\frac{5\\pi}{2} \\cos \\theta)$ becomes $\\cos(0) = 1$ when $\\theta = 90^\\circ$. This explains the presence of a broadside lobe perpendicular to the wire, which is a characteristic feature of odd-harmonic standing wave antennas.",
+      "Since <M>n=5</M> is an odd number, the term <M>\\cos(\\frac{5\\pi}{2} \\cos \\theta)</M> becomes <M>\\cos(0) = 1</M> when <M>\\theta = 90^\\circ</M>. This explains the presence of a broadside lobe perpendicular to the wire, which is a characteristic feature of odd-harmonic standing wave antennas.",
   },
 } satisfies typeof import("~/locales/zh/demos").default;

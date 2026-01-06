@@ -8,19 +8,20 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 
-// Height variable removed or adjusted. Positive V originally hardcoded group position [0,1,0].
-// So we use local variables or hardcoded values here.
+// Height adjusted to allow legs to hang down without clipping ground
+const height = 3;
 
 function InvertedVAntenna() {
-  // Consuming Positive V Geometry (Dipole bent upwards)
-  const angle = Math.PI / 4; // 45 degrees up
+  const angle = Math.PI / 4; // 45 degrees
   const length = 2; // Arm length
+  // Rotation for downward legs: 135 degrees (90 + 45)
+  const legRotation = angle + Math.PI / 2;
 
   return (
-    <group position={[0, 1, 0]}>
+    <group position={[0, height, 0]}>
       {/* Mast */}
-      <mesh position={[0, -2, 0]}>
-        <cylinderGeometry args={[0.05, 0.05, 4, 16]} />
+      <mesh position={[0, -height / 2, 0]}>
+        <cylinderGeometry args={[0.05, 0.05, height, 16]} />
         <meshStandardMaterial color="#666" />
       </mesh>
 
@@ -30,27 +31,27 @@ function InvertedVAntenna() {
         <meshStandardMaterial color="white" />
       </mesh>
 
-      {/* Left Leg (Up and Left) */}
+      {/* Left Leg (Down and Left) */}
       <mesh
         position={[
           (-length * Math.cos(angle)) / 2,
-          (length * Math.sin(angle)) / 2,
+          (-length * Math.sin(angle)) / 2,
           0,
         ]}
-        rotation={[0, 0, -angle]}
+        rotation={[0, 0, legRotation]}
       >
         <cylinderGeometry args={[0.02, 0.02, length, 16]} />
         <meshStandardMaterial color="#ef4444" />
       </mesh>
 
-      {/* Right Leg (Up and Right) */}
+      {/* Right Leg (Down and Right) */}
       <mesh
         position={[
           (length * Math.cos(angle)) / 2,
-          (length * Math.sin(angle)) / 2,
+          (-length * Math.sin(angle)) / 2,
           0,
         ]}
-        rotation={[0, 0, angle]}
+        rotation={[0, 0, -legRotation]}
       >
         <cylinderGeometry args={[0.02, 0.02, length, 16]} />
         <meshStandardMaterial color="#ef4444" />
@@ -83,7 +84,7 @@ function RadiationPattern() {
   }, []);
 
   return (
-    <group position={[0, 1, 0]}>
+    <group position={[0, height, 0]}>
       <mesh geometry={geometry}>
         <meshBasicMaterial
           color="#22c55e"
@@ -280,19 +281,22 @@ export default function InvertedVAntennaScene({
             args={[20, 20, 0x333333, 0x222222]}
             // Using Positive V's mast logic (mast bottom at -3, but group at 1? No group at 1, mast bottom at -2 inside)
             // Original Positive V had gridPosition at [0, -1, 0].
-            position={[0, -1, 0]}
+            position={[0, 0, 0]}
           />
 
           <InvertedVAntenna />
           {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
+          {/* Surface/Field Mode - Lifted to match antenna height */}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="inverted-v"
-              polarizationType="horizontal"
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={[0, height, 0]}>
+              <ElectricFieldInstanced
+                antennaType="inverted-v"
+                polarizationType="horizontal"
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+              />
+            </group>
           )}
         </Canvas>
 

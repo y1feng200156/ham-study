@@ -8,14 +8,20 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 
-// Height definition moved from inverted-v-scene (originally for Inverted V)
-// Now used here because we are swapping the geometry logic.
+// Height definition
 const height = 3;
 
 function PositiveVAntenna() {
-  // Consuming Inverted V Geometry (Dipole bent downwards) as requested
-  const angle = Math.PI / 4; // 45 degrees droop
+  // Positive V Geometry (Dipole bent upwards)
+  const angle = Math.PI / 4; // 45 degrees
   const length = 2; // Arm length
+
+  // To pin base at (0,0) and point Up-Left (for Left Leg):
+  // Rotation: +45deg (Z). Local Up is (-sin, cos).
+  // Center needs to be at (+L/2 * -sin(45), +L/2 * cos(45)).
+
+  const xOffset = (length / 2) * Math.sin(angle); // 0.707
+  const yOffset = (length / 2) * Math.cos(angle); // 0.707
 
   return (
     <group position={[0, height, 0]}>
@@ -31,28 +37,14 @@ function PositiveVAntenna() {
         <meshStandardMaterial color="white" />
       </mesh>
 
-      {/* Left Leg */}
-      <mesh
-        position={[
-          (-length * Math.cos(angle)) / 2,
-          (-length * Math.sin(angle)) / 2,
-          0,
-        ]}
-        rotation={[0, 0, angle]}
-      >
+      {/* Left Leg (Up and Left) */}
+      <mesh position={[-xOffset, yOffset, 0]} rotation={[0, 0, angle]}>
         <cylinderGeometry args={[0.02, 0.02, length, 16]} />
         <meshStandardMaterial color="#ef4444" />
       </mesh>
 
-      {/* Right Leg */}
-      <mesh
-        position={[
-          (length * Math.cos(angle)) / 2,
-          (-length * Math.sin(angle)) / 2,
-          0,
-        ]}
-        rotation={[0, 0, -angle]}
-      >
+      {/* Right Leg (Up and Right) */}
+      <mesh position={[xOffset, yOffset, 0]} rotation={[0, 0, -angle]}>
         <cylinderGeometry args={[0.02, 0.02, length, 16]} />
         <meshStandardMaterial color="#ef4444" />
       </mesh>
@@ -284,19 +276,22 @@ export default function PositiveVAntennaScene({
             // Original Inverted V was position={[0, -height/2, 0]}.
             // Original Positive V was position={[0, -1, 0]}.
             // Let's stick to the Inverted V logic for grid since we are using its mast.
-            position={[0, -height / 2, 0]}
+            position={[0, 0, 0]}
           />
 
           <PositiveVAntenna />
           {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
+          {/* Surface/Field Mode - Lifted to match antenna height */}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="positive-v"
-              polarizationType="horizontal"
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={[0, height, 0]}>
+              <ElectricFieldInstanced
+                antennaType="positive-v"
+                polarizationType="horizontal"
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+              />
+            </group>
           )}
         </Canvas>
 

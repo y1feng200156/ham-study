@@ -349,13 +349,16 @@ export default function MoxonAntennaScene({
           <MoxonAntenna />
           {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
+          {/* Surface/Field Mode - Lifted to match antenna height */}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="moxon"
-              polarizationType="horizontal"
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={[0, 2, 0]}>
+              <ElectricFieldInstanced
+                antennaType="moxon"
+                polarizationType="horizontal"
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+              />
+            </group>
           )}
         </Canvas>
 

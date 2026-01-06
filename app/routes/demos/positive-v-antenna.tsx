@@ -8,8 +8,8 @@ const PositiveVAntennaScene = lazy(
   () => import("~/components/positive-v-scene"),
 );
 
-import { ScientificCitation } from "~/components/scientific-citation";
 import { BlockMath } from "~/components/math";
+import { ScientificCitation } from "~/components/scientific-citation";
 
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);

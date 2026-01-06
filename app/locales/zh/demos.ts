@@ -248,20 +248,41 @@ export default {
       "<strong>高增益:</strong> 2 单元的 Quad 天线通常相当于 3 单元的八木天线增益。",
     lowNoise:
       "<strong>低噪音:</strong> 闭合回路结构有助于减少接收时的静电噪音，听感通常比八木更安静。",
-    polarizationTitle: "极化与特性",
-    polarization: "<strong>极化:</strong> 取决于馈电点位置。",
-    horizontalFeed: "底部或顶部中心馈电 → 水平极化。",
-    verticalFeed: "侧边中心馈电 → 垂直极化。",
-    challenge:
-      "<strong>挑战:</strong> 3D 立体结构导致受风面积大，抗风和结冰是主要挑战。",
+    theoryAnalysis: "理论分析",
+    theoryContent:
+      "全波谐振环（Full-Wave Loop）本质上是一个<strong>变形的双偶极子阵列</strong>。当环周长约为 1 个波长 (<M>\\lambda</M>) 时，环上的电流分布形成驻波，最大辐射方向垂直于框面（Broadside）。这种闭合回路结构不仅提供了比半波偶极子更高的增益（约 3.3 dBi），还因为它是直流接地的，能有效抑制降水静电噪音，使接收背景更安静。",
+    formulaLoopLength: "环周长 (Loop Perimeter)",
+    formulaImpedance: "输入阻抗 (单环)",
+    comparisonTable: {
+      title: "对比表",
+      headers: ["特性", "电小环 (Small Loop)", "全波环 (Full-Wave Loop)"],
+      rows: [
+        {
+          feature: "尺寸 (周长)",
+          small: "< 0.1λ",
+          full: "≈ 1.0λ",
+        },
+        {
+          feature: "物理模型",
+          small: "磁偶极子",
+          full: "双偶极子阵列",
+        },
+        {
+          feature: "辐射方向",
+          small: "沿着框面 (In Plane)",
+          full: "垂直框面 (Broadside)",
+        },
+        {
+          feature: "典型应用",
+          small: "接收 (磁棒天线)",
+          full: "发射/DX (Quad)",
+        },
+      ],
+    },
     physicsContent:
       "四方框天线 (Quad) 是一个全波长闭合回路，相比于半波长偶极子，它具有更有效的辐射孔径。标准的 2 单元 Quad (有源振子 + 反射器) 通过临界耦合可提供约 7dBi 的增益，相当于 3 单元八木。由于它是直流接地的闭合回路，能有效泄放雨雪静电 (Precipitation Static)，因此接收背景噪音通常比八木更低。",
     physicsQuote:
       '"The closed-loop configuration of the Quad antenna results in a lower Q and wider bandwidth... and is less susceptible to static noise."',
-    theoryTitle: "理论分析 (Theoretical Analysis)",
-    theoryFormula:
-      "对于两单元方框天线，其归一化方向图函数可近似表示为心形线 (Cardioid)：",
-    theoryFormulaExpl: "其中 <M>\\theta</M> 是方向角。",
   },
 
   yagiAntenna: {

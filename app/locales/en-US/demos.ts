@@ -251,22 +251,41 @@ export default {
       "<strong>High Gain:</strong> A 2-element Quad typically equals the gain of a 3-element Yagi.",
     lowNoise:
       "<strong>Low Noise:</strong> The closed-loop structure helps reduce static noise during reception; it typically sounds quieter than a Yagi.",
-    polarizationTitle: "Polarization & Characteristics",
-    polarization:
-      "<strong>Polarization:</strong> Depends on feed point location.",
-    horizontalFeed: "Bottom or top center feed → Horizontal polarization.",
-    verticalFeed: "Side center feed → Vertical polarization.",
-    challenge:
-      "<strong>Challenge:</strong> The 3D structure has large wind loading; wind and ice resistance are main challenges.",
+    theoryAnalysis: "Theoretical Analysis",
+    theoryContent:
+      "The Full-Wave Loop (Quad) is essentially a <strong>folded dual-dipole array</strong>. When the perimeter is approximately 1 wavelength (<M>\\lambda</M>), the current distribution forms a standing wave, with maximum radiation perpendicular to the loop plane (Broadside). This closed-loop structure provides higher gain (approx 3.3 dBi) than a half-wave dipole and is DC-grounded, effectively reducing precipitation static noise for quieter reception.",
+    formulaLoopLength: "Loop Perimeter",
+    formulaImpedance: "Input Impedance (Single Loop)",
+    comparisonTable: {
+      title: "Comparison Table",
+      headers: ["Feature", "Small Loop", "Full-Wave Loop"],
+      rows: [
+        {
+          feature: "Size (Perimeter)",
+          small: "< 0.1λ",
+          full: "≈ 1.0λ",
+        },
+        {
+          feature: "Physics Model",
+          small: "Magnetic Dipole",
+          full: "Dual Dipole Array",
+        },
+        {
+          feature: "Radiation Direction",
+          small: "In Plane",
+          full: "Broadside",
+        },
+        {
+          feature: "Application",
+          small: "Reception (AM Rod)",
+          full: "Transmission/DX (Quad)",
+        },
+      ],
+    },
     physicsContent:
       "The Quad antenna is a full-wavelength closed loop with a more effective radiation aperture than a half-wave dipole. A standard 2-element Quad (driven + reflector) provides about 7dBi gain through critical coupling, equivalent to a 3-element Yagi. Being a DC-grounded closed loop, it effectively dissipates precipitation static, resulting in lower background noise than Yagis.",
     physicsQuote:
       '"The closed-loop configuration of the Quad antenna results in a lower Q and wider bandwidth... and is less susceptible to static noise."',
-    theoryTitle: "Theoretical Analysis",
-    theoryFormula:
-      "For a 2-element Quad Antenna, the normalized radiation pattern can be approximated by a cardioid:",
-    theoryFormulaExpl:
-      "Where <M>\\theta</M> is the angle relative to the boom axis.",
   },
 
   yagiAntenna: {

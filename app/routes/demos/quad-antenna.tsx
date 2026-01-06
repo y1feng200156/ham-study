@@ -80,45 +80,67 @@ export default function QuadAntennaPage() {
             </li>
           </ul>
 
-          <h3>{t(`${qa}.polarizationTitle`)}</h3>
-          <ul>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${qa}.polarization`}
-                components={{ strong: <strong /> }}
-              />
-              <br />- {t(`${qa}.horizontalFeed`)}
-              <br />- {t(`${qa}.verticalFeed`)}
-            </li>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${qa}.challenge`}
-                components={{ strong: <strong /> }}
-              />
-            </li>
-          </ul>
+          <h3>{t(`${qa}.theoryAnalysis`)}</h3>
+          <p>
+            <Trans
+              ns="demos"
+              i18nKey={`${qa}.theoryContent`}
+              components={{ strong: <strong />, M: <InlineMath /> }}
+            />
+          </p>
 
-          <div className="prose dark:prose-invert max-w-none mb-8">
-            <h4 className="font-bold mt-4 mb-2">{t(`${qa}.theoryTitle`)}</h4>
-            <p>
-              <Trans
-                ns="demos"
-                i18nKey={`${qa}.theoryFormula`}
-                components={{ M: <InlineMath /> }}
-              />
-            </p>
-            <div className="my-4">
-              <BlockMath math="G(\theta) \approx \left(\frac{1 + \cos\theta}{2}\right)^2" />
+          <div className="my-6 space-y-4">
+            <div>
+              <p className="font-semibold mb-2">
+                {t(`${qa}.formulaLoopLength`)}:
+              </p>
+              <BlockMath math="L_{loop} \approx 1.005\lambda" />
             </div>
-            <p>
-              <Trans
-                ns="demos"
-                i18nKey={`${qa}.theoryFormulaExpl`}
-                components={{ M: <InlineMath /> }}
-              />
-            </p>
+            <div>
+              <p className="font-semibold mb-2">
+                {t(`${qa}.formulaImpedance`)}:
+              </p>
+              <BlockMath math="Z_{in} \approx 100\Omega" />
+            </div>
+          </div>
+
+          <h4>{t(`${qa}.comparisonTable.title`)}</h4>
+          <div className="overflow-x-auto my-4">
+            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+              <thead className="bg-zinc-50 dark:bg-zinc-900">
+                <tr>
+                  {(
+                    t(`${qa}.comparisonTable.headers`, {
+                      returnObjects: true,
+                    }) as string[]
+                  ).map((header) => (
+                    <th
+                      key={header}
+                      className="px-4 py-3 text-left font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                {(
+                  t(`${qa}.comparisonTable.rows`, {
+                    returnObjects: true,
+                  }) as Array<{
+                    feature: string;
+                    small: string;
+                    full: string;
+                  }>
+                ).map((row) => (
+                  <tr key={row.feature}>
+                    <td className="px-4 py-3 font-medium">{row.feature}</td>
+                    <td className="px-4 py-3">{row.small}</td>
+                    <td className="px-4 py-3">{row.full}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">

@@ -140,22 +140,27 @@ export function ElectricFieldInstanced({
             const L = lengthRef.current; // Use Ref to avoid stale closure
 
             // Use Cosine argument to generate lobes along X-axis
-            // The argument 3.0 is a tuning factor to make it look distinct
-            // For L=4, we want ~8 lobes.
-            // sin(4 * PI * cos(angle)) -> 4 cycles -> 8 zeros -> 8 lobes.
-            // So argument should be PI * L.
-            const lobeArg = Math.PI * L * Math.cos(angle);
-            const num = Math.abs(Math.sin(lobeArg));
+            // Increase frequency factor significantly to show distinct lobes for L=10
+            // Physics: Argument is k * L * cos(theta) * 0.5 roughly?
+            // Visual: We want MORE lobes.
+            // Try 2.5 * PI * L
+            const lobeArg = 2.5 * Math.PI * L * Math.cos(angle);
+
+            // Sharpen the lobes: power of 2 or more?
+            const baseLobe = Math.abs(Math.sin(lobeArg));
+            const num = baseLobe ** 2; // Sharper lobes
 
             // Denom to boost main lobes near axis?
             // Real formula has /sin(theta).
             const den = Math.abs(Math.sin(angle));
 
             // Clamp denom to avoid infinity
-            const val = den > 0.05 ? num / den : num * 20.0;
+            // For L=10, we want noticeable lobes off-axis too.
+            const val = den > 0.1 ? num / den : num * 10.0;
 
             // Normalize somewhat so it's not too huge
-            dirGain = val * 0.3 + 0.1;
+            // Lower baseline to 0.05 to allow "nulls" to be truly dark/blue
+            dirGain = val * 0.5 + 0.05;
           }
 
           // Apply Polarization Pattern (E-field orientation)

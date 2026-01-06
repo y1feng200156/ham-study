@@ -276,7 +276,7 @@ export default function LongWireAntennaScene({
     "medium",
   );
   // Default length 4 lambda
-  const [length, setLength] = useState([4]);
+  const [length, setLength] = useState(2);
 
   const speedMultiplier = {
     slow: 0.3,
@@ -368,17 +368,53 @@ export default function LongWireAntennaScene({
 
       <div className="pt-3 border-t border-white/10">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          {t("common.controls.length")} : {length[0]}λ
+          {t("common.controls.length")}
         </div>
-        <Slider
-          defaultValue={[4]}
-          min={1}
-          max={10}
-          step={0.5}
-          value={length}
-          onValueChange={setLength}
-          className="w-full"
-        />
+        <RadioGroup
+          value={length.toString()}
+          onValueChange={(v) => setLength(Number.parseInt(v))}
+          className="flex gap-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="2"
+              id="l-2"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="l-2"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              2λ
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="4"
+              id="l-4"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="l-4"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              4λ
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="8"
+              id="l-8"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="l-8"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              8λ
+            </Label>
+          </div>
+        </RadioGroup>
       </div>
 
       <div className="pt-3 border-t border-white/10">
@@ -469,16 +505,17 @@ export default function LongWireAntennaScene({
             position={[0, -2, 0]}
           />
 
-          <LongWireAntenna speed={effectiveSpeed} length={length[0]} />
-          {showPattern && <RadiationPattern length={length[0]} />}
+          <LongWireAntenna speed={effectiveSpeed} length={length} />
+          {showPattern && <RadiationPattern length={length} />}
           {showWaves && (
             <group position={midPoint} rotation={[0, 0, rotationAngle]}>
               <ElectricFieldInstanced
+                key={length}
                 antennaType="long-wire"
                 polarizationType="horizontal"
                 speed={effectiveSpeed}
                 amplitudeScale={1.5}
-                antennaLength={length[0]}
+                antennaLength={length}
               />
             </group>
           )}

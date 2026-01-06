@@ -107,188 +107,207 @@ export default function YagiAntennaPage() {
             </li>
           </ul>
 
-          <h3>{t(`${yagi}.theoryTitle`)}</h3>
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 py-0 md:py-0 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
+            <h3 className="text-xl font-bold mb-4">
+              {t(`${yagi}.theoryAnalysis`)}
+            </h3>
 
-          {/* <p> element removed, content merged with previous header or implicit */}
-          <p>
-            <Trans
-              ns="demos"
-              i18nKey={`${yagi}.theorySection1.content`}
-              components={{ strong: <strong /> }}
-            />
-          </p>
+            <h4>{t(`${yagi}.theoryTitle`)}</h4>
 
-          <h4>{t(`${yagi}.theorySection2.title`)}</h4>
-          <p>{t(`${yagi}.theorySection2.intro`)}</p>
-          <ul>
-            <li>
-              <strong>{t(`${yagi}.theorySection2.drivenElement.title`)}</strong>
-              <ul className="list-[circle] pl-5 mt-2">
-                {Object.keys(
-                  t(`${yagi}.theorySection2.drivenElement.items`, {
-                    returnObjects: true,
-                  }) as string[],
-                ).map((key) => (
-                  <li key={key}>
-                    <Trans
-                      ns="demos"
-                      i18nKey={
-                        `${yagi}.theorySection2.drivenElement.items.${key}` as never
-                      }
-                      components={{ strong: <strong />, M: <InlineMath /> }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li>
-              <strong>{t(`${yagi}.theorySection2.reflector.title`)}</strong>
-              <ul className="list-[circle] pl-5 mt-2">
-                {Object.keys(
-                  t(`${yagi}.theorySection2.reflector.items`, {
-                    returnObjects: true,
-                  }) as string[],
-                ).map((key) => (
-                  <li key={key}>
-                    <Trans
-                      ns="demos"
-                      i18nKey={
-                        `${yagi}.theorySection2.reflector.items.${key}` as never
-                      }
-                      components={{ strong: <strong />, M: <InlineMath /> }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li>
-              <strong>{t(`${yagi}.theorySection2.director.title`)}</strong>
-              <ul className="list-[circle] pl-5 mt-2">
-                {Object.keys(
-                  t(`${yagi}.theorySection2.director.items`, {
-                    returnObjects: true,
-                  }) as string[],
-                ).map((key) => (
-                  <li key={key}>
-                    <Trans
-                      ns="demos"
-                      i18nKey={
-                        `${yagi}.theorySection2.director.items.${key}` as never
-                      }
-                      components={{ strong: <strong />, M: <InlineMath /> }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
+            {/* <p> element removed, content merged with previous header or implicit */}
+            <p>
+              <Trans
+                ns="demos"
+                i18nKey={`${yagi}.theorySection1.content`}
+                components={{ strong: <strong /> }}
+              />
+            </p>
 
-          <h4>{t(`${yagi}.theorySection3.title`)}</h4>
-          <p>
-            <Trans
-              ns="demos"
-              i18nKey={`${yagi}.theorySection3.content`}
-              components={{ strong: <strong /> }}
-            />
-          </p>
-
-          <ul>
-            {Object.keys(
-              t(`${yagi}.theorySection3.items`, {
-                returnObjects: true,
-              }) as string[],
-            ).map((key) => (
-              <li key={key}>
-                <Trans
-                  ns="demos"
-                  i18nKey={`${yagi}.theorySection3.items.${key}` as never}
-                  components={{ strong: <strong />, M: <InlineMath /> }}
-                />
-              </li>
-            ))}
-          </ul>
-
-          <h4>{t(`${yagi}.theorySummaryTable.title`)}</h4>
-          <div className="overflow-x-auto my-4">
-            <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
-              <thead>
-                <tr className="bg-zinc-100 dark:bg-zinc-800">
-                  {Object.entries(
-                    t(`${yagi}.theorySummaryTable.headers`, {
+            <h4>{t(`${yagi}.theorySection2.title`)}</h4>
+            <p>{t(`${yagi}.theorySection2.intro`)}</p>
+            <ul>
+              <li>
+                <strong>
+                  {t(`${yagi}.theorySection2.drivenElement.title`)}
+                </strong>
+                <ul className="list-[circle] pl-5 mt-2">
+                  {Object.keys(
+                    t(`${yagi}.theorySection2.drivenElement.items`, {
                       returnObjects: true,
                     }) as string[],
-                  ).map(([key, header]) => (
-                    <th
-                      key={key}
-                      className="border border-zinc-200 dark:border-zinc-700 p-2 text-left font-semibold"
-                    >
-                      {header}
-                    </th>
+                  ).map((key) => (
+                    <li key={key}>
+                      <Trans
+                        ns="demos"
+                        i18nKey={
+                          // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                          `${yagi}.theorySection2.drivenElement.items.${key}` as any
+                        }
+                        components={{ strong: <strong />, M: <InlineMath /> }}
+                      />
+                    </li>
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(
-                  t(`${yagi}.theorySummaryTable.rows`, {
-                    returnObjects: true,
-                  }),
-                ).map(([key]) => (
-                  <tr
-                    key={key}
-                    className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
-                  >
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                </ul>
+              </li>
+              <li>
+                <strong>{t(`${yagi}.theorySection2.reflector.title`)}</strong>
+                <ul className="list-[circle] pl-5 mt-2">
+                  {Object.keys(
+                    t(`${yagi}.theorySection2.reflector.items`, {
+                      returnObjects: true,
+                    }) as string[],
+                  ).map((key) => (
+                    <li key={key}>
                       <Trans
                         ns="demos"
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${key}.type` as never
+                          // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                          `${yagi}.theorySection2.reflector.items.${key}` as any
                         }
-                        components={{
-                          strong: <strong />,
-                          M: <InlineMath />,
-                        }}
+                        components={{ strong: <strong />, M: <InlineMath /> }}
                       />
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li>
+                <strong>{t(`${yagi}.theorySection2.director.title`)}</strong>
+                <ul className="list-[circle] pl-5 mt-2">
+                  {Object.keys(
+                    t(`${yagi}.theorySection2.director.items`, {
+                      returnObjects: true,
+                    }) as string[],
+                  ).map((key) => (
+                    <li key={key}>
                       <Trans
                         ns="demos"
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${key}.length` as never
+                          // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                          `${yagi}.theorySection2.director.items.${key}` as any
                         }
-                        components={{ M: <InlineMath /> }}
+                        components={{ strong: <strong />, M: <InlineMath /> }}
                       />
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
-                      <Trans
-                        ns="demos"
-                        i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${key}.reactance` as never
-                        }
-                        components={{ M: <InlineMath /> }}
-                      />
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
-                      <Trans
-                        ns="demos"
-                        i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${key}.phase` as never
-                        }
-                        components={{ M: <InlineMath /> }}
-                      />
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
-                      <Trans
-                        ns="demos"
-                        i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${key}.function` as never
-                        }
-                        components={{ M: <InlineMath /> }}
-                      />
-                    </td>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+
+            <h4>{t(`${yagi}.theorySection3.title`)}</h4>
+            <p>
+              <Trans
+                ns="demos"
+                i18nKey={`${yagi}.theorySection3.content`}
+                components={{ strong: <strong /> }}
+              />
+            </p>
+
+            <ul>
+              {Object.keys(
+                t(`${yagi}.theorySection3.items`, {
+                  returnObjects: true,
+                }) as string[],
+              ).map((key) => (
+                <li key={key}>
+                  <Trans
+                    ns="demos"
+                    i18nKey={
+                      // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                      `${yagi}.theorySection3.items.${key}` as any
+                    }
+                    components={{ strong: <strong />, M: <InlineMath /> }}
+                  />
+                </li>
+              ))}
+            </ul>
+
+            <h4>{t(`${yagi}.theorySummaryTable.title`)}</h4>
+            <div className="overflow-x-auto my-4">
+              <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
+                <thead>
+                  <tr className="bg-zinc-100 dark:bg-zinc-800">
+                    {Object.entries(
+                      t(`${yagi}.theorySummaryTable.headers`, {
+                        returnObjects: true,
+                      }) as string[],
+                    ).map(([key, header]) => (
+                      <th
+                        key={key}
+                        className="border border-zinc-200 dark:border-zinc-700 p-2 text-left font-semibold"
+                      >
+                        {header}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {Object.entries(
+                    t(`${yagi}.theorySummaryTable.rows`, {
+                      returnObjects: true,
+                    }),
+                  ).map(([key]) => (
+                    <tr
+                      key={key}
+                      className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
+                    >
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.type` as any
+                          }
+                          components={{
+                            strong: <strong />,
+                            M: <InlineMath />,
+                          }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.length` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.reactance` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.phase` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.function` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">

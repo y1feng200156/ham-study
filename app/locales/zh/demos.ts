@@ -272,6 +272,7 @@ export default {
     title: "八木-宇田天线 (Yagi-Uda Antenna)",
     about:
       "八木天线是由日本的八木秀次和宇田新太郎发明的。它是一种<strong>高增益、强方向性</strong>的天线，广泛用于短波通信、电视接收和雷达。",
+    theoryAnalysis: "原理分析",
     principle:
       "<strong>工作原理:</strong> 通过寄生振子（反射器和引向器）与有源振子之间的互感耦合，改变电流相位，从而在单一方向叠加增强信号，在反方向抵消信号。",
     gain: "<strong>增益 (Gain):</strong> 单元越多，引向器越长，增益越高，波束越窄。",

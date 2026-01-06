@@ -277,6 +277,7 @@ export default {
     title: "Yagi-Uda Antenna",
     about:
       "The Yagi antenna was invented by Hidetsugu Yagi and Shintaro Uda of Japan. It's a <strong>high-gain, highly directional</strong> antenna widely used for shortwave communication, TV reception, and radar.",
+    theoryAnalysis: "Theory Analysis",
     principle:
       "<strong>Operating Principle:</strong> Through mutual coupling between parasitic elements (reflector and directors) and the driven element, current phases are modified to constructively combine signals in one direction while canceling in the opposite direction.",
     gain: "<strong>Gain:</strong> More elements and longer directors mean higher gain and narrower beam.",

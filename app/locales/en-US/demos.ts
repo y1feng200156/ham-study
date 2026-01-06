@@ -45,19 +45,19 @@ export default {
     metaKeywords: "elliptical polarization, polarization, radio propagation",
     title: "Elliptical Polarization",
     about:
-      "This visualization demonstrates <b>Elliptical Polarization</b>. This is the general form of polarization. When vertical and horizontal components have different amplitudes, or the phase difference is not 0°, 90°, or 180°, elliptical polarization results.",
+      "This visualization demonstrates <b>Elliptical Polarization</b>. This is the general form of polarization. When vertical and horizontal components have different amplitudes, or the phase difference is not <M>0^\\circ</M>, <M>90^\\circ</M>, or <M>180^\\circ</M>, elliptical polarization results.",
     sliderNote:
       "Adjust the sliders below to observe how different parameters affect the polarization shape:",
     linear:
-      "<strong>Linear Polarization:</strong> Phase difference is 0° or 180°.",
+      "<strong>Linear Polarization:</strong> Phase difference is <M>0^\\circ</M> or <M>180^\\circ</M>.",
     circular:
-      "<strong>Circular Polarization:</strong> Equal V/H amplitudes with 90° phase difference.",
+      "<strong>Circular Polarization:</strong> Equal V/H amplitudes with <M>90^\\circ</M> phase difference.",
     elliptical: "<strong>Elliptical Polarization:</strong> All other cases.",
     generalRulesTitle: "General Rules for Polarization Matching",
     generalRules:
       "In practice, most radio signals become somewhat elliptically polarized during propagation (due to reflections, refraction, etc.). Polarization mismatch loss depends on the <strong>Axial Ratio</strong> and <strong>Tilt Angle</strong> differences between the two elliptically polarized waves.",
     physicsContent:
-      "Elliptical polarization is the general form of electromagnetic wave polarization; linear and circular are special cases. Mathematically, it's the superposition of two orthogonal linearly polarized components with arbitrary amplitude ratio and phase difference. <strong>Axial Ratio (AR)</strong> measures the ellipse flatness: AR=1 (0dB) is circular, AR=∞ is linear.",
+      "Elliptical polarization is the general form of electromagnetic wave polarization; linear and circular are special cases. Mathematically, it's the superposition of two orthogonal linearly polarized components with arbitrary amplitude ratio and phase difference. <strong>Axial Ratio (AR)</strong> measures the ellipse flatness: <M>AR=1 (0\\text{dB})</M> is circular, <M>AR=\\infty</M> is linear.",
     physicsQuote:
       '"In the general case, the trace of the tip of the electric field vector... forms an ellipse... The ratio of the major axis to the minor axis is called the Axial Ratio."',
   },

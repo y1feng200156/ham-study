@@ -43,17 +43,18 @@ export default {
       "橢圓極化, elliptical polarization, 極化, polarization, 無線電傳播, radio propagation",
     title: "橢圓極化 (Elliptical Polarization)",
     about:
-      "本可視化演示了<b>橢圓極化 (Elliptical Polarization)</b>。這是極化的一般形式。當垂直和水平分量的幅度不同，或者相位差不是 0、90、180度時，就會產生橢圓極化。",
+      "本可視化演示了<b>橢圓極化 (Elliptical Polarization)</b>。這是極化的一般形式。當垂直和水平分量的幅度不同，或者相位差不是 <M>0^\\circ</M>、<M>90^\\circ</M>、<M>180^\\circ</M> 時，就會產生橢圓極化。",
     sliderNote: "通過調整下方的滑塊，你可以觀察不同參數對極化形狀的影響：",
-    linear: "<strong>線極化 (Linear):</strong> 相位差為 0° 或 180°。",
+    linear:
+      "<strong>線極化 (Linear):</strong> 相位差為 <M>0^\\circ</M> 或 <M>180^\\circ</M>。",
     circular:
-      "<strong>圓極化 (Circular):</strong> 垂直與水平幅度相等且相位差為 90°。",
+      "<strong>圓極化 (Circular):</strong> 垂直與水平幅度相等且相位差為 <M>90^\\circ</M>。",
     elliptical: "<strong>橢圓極化 (Elliptical):</strong> 其他所有情況。",
     generalRulesTitle: "關於極化匹配的一般規則",
     generalRules:
       "實際上，大多數無線電訊號在傳播過程中都會變成某種程度的橢圓極化（由於反射、折射等）。極化失配損耗 (Polarization Mismatch Loss) 取決於兩個橢圓極化波的<strong>軸比 (Axial Ratio)</strong> 和 <strong>傾角 (Tilt Angle)</strong> 的差異。",
     physicsContent:
-      "橢圓極化是電磁波極化的一般形式，線極化和圓極化只是其特例。從數學上講，它是兩個正交線極化分量的疊加，且這兩個分量具有任意的幅度比和相位差。<strong>軸比 (Axial Ratio, AR)</strong> 是衡量橢圓扁平程度的關鍵指標：AR=1 (0dB) 為圓極化，AR=∞ 為線極化。",
+      "橢圓極化是電磁波極化的一般形式，線極化和圓極化只是其特例。從數學上講，它是兩個正交線極化分量的疊加，且這兩個分量具有任意的幅度比和相位差。<strong>軸比 (Axial Ratio, AR)</strong> 是衡量橢圓扁平程度的關鍵指標：<M>AR=1 (0\\text{dB})</M> 為圓極化，<M>AR=\\infty</M> 為線極化。",
     physicsQuote:
       '"In the general case, the trace of the tip of the electric field vector... forms an ellipse... The ratio of the major axis to the minor axis is called the Axial Ratio."',
   },

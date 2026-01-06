@@ -43,17 +43,18 @@ export default {
       "椭圆极化, elliptical polarization, 极化, polarization, 无线电传播, radio propagation",
     title: "椭圆极化 (Elliptical Polarization)",
     about:
-      "本可视化演示了<b>椭圆极化 (Elliptical Polarization)</b>。这是极化的一般形式。当垂直和水平分量的幅度不同，或者相位差不是 0、90、180度时，就会产生椭圆极化。",
+      "本可视化演示了<b>椭圆极化 (Elliptical Polarization)</b>。这是极化的一般形式。当垂直和水平分量的幅度不同，或者相位差不是 <M>0^\\circ</M>、<M>90^\\circ</M>、<M>180^\\circ</M> 时，就会产生椭圆极化。",
     sliderNote: "通过调整下方的滑块，你可以观察不同参数对极化形状的影响：",
-    linear: "<strong>线极化 (Linear):</strong> 相位差为 0° 或 180°。",
+    linear:
+      "<strong>线极化 (Linear):</strong> 相位差为 <M>0^\\circ</M> 或 <M>180^\\circ</M>。",
     circular:
-      "<strong>圆极化 (Circular):</strong> 垂直与水平幅度相等且相位差为 90°。",
+      "<strong>圆极化 (Circular):</strong> 垂直与水平幅度相等且相位差为 <M>90^\\circ</M>。",
     elliptical: "<strong>椭圆极化 (Elliptical):</strong> 其他所有情况。",
     generalRulesTitle: "关于极化匹配的一般规则",
     generalRules:
       "实际上，大多数无线电信号在传播过程中都会变成某种程度的椭圆极化（由于反射、折射等）。极化失配损耗 (Polarization Mismatch Loss) 取决于两个椭圆极化波的<strong>轴比 (Axial Ratio)</strong> 和 <strong>倾角 (Tilt Angle)</strong> 的差异。",
     physicsContent:
-      "椭圆极化是电磁波极化的一般形式，线极化和圆极化只是其特例。从数学上讲，它是两个正交线极化分量的叠加，且这两个分量具有任意的幅度比和相位差。<strong>轴比 (Axial Ratio, AR)</strong> 是衡量椭圆扁平程度的关键指标：AR=1 (0dB) 为圆极化，AR=∞ 为线极化。",
+      "椭圆极化是电磁波极化的一般形式，线极化和圆极化只是其特例。从数学上讲，它是两个正交线极化分量的叠加，且这两个分量具有任意的幅度比和相位差。<strong>轴比 (Axial Ratio, AR)</strong> 是衡量椭圆扁平程度的关键指标：<M>AR=1 (0\\text{dB})</M> 为圆极化，<M>AR=\\infty</M> 为线极化。",
     physicsQuote:
       '"In the general case, the trace of the tip of the electric field vector... forms an ellipse... The ratio of the major axis to the minor axis is called the Axial Ratio."',
   },

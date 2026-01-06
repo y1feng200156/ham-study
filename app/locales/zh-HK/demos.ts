@@ -255,6 +255,79 @@ export default {
       "八木天線的定向性源於寄生單元（反射器和引向器）上的感應電流與驅動元件電流之間的<strong>相位差 (Phase Difference)</strong>。",
     physicsQuote:
       '"The phase of the current in the parasitic element depends on its length... By proper spacing and length, the radiation from the parasitic element reinforces the radiation from the driven element in the forward direction."',
+    theoryTitle: "1. 概述",
+    theorySection1: {
+      content:
+        "八木-宇田天線（簡稱八木天線）是一種高增益、方向性強的<strong>端射陣列天線</strong>（End-fire Array）。它由一個<strong>驅動元件</strong>（Driven Element）和若干個<strong>無源寄生元件</strong>（Parasitic Elements）組成。其核心原理並非通過饋線給所有振子供電，而是利用<strong>電磁耦合</strong>（互阻抗）在無源振子中感應出電流，通過調整無源振子的<strong>長度</strong>和<strong>間距</strong>，控制感應電流的<strong>幅度</strong>和<strong>相位</strong>，從而實現波束的定向疊加。",
+    },
+    theorySection2: {
+      title: "2. 結構組成與電特性",
+      intro: "典型的八木天線包含三種元件，排列在同一根主樑（Boom）上：",
+      drivenElement: {
+        title: "2.1 驅動元件 (Driven Element)",
+        items: [
+          "<strong>物理描述</strong>：通常是一個半波偶極子（Dipole）或摺合振子（Folded Dipole）。",
+          "<strong>長度</strong>：<M>L \\approx 0.48\\lambda</M>（略短於半波長以呈純電阻性諧振）。",
+          "<strong>功能</strong>：唯一連接饋線（訊號源）的元件，負責激勵整個天線系統。",
+        ],
+      },
+      reflector: {
+        title: "2.2 反射器 (Reflector)",
+        items: [
+          "<strong>位置</strong>：位於驅動元件的後方（背離發射方向）。",
+          "<strong>長度</strong>：<M>L_R \\approx (0.5 \\sim 0.55)\\lambda</M>（比驅動元件長約 5%）。",
+          "<strong>阻抗特性</strong>：由於長度大於諧振長度（<M>\\lambda/2</M>），其呈現<strong>感性</strong>（Inductive）。",
+          "<strong>相位特性</strong>：感性阻抗導致感應電流 <M>I_R</M> 在相位上<strong>滯後</strong>於感應電動勢。",
+          "<strong>作用</strong>：像一面“鏡子”，將射向後方的電磁波反射回前方，抑制後瓣，提高前後比（F/B Ratio）。",
+        ],
+      },
+      director: {
+        title: "2.3 引向器 (Director)",
+        items: [
+          "<strong>位置</strong>：位於驅動元件的前方（發射方向）。",
+          "<strong>數量</strong>：可以有 1個或多個（引向器越多，增益越高，波束越窄）。",
+          "<strong>長度</strong>：<M>L_D \\approx (0.4 \\sim 0.45)\\lambda</M>（比驅動元件短約 5%）。",
+          "<strong>阻抗特性</strong>：由於長度小於諧振長度（<M>\\lambda/2</M>），其呈現<strong>容性</strong>（Capacitive）。",
+          "<strong>相位特性</strong>：容性阻抗導致感應電流 <M>I_D</M> 在相位上<strong>超前</strong>於感應電動勢。",
+          "<strong>作用</strong>：像“透鏡”一樣引導電磁波向前方傳播。",
+        ],
+      },
+    },
+    theorySection3: {
+      title: "3. 工作原理分析 (相位疊加法)",
+      content: "八木天線的工作原理可以簡化為<strong>二元陣列分析</strong>。",
+      items: [
+        "<strong>反射器原理</strong>：反射器較長（感性），電流相位滯後。這種滯後使得其輻射的波在傳回驅動元件時，正好與向後發射的波相位相反（相消干涉），消除了後瓣；而在前方則相位相同（相長干涉），增強了訊號。",
+        "<strong>引向器原理</strong>：引向器較短（容性），電流相位超前。這種相位超前正好抵消了波的空間傳播延遲，使得波像行波一樣在引向器列上逐級疊加增強。",
+      ],
+    },
+    theorySummaryTable: {
+      title: "4. 總結表",
+      headers: ["元件類型", "長度特徵", "電抗性質", "電流相位", "作用"],
+      rows: [
+        {
+          type: "<strong>反射器</strong>",
+          length: "<M>\\gt \\lambda/2</M>",
+          reactance: "感性 (+jX)",
+          phase: "滯後",
+          function: "消除後向輻射，充當“反射鏡”",
+        },
+        {
+          type: "<strong>驅動元件</strong>",
+          length: "<M>\\approx \\lambda/2</M>",
+          reactance: "諧振 (0)",
+          phase: "基準",
+          function: "能量饋入點",
+        },
+        {
+          type: "<strong>引向器</strong>",
+          length: "<M>\\lt \\lambda/2</M>",
+          reactance: "容性 (-jX)",
+          phase: "超前",
+          function: "引導波束前行，充當“透鏡”",
+        },
+      ],
+    },
   },
 
   endFedAntenna: {

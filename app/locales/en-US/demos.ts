@@ -296,5 +296,14 @@ export default {
       "Current distribution on a long wire is typically treated as a standing wave (if open-ended) or traveling wave (if terminated). For an open-ended long wire, the radiation pattern is characteristically multi-lobed.",
     physicsQuote:
       '"As the wire is made longer, the major lobes of radiation align more closely with the wire... creating a directional effect along the wire axis."',
+    theoryTitle: "Theoretical Analysis",
+    theoryDesc:
+      "The Long Wire Antenna, particularly when operating at multiple wavelengths, exhibits a complex radiation pattern governed by the standing wave distribution along the wire.",
+    theoryFormulaIntro:
+      "For a Standing Wave Long Wire Antenna of length L with an odd number of half-wavelengths ($n$ is odd), the normalized electric field radiation pattern $E(\\theta)$ is given by:",
+    theoryFormulaExpl:
+      "Where $\\theta$ is the angle with respect to the wire axis. In our simulation, we model a wire of length $L = 2.5\\lambda$, which corresponds to:",
+    theoryResult:
+      "Since $n=5$ is an odd number, the term $\\cos(\\frac{5\\pi}{2} \\cos \\theta)$ becomes $\\cos(0) = 1$ when $\\theta = 90^\\circ$. This explains the presence of a broadside lobe perpendicular to the wire, which is a characteristic feature of odd-harmonic standing wave antennas.",
   },
 } satisfies typeof import("~/locales/zh/demos").default;

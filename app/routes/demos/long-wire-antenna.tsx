@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { ScientificCitation } from "~/components/scientific-citation";
+import { BlockMath } from "~/components/math";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/long-wire-antenna";
 
@@ -87,6 +88,36 @@ export default function LongWireAntennaPage() {
               />
             </li>
           </ul>
+
+          <div className="prose dark:prose-invert max-w-none mb-8">
+            <h3>{t("theoryTitle", "Theoretical Analysis")}</h3>
+            <p>
+              {t(
+                "theoryDesc",
+                "The Long Wire Antenna, particularly when operating at multiple wavelengths, exhibits a complex radiation pattern governed by the standing wave distribution along the wire.",
+              )}
+            </p>
+            <p>
+              {t(
+                "theoryFormulaIntro",
+                "For a Standing Wave Long Wire Antenna of length L with an odd number of half-wavelengths ($n$ is odd), the normalized electric field radiation pattern $E(\theta)$ is given by:",
+              )}
+            </p>
+            <BlockMath math="E(\theta) \propto \left| \frac{\cos\left(\frac{n\pi}{2} \cos \theta\right)}{\sin \theta} \right|" />
+            <p>
+              {t(
+                "theoryFormulaExpl",
+                "Where $\\theta$ is the angle with respect to the wire axis. In our simulation, we model a wire of length $L = 2.5\\lambda$, which corresponds to:",
+              )}
+            </p>
+            <BlockMath math="n = \frac{L}{\lambda/2} = \frac{2.5\lambda}{0.5\lambda} = 5" />
+            <p>
+              {t(
+                "theoryResult",
+                "Since $n=5$ is an odd number, the term $\\cos(\\frac{5\\pi}{2} \\cos \\theta)$ becomes $\\cos(0) = 1$ when $\\theta = 90^\\circ$. This explains the presence of a broadside lobe perpendicular to the wire, which is a characteristic feature of odd-harmonic standing wave antennas.",
+              )}
+            </p>
+          </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation

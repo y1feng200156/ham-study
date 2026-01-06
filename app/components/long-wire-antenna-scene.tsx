@@ -20,20 +20,17 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 
+const WIRE_START = new Vector3(-5, -1, 0);
+const WIRE_END = new Vector3(5, 3, 0);
+
 function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   const insulatorGeo = useMemo(
     () => new CylinderGeometry(0.05, 0.05, 0.2, 16),
     [],
   );
 
-  // Antenna wire points
-  // Long wire usually starts low and goes high, or is horizontal.
-  // Let's model a generic random wire starting from a "shack" (origin) to a support.
-  // To make it "Long", we make it > 1 wavelength.
-  // Let's assume lambda is approx 4 units. So length 10 is ~2.5 lambda.
-
-  const startPoint = useMemo(() => new Vector3(-5, -1, 0), []);
-  const endPoint = useMemo(() => new Vector3(5, 3, 0), []);
+  const startPoint = useMemo(() => WIRE_START.clone(), []);
+  const endPoint = useMemo(() => WIRE_END.clone(), []);
 
   const wireCurve = useMemo(() => {
     return new LineCurve3(startPoint, endPoint);
@@ -46,15 +43,6 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
 
   // E-Field and H-Field visualization
   const segmentCount = 40;
-
-  // Ref for animating fields
-  // We can reuse ElectricFieldInstanced for the main wave propagation visualization in the "air"
-  // But strictly for the wire currents/voltages, we might want manual control like in EndFed scene
-  // OR we can just use the standard ElectricFieldInstanced for simplicity and consistency if it supports line sources well.
-  // The EndFed implementation manually instantiates E/H fields along the wire to show Standing Waves (Voltage/Current distribution).
-  // Long wire also has standing waves if unmatched, or traveling waves if terminated.
-  // "Long Wire" usually implies standing waves unless it's a Beverage antenna (terminated).
-  // Let's assume standing waves (random wire).
 
   const eRef = useRef<InstancedMesh>(null);
   const hRef = useRef<InstancedMesh>(null);
@@ -77,9 +65,6 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   const hFieldInstances = useMemo(() => {
     // Current rings
     const geometry = new CylinderGeometry(0.15, 0.15, 0.05, 16); // Ring-like cylinder
-    // Or Torus
-    // const geometry = new TorusGeometry(0.15, 0.02, 8, 16);
-    // Cylinder is cheaper/easier to align sometimes
     const mesh = new InstancedMesh(
       geometry,
       new MeshBasicMaterial({
@@ -110,17 +95,13 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
 
         const pos = wireCurve.getPoint(t);
         const tangent = wireCurve.getTangent(t).normalize();
-        // E-field is perpendicular to the wire.
-        // To get a perpendicular vector, we can cross the tangent with an arbitrary non-collinear vector.
-        // If the wire is in XY plane, Z is perpendicular. If wire is 3D, it's more complex.
-        // For visualization, let's assume E-field is in the plane containing the wire and a global 'up' vector.
-        const arbitraryUp = new Vector3(0, 0, 1); // Use Z-axis as a general 'up' for perpendicular calculation
+
+        const arbitraryUp = new Vector3(0, 0, 1);
         const normal = new Vector3()
           .crossVectors(tangent, arbitraryUp)
           .normalize();
         if (normal.lengthSq() === 0) {
-          // Handle case where tangent is parallel to arbitraryUp
-          arbitraryUp.set(0, 1, 0); // Try Y-axis instead
+          arbitraryUp.set(0, 1, 0);
           normal.crossVectors(tangent, arbitraryUp).normalize();
         }
 
@@ -138,7 +119,6 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
     if (hRef.current) {
       for (let i = 0; i < segmentCount; i++) {
         const t = i / (segmentCount - 1);
-        // Current distribution shifted by 90 deg (PI/2) spatially and temporally relative to voltage
         const k = 2.5 * 2 * Math.PI;
         const spatialAmp = Math.cos(t * k);
         const timeAmp = Math.cos(time);
@@ -148,7 +128,6 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
         const tangent = wireCurve.getTangent(t).normalize();
 
         tempObj.position.copy(pos);
-        // Align cylinder (which is along Y-axis by default) to the tangent vector
         const quaternion = new Quaternion().setFromUnitVectors(up, tangent);
         tempObj.setRotationFromQuaternion(quaternion);
         tempObj.scale.set(
@@ -199,39 +178,25 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
 }
 
 function RadiationPattern() {
-  // Long wire pattern: Multiple lobes.
-  // Main lobes are angled towards the wire axis in the direction of wave travel (if traveling)
-  // or symmetric if standing wave.
-  // For standing wave (unmatched): 4 main lobes for 1 wavelength, more for longer.
-  // Let's visualize a generic multi-lobed shape.
-
   const geometry = useMemo(() => {
     const geo = new SphereGeometry(1, 90, 60);
     const posAttribute = geo.attributes.position;
     const vertex = new Vector3();
     const scale = 4;
 
-    // Wire axis roughly X? Our wire is diagonal-ish in X-Y plane.
-    // Let's simplify and make the pattern aligned to X-axis and tilt the whole group to match wire.
-    // Wire vector: (10, 4, 0) -> normalized.
-
     for (let i = 0; i < posAttribute.count; i++) {
       vertex.fromBufferAttribute(posAttribute, i);
-
-      // Calculate angle theta from X-axis
-      // const theta = Math.acos(vertex.x / vertex.length());
-      // Formula for long wire pattern approx: | sin(theta) * sin(n * pi * (1 - cos(theta))) | ??
-      // Let's use a simpler lobing function: |sin( L * cos(theta))|
-      // L relates to length in wavelengths.
-
       const angle = vertex.angleTo(new Vector3(1, 0, 0)); // Angle to X axis
 
-      // Pattern factor
-      // A simple multi-lobe pattern: |sin(k * cos(angle))|
-      // k = 2.5 * PI (for 2.5 wavelengths)
       const k = 2.5 * Math.PI;
-      // We also need sin(theta) factor for element factor if it's wire
-      const gain = Math.abs(Math.sin(angle) * Math.sin(k * Math.cos(angle)));
+      // For odd number of half-wavelengths (n=5, L=2.5lambda), use COSINE in numerator.
+      // E ~ cos(n * pi/2 * cos(theta)) / sin(theta)
+
+      const num = Math.cos(k * Math.cos(angle));
+      const den = Math.sin(angle);
+
+      // Avoid division by zero
+      const gain = Math.abs(den > 0.01 ? num / den : 0);
 
       // Add distinct lobes
       vertex.normalize().multiplyScalar(Math.max(0.01, gain) * scale);
@@ -242,19 +207,15 @@ function RadiationPattern() {
     return geo;
   }, []);
 
-  // Determine wire angle
-  const start = new Vector3(-5, -1, 0);
-  const end = new Vector3(5, 3, 0);
-  const direction = new Vector3().subVectors(end, start).normalize();
-
-  // Calculate rotation angle relative to X-axis pattern
-  const rotationAngle = Math.acos(new Vector3(1, 0, 0).dot(direction));
+  const direction = new Vector3().subVectors(WIRE_END, WIRE_START).normalize();
+  const rotationAngle = Math.atan2(direction.y, direction.x);
+  const midPoint = new Vector3()
+    .addVectors(WIRE_START, WIRE_END)
+    .multiplyScalar(0.5);
 
   return (
-    <group position={[0, 1, 0]}>
+    <group position={midPoint}>
       <mesh geometry={geometry} rotation={[0, 0, rotationAngle]}>
-        {" "}
-        {/* rotationAngle is around Z axis because wire is in X-Y plane */}
         <meshBasicMaterial
           color="#22c55e"
           wireframe={true}
@@ -287,6 +248,13 @@ export default function LongWireAntennaScene({
   }[speedMode];
 
   const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
+  // Calculate generic position/rotation for field alignment
+  const direction = new Vector3().subVectors(WIRE_END, WIRE_START).normalize();
+  const rotationAngle = Math.atan2(direction.y, direction.x);
+  const midPoint = new Vector3()
+    .addVectors(WIRE_START, WIRE_END)
+    .multiplyScalar(0.5);
 
   // Legend and Control logic (similar to others)
   const LegendContent = () => (
@@ -462,12 +430,14 @@ export default function LongWireAntennaScene({
           <LongWireAntenna speed={effectiveSpeed} />
           {showPattern && <RadiationPattern />}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="long-wire"
-              polarizationType="horizontal" // Generalization, as it's mixed
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={midPoint} rotation={[0, 0, rotationAngle]}>
+              <ElectricFieldInstanced
+                antennaType="long-wire"
+                polarizationType="horizontal" // Generalization, as it's mixed
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+              />
+            </group>
           )}
         </Canvas>
 

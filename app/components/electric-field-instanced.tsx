@@ -118,6 +118,15 @@ export function ElectricFieldInstanced({
             const sinDir = Math.sin(angle);
             const front = Math.max(0, sinDir);
             dirGain = front ** 2.0 + 0.1;
+          } else if (antennaType === "long-wire") {
+            const k = 2.5 * Math.PI;
+            // n=5 (odd) -> Use Cosine
+            const cosPsi = Math.cos(k * Math.cos(angle));
+            const sinTheta = Math.sin(angle);
+
+            // E ~ cos(2.5pi * cos(theta)) / sin(theta)
+            const pattern = Math.abs(sinTheta > 0.01 ? cosPsi / sinTheta : 0);
+            dirGain = pattern + 0.1;
           }
 
           // Apply Polarization Pattern (E-field orientation)
@@ -243,6 +252,7 @@ export function ElectricFieldInstanced({
           antennaType === "yagi" ||
           antennaType === "quad" ||
           antennaType === "moxon" ||
+          antennaType === "long-wire" ||
           polarizationType === "horizontal"; // Dipoles/V-antennas have nulls
 
         if (

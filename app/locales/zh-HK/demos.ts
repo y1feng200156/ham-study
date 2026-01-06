@@ -290,5 +290,14 @@ export default {
       "長線天線上的電流分佈通常被視為駐波（若末端開路）或行波（若末端終止）。對於末端開路的長線，其輻射方向圖是典型的多瓣狀。",
     physicsQuote:
       '"As the wire is made longer, the major lobes of radiation align more closely with the wire... creating a directional effect along the wire axis."',
+    theoryTitle: "理論分析 (Theoretical Analysis)",
+    theoryDesc:
+      "長線天線，特別是在多個波長下工作時，會表現出由沿導線的駐波分佈決定的複雜輻射圖。",
+    theoryFormulaIntro:
+      "對於長度為 L 且包含奇數個半波長（$n$ 為奇數）的駐波長線天線，歸一化的電場輻射方向圖 $E(\\theta)$ 由下式給出：",
+    theoryFormulaExpl:
+      "其中 $\\theta$ 是相對於導線軸的夾角。在我們的仿真中，導線長度模型為 $L = 2.5\\lambda$，對應於：",
+    theoryResult:
+      "由於 $n=5$ 是奇數，當 $\\theta = 90^\\circ$ 時，項 $\\cos(\\frac{5\\pi}{2} \\cos \\theta)$ 變為 $\\cos(0) = 1$。這解釋了為什麼會存在垂直於導線的寬邊波瓣，這是奇次諧波駐波天線的一個顯著特徵。",
   },
 } satisfies typeof import("~/locales/zh/demos").default;

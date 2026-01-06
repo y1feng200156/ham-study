@@ -290,5 +290,14 @@ export default {
       "长线天线上的电流分布通常被视为驻波（若末端开路）或行波（若末端终止）。对于末端开路的长线，其辐射方向图是典型的多瓣状。",
     physicsQuote:
       '"As the wire is made longer, the major lobes of radiation align more closely with the wire... creating a directional effect along the wire axis."',
+    theoryTitle: "理论分析 (Theoretical Analysis)",
+    theoryDesc:
+      "长线天线，特别是在多个波长下工作时，会表现出由沿导线的驻波分布决定的复杂辐射图。",
+    theoryFormulaIntro:
+      "对于长度为 L 且包含奇数个半波长（$n$ 为奇数）的驻波长线天线，归一化的电场辐射方向图 $E(\\theta)$ 由下式给出：",
+    theoryFormulaExpl:
+      "其中 $\\theta$ 是相对于导线轴的夹角。在我们的仿真中，导线长度模型为 $L = 2.5\\lambda$，对应于：",
+    theoryResult:
+      "由于 $n=5$ 是奇数，当 $\\theta = 90^\\circ$ 时，项 $\\cos(\\frac{5\\pi}{2} \\cos \\theta)$ 变为 $\\cos(0) = 1$。这解释了为什么会存在垂直于导线的宽边波瓣，这是奇次谐波驻波天线的一个显著特征。",
   },
 } satisfies Record<string, unknown>;

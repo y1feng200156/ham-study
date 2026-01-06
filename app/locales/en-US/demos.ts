@@ -207,35 +207,36 @@ export default {
       '"Raising the ends of the dipole in a V-shape keeps the high-voltage points away from lossy structures... minimizing ground losses."',
 
     // New Content
-    definitionTitle: '1. What is "Positive V"?',
-    definitionContent:
-      "Positive V antenna typically refers to a <strong>rigid V-dipole</strong>. It consists of two metal tubes, opening upwards or outwards in a V shape, with an included angle typically between 90° and 120°.",
-
-    principleTitle: "2. Why bend it? (Core Principle)",
-
-    impedanceTitle: "2.1 Impedance Matching (Main Reason)",
-    impedanceProblem:
-      "<strong>Problem</strong>: The impedance of a standard vertical half-wave dipole (180°) is about <strong>73Ω</strong>, while common coaxial cable is <strong>50Ω</strong>. Direct connection results in an SWR of 1.5.",
-    impedanceSolution:
-      "<strong>Solution</strong>: Bending the elements into a V shape reduces the mutual impedance and thus the total radiation resistance. When the angle is between <strong>90°~120°</strong>, the impedance naturally drops to around <strong>50Ω</strong>.",
-    impedanceConclusion:
-      '<strong>Conclusion</strong>: <strong>The Positive V antenna has built-in "impedance transformation", matching 50Ω cable perfectly without a tuner.</strong>',
-
-    directionalityTitle: "2.2 Improved Directionality",
-    directionalityDipole:
-      '<strong>Straight Dipole</strong>: The radiation pattern is a "figure-8", with deep nulls (blind spots) at both ends.',
-    directionalityPositiveV:
-      "<strong>Positive V</strong>: Due to the change in current vector direction, the original nulls are filled. The pattern becomes more rounded, approaching an omnidirectional antenna.",
-
-    spaceTitle: "2.3 Saving Space",
-    spaceContent:
-      "Compared to a straight dipole, the V-shape has a smaller turning radius, making it easier to install in limited rooftop spaces.",
-
-    comparisonTitle: "3. Common Misconception: Positive V vs. Inverted V",
-    invertedV:
-      "<strong>Inverted V</strong>: Center high, ends low. Uses wire, low cost, high takeoff angle, suitable for short-distance (NVIS/local) communication.",
-    positiveV:
-      "<strong>Positive V (Rigid V)</strong>: Center low, ends high. Uses aluminum tubes, wind-resistant, low takeoff angle, suitable for long-distance (DX) communication.",
+    theoryAnalysis: "Theoretical Analysis",
+    theoryContent:
+      "The Positive-V antenna is essentially a <strong>bent half-wave dipole</strong>. By folding the elements upward into a V-shape (typically 90°~120°), the antenna's impedance characteristics are altered. While a straight dipole has an impedance of about 73Ω, the V-shape utilizes mutual impedance between elements to lower the radiation resistance to near <strong>50Ω</strong>, achieving a <strong>natural match</strong> with common coaxial cables (no tuner needed). Additionally, the V-shape improves directionality by filling in the nulls at the ends of the antenna.",
+    impedanceMathLabel: "Impedance at 120° angle",
+    comparisonTable: {
+      title: "Comparison Table",
+      headers: ["Feature", "Positive V (Rigid V)", "Inverted V"],
+      rows: [
+        {
+          feature: "Shape",
+          posV: "V (Low center, high ends)",
+          invV: "∧ (High center, low ends)",
+        },
+        {
+          feature: "Impedance",
+          posV: "~50Ω (Natural match)",
+          invV: "< 50Ω (Usually needs Balun)",
+        },
+        {
+          feature: "Take-off Angle",
+          posV: "Low (Good for DX)",
+          invV: "High (Good for NVIS)",
+        },
+        {
+          feature: "Installation",
+          posV: "Rotator/Al tubing (Rigid)",
+          invV: "Single mast/Wire (Simple)",
+        },
+      ],
+    },
   },
 
   quadAntenna: {

@@ -451,6 +451,18 @@ export default {
       "端馈半波天线 (EFHW) 在谐振时，馈电点位于电压波腹（电压最大）和电流波节（电流最小）处。根据 Z=V/I，这意味着其输入阻抗极高（理论上无穷大，实际上约 2500-5000Ω）。因此必须使用高变比（如 49:1 或 64:1）的宽带阻抗变换器将其降至 50Ω。",
     physicsQuote:
       '"An end-fed half-wave antenna presents a very high impedance at the feed point... requiring a matching network (unun) to transform the high impedance down to 50 ohms."',
+    theoryAnalysis: "理论分析",
+    theoryVoltageFeed:
+      "<strong>电压馈电 (Voltage Feed):</strong> 在导线末端馈电（高电压、低电流）会导致极高的阻抗 (<M>2000\\Omega \\sim 4000\\Omega</M>)。必须使用高变比变压器 (49:1 或 64:1) 进行匹配。",
+    harmonics:
+      "<strong>多波段谐振 (Harmonic Resonance):</strong> 切谐在基频 (<M>f_0</M>) 的半波长导线，在整数倍频率 (<M>2f_0, 3f_0...</M>) 上也会表现为高阻抗谐振。这使得一根线可以在多个波段 (如 40m/20m/10m) 工作而无需天调。",
+    formulaRadiation: "辐射方向图公式 (谐波工作)",
+    oddHarmonics: "当谐波次数 <M>n</M> 为奇数 (1, 3, 5...)：",
+    evenHarmonics: "当谐波次数 <M>n</M> 为偶数 (2, 4, 6...)：",
+    patternDesc:
+      "随着谐波次数 <M>n</M> 的增加，原本单一的波瓣会分裂成多个花瓣，且最大辐射方向会越来越贴近导线轴线。",
+    commonMode:
+      "<strong>共模电流风险:</strong> 同轴电缆的屏蔽层通常充当了地网 (Counterpoise)。强烈建议加装共模扼流圈 (Choke) 以防止射频干扰 (RFI) 回流到电台。",
   },
 
   longWireAntenna: {

@@ -451,6 +451,18 @@ export default {
       "端饋半波天線 (EFHW) 在諧振時，饋電點位於電壓波腹（電壓最大）和電流波節（電流最小）處。根據 Z=V/I，這意味著其輸入阻抗極高。",
     physicsQuote:
       '"An end-fed half-wave antenna presents a very high impedance at the feed point... requiring a matching network (unun) to transform the high impedance down to 50 ohms."',
+    theoryAnalysis: "理論分析",
+    theoryVoltageFeed:
+      "<strong>電壓饋電 (Voltage Feed):</strong> 在導線末端饋電（高電壓、低電流）會導致極高的阻抗 (<M>2000\\Omega \\sim 4000\\Omega</M>)。必須使用高變比變壓器 (49:1 或 64:1) 進行匹配。",
+    harmonics:
+      "<strong>多波段諧振 (Harmonic Resonance):</strong> 切諧在基頻 (<M>f_0</M>) 的半波長導線，在整數倍頻率 (<M>2f_0, 3f_0...</M>) 上也會表現為高阻抗諧振。這使得一根線可以在多個波段 (如 40m/20m/10m) 工作而無需天調。",
+    formulaRadiation: "輻射方向圖公式 (諧波工作)",
+    oddHarmonics: "當諧波次數 <M>n</M> 為奇數 (1, 3, 5...)：",
+    evenHarmonics: "當諧波次數 <M>n</M> 為偶數 (2, 4, 6...)：",
+    patternDesc:
+      "隨著諧波次數 <M>n</M> 的增加，原本單一的波瓣會分裂成多個花瓣，且最大輻射方向會越來越貼近導線軸線。",
+    commonMode:
+      "<strong>共模電流風險:</strong> 同軸電纜的屏蔽層通常充當了地網 (Counterpoise)。強烈建議加裝共模扼流圈 (Choke) 以防止射頻干擾 (RFI) 回流到電台。",
   },
 
   longWireAntenna: {

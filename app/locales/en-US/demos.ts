@@ -455,6 +455,18 @@ export default {
       "At resonance, the EFHW feed point is at a voltage antinode (maximum voltage) and current node (minimum current). From Z=V/I, this means extremely high input impedance (theoretically infinite, practically ~2500-5000Ω). A high-ratio broadband unun (49:1 or 64:1) is required to transform this to 50Ω.",
     physicsQuote:
       '"An end-fed half-wave antenna presents a very high impedance at the feed point... requiring a matching network (unun) to transform the high impedance down to 50 ohms."',
+    theoryAnalysis: "Theoretical Analysis",
+    theoryVoltageFeed:
+      "<strong>Voltage Feed:</strong> Feeding at the end of the wire (high voltage, low current) results in a very high impedance (<M>2000\\Omega \\sim 4000\\Omega</M>). A transformer with a high turns ratio (49:1 or 64:1) is essential for efficient power transfer.",
+    harmonics:
+      "<strong>Harmonic Resonance:</strong> A half-wave wire for the fundamental frequency (<M>f_0</M>) also resonates at integer multiples (<M>2f_0, 3f_0...</M>). This allows multi-band operation (e.g., 40m/20m/10m) on a single wire without a tuner.",
+    formulaRadiation: "Radiation Pattern Formula (Harmonics)",
+    oddHarmonics: "For odd harmonics (<M>n=1, 3, 5...</M>):",
+    evenHarmonics: "For even harmonics (<M>n=2, 4, 6...</M>):",
+    patternDesc:
+      "As the harmonic order <M>n</M> increases, the single lobe splits into multiple lobes, and the main beam direction shifts closer to the wire axis.",
+    commonMode:
+      "<strong>Common Mode Current:</strong> The coax shield often acts as the counterpoise. A common mode choke is highly recommended to prevent RFI.",
   },
 
   longWireAntenna: {

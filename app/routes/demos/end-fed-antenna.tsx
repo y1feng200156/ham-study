@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
+import { BlockMath, InlineMath } from "~/components/math";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/end-fed-antenna";
 
@@ -88,6 +89,71 @@ export default function EndFedAntennaPage() {
               />
             </li>
           </ul>
+
+          <h3>{t(`${ef}.theoryAnalysis`)}</h3>
+          <ul>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.theoryVoltageFeed`}
+                components={{ strong: <strong />, M: <InlineMath /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.harmonics`}
+                components={{ strong: <strong />, M: <InlineMath /> }}
+              />
+            </li>
+          </ul>
+
+          <div className="my-6 space-y-4">
+            <div>
+              <p className="font-semibold mb-2">
+                {t(`${ef}.formulaRadiation`)}:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <Trans
+                      ns="demos"
+                      i18nKey={`${ef}.oddHarmonics`}
+                      components={{ M: <InlineMath /> }}
+                    />
+                  </p>
+                  <BlockMath math="F(\theta) = \frac{\cos(\frac{n\pi}{2} \cos \theta)}{\sin \theta}" />
+                </div>
+                <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <Trans
+                      ns="demos"
+                      i18nKey={`${ef}.evenHarmonics`}
+                      components={{ M: <InlineMath /> }}
+                    />
+                  </p>
+                  <BlockMath math="F(\theta) = \frac{\sin(\frac{n\pi}{2} \cos \theta)}{\sin \theta}" />
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground mt-2">
+                <Trans
+                  ns="demos"
+                  i18nKey={`${ef}.patternDesc`}
+                  components={{ M: <InlineMath /> }}
+                />
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg p-4 mb-6">
+            <p className="text-amber-800 dark:text-amber-200 text-sm">
+              <Trans
+                ns="demos"
+                i18nKey={`${ef}.commonMode`}
+                components={{ strong: <strong /> }}
+              />
+            </p>
+          </div>
 
           <h3>{t(`${ef}.polarizationTitle`)}</h3>
           <ul></ul>

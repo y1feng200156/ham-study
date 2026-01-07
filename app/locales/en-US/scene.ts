@@ -41,6 +41,10 @@ export default {
     radials: "Radials",
     pattern: "Radiation Pattern",
     eField: "E-field",
+    radialAngle: "Radial Angle",
+    angle90: "90° (Horizontal)",
+    angle60: "60° (Uptilted)",
+    angle135: "135° (Drooping)",
   },
   horizontalPolarization: {
     title: "Horizontal Polarization",

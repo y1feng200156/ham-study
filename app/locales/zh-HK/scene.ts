@@ -41,6 +41,10 @@ export default {
     radials: "地網 (無源 / Radials)",
     pattern: "輻射方向圖 (Pattern)",
     eField: "電場 (E-field)",
+    radialAngle: "地網角度 (Radial Angle)",
+    angle90: "90° (水平/Horizontal)",
+    angle60: "60° (上翹/Uptilted)",
+    angle135: "135° (下垂/Drooping)",
   },
   horizontalPolarization: {
     title: "水平極化 (Horizontal Polarization)",

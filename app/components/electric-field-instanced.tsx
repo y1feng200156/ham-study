@@ -10,6 +10,7 @@ interface ElectricFieldInstancedProps {
   isRHCP?: boolean;
   axialRatio?: number;
   antennaLength?: number;
+  radialAngle?: "60" | "135" | string;
 }
 
 export function ElectricFieldInstanced({
@@ -19,6 +20,7 @@ export function ElectricFieldInstanced({
   amplitudeScale = 1.0,
   isRHCP = true,
   antennaLength = 2.5,
+  radialAngle,
 }: ElectricFieldInstancedProps) {
   // Dense Grid for "Field Fabric"
   const gridSize = 100; // 100x100 = 10,000 particles
@@ -62,6 +64,13 @@ export function ElectricFieldInstanced({
           meshRef.current.setMatrixAt(i, dummy.matrix);
           i++;
           continue;
+        }
+
+        // Conical Slope Logic for GP 60
+        let yOffset = 0;
+        if (antennaType === "gp" && radialAngle === "60") {
+          // 45 degree slope upwards
+          yOffset = dist * 1.2;
         }
 
         // Phase Calculation (The Wave travels, particles don't)
@@ -219,11 +228,7 @@ export function ElectricFieldInstanced({
 
             hScale = 1.0;
           }
-        } else if (
-          polarizationType === "vertical" ||
-          antennaType === "vertical" ||
-          antennaType === "gp"
-        ) {
+        } else if (antennaType === "vertical" || antennaType === "gp") {
           hScale = 0;
           dirGain = 1.0; // Omni
         } else if (polarizationType === "horizontal") {
@@ -260,7 +265,7 @@ export function ElectricFieldInstanced({
         const tanZ = Math.cos(angle);
 
         const finalX = posX + tanX * dispH;
-        const finalY = dispY;
+        const finalY = dispY + yOffset;
         const finalZ = posZ + tanZ * dispH;
 
         dummy.position.set(finalX, finalY, finalZ);

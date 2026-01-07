@@ -8,6 +8,7 @@ const InvertedVAntennaScene = lazy(
   () => import("~/components/inverted-v-scene"),
 );
 
+import { BlockMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
 export const loader = ({ context }: Route.LoaderArgs) => {
@@ -65,40 +66,62 @@ export default function InvertedVAntennaPage() {
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
           <p>{t(`${iv}.about`)}</p>
-          <ul>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${iv}.impedance`}
-                components={{ strong: <strong /> }}
-              />
-            </li>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${iv}.space`}
-                components={{ strong: <strong /> }}
-              />
-            </li>
-          </ul>
+          <h3>{t(`${iv}.theoryAnalysis`)}</h3>
+          <p>
+            <Trans
+              ns="demos"
+              i18nKey={`${iv}.theoryContent`}
+              components={{ strong: <strong /> }}
+            />
+          </p>
 
-          <h3>{t("polarizationTitle")}</h3>
-          <ul>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${iv}.mixedPolarization`}
-                components={{ strong: <strong /> }}
-              />
-            </li>
-            <li>
-              <Trans
-                ns="demos"
-                i18nKey={`${iv}.application`}
-                components={{ strong: <strong /> }}
-              />
-            </li>
-          </ul>
+          <div className="my-6 space-y-4">
+            <div>
+              <p className="font-semibold mb-2">
+                {t(`${iv}.formulaImpedance`)}:
+              </p>
+              <BlockMath math="Z_{in} \approx 50\Omega \quad (90^{\circ} < \theta < 120^{\circ})" />
+            </div>
+          </div>
+
+          <h4>{t(`${iv}.comparisonTable.title`)}</h4>
+          <div className="overflow-x-auto my-4">
+            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+              <thead className="bg-zinc-50 dark:bg-zinc-900">
+                <tr>
+                  {(
+                    t(`${iv}.comparisonTable.headers`, {
+                      returnObjects: true,
+                    }) as string[]
+                  ).map((header) => (
+                    <th
+                      key={header}
+                      className="px-4 py-3 text-left font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                {(
+                  t(`${iv}.comparisonTable.rows`, {
+                    returnObjects: true,
+                  }) as Array<{
+                    feature: string;
+                    rigid: string;
+                    inverted: string;
+                  }>
+                ).map((row) => (
+                  <tr key={row.feature}>
+                    <td className="px-4 py-3 font-medium">{row.feature}</td>
+                    <td className="px-4 py-3">{row.rigid}</td>
+                    <td className="px-4 py-3">{row.inverted}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation

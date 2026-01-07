@@ -124,14 +124,41 @@ export default {
     title: "GP天線 (Ground Plane Antenna)",
     about:
       "GP 天線（Ground Plane，地網天線）是最基礎、最常見的垂直天線。它由一根垂直的 1/4 波長振子和數根（通常 3-4 根）水平或下傾的地網（Radials）組成。",
-    artificialGround:
-      "<strong>人造地網:</strong> 那些徑向伸出的金屬桿模擬了一個完美的'地面'，就像鏡子一樣反射出另一半天線（鏡像），從而形成了等效的偶極子。",
-    takeoffAngle:
-      "<strong>發射仰角:</strong> 具有較低的發射仰角，這意味著大部分能量是貼著地面或水平方向發射出去的，非常適合 DX (遠距離) 通訊和本地覆蓋。",
+    theoryAnalysis: "理論分析",
+    theoryContent:
+      "GP天線（Ground Plane）利用<strong>鏡像原理</strong>，通過地網在地下產生一個虛擬的鏡像振子，從而構成完整的垂直偶極子。實體的 1/4 波長振子與虛擬的下半部分相結合，實現了全尺寸天線的效率。通過調整地網下垂角度至約 135°，可以提高輸入阻抗至 <strong>50Ω</strong>，完美匹配同軸電纜。其低仰角輻射特性使其成為 DX 通訊的利器。",
+    formulaRadiation: "輻射方向圖 (理想單極子)",
+    formulaImpedance: "輸入阻抗匹配 (地網下垂 135°)",
+    comparisonTable: {
+      title: "對比表：GP天線 (垂直) vs 偶極子 (水平)",
+      headers: ["特性", "GP天線 (垂直極化)", "偶極子 (水平極化)"],
+      rows: [
+        {
+          feature: "輻射方向",
+          gp: "全向 (360° 無死角)",
+          dipole: "雙向 (8字形)",
+        },
+        {
+          feature: "發射仰角",
+          gp: "低仰角 (DX 利器)",
+          dipole: "高仰角 (適合 NVIS)",
+        },
+        {
+          feature: "抗噪能力",
+          gp: "差 (易受干擾)",
+          dipole: "好 (較安靜)",
+        },
+        {
+          feature: "架設難度",
+          gp: "需地網，佔地小",
+          dipole: "需兩點支撐，佔地大",
+        },
+      ],
+    },
     physicsContent:
-      "GP 天線 (Ground Plane) 的原理基於<strong>鏡像理論 (Image Theory)</strong>。導電平面（地網）充當反射面，使垂直單極子 (Monopole) 產生的輻射場等效於一個完整的偶極子 (Dipole)。",
+      "GP天線的工作依賴於鏡像原理 (Image Theory)。理想導電地平面就像一面電磁鏡子，在地下產生一個與地上振子電流方向相同（相位相同）的鏡像。這使得 1/4 波長的單極子在遠場表現得像一個 1/2 波長的偶極子。地網的作用就是模擬這個導電平面。",
     physicsQuote:
-      '"A monopole above a perfect ground plane... radiates only in the upper half-space... It is equivalent to a dipole in free space."',
+      '"The monopole above a ground plane creates an image current... The combination of the actual source and the image current produces the same fields as a dipole in the upper hemisphere."',
   },
 
   invertedVAntenna: {
@@ -143,16 +170,38 @@ export default {
     title: "倒V天線 (Inverted V Antenna)",
     about:
       "倒V天線實際上就是中間架高、兩端下垂的偶極子天線 (Dipole)。由於其架設簡單（只需一根支撐桿），是業餘無線電愛好者最常用的短波天線之一。",
-    impedance:
-      "<strong>阻抗匹配:</strong> 兩臂下垂會降低天線的輻射阻抗，使其從水平偶極子的 73Ω 降至約 50Ω，從而能直接與常見的 50Ω 同軸電纜良好匹配。",
-    space:
-      "<strong>空間佔用:</strong> 相比水平展寬的偶極子，倒V佔用的水平投影面積更小。",
-    mixedPolarization:
-      "<strong>混合極化:</strong> 雖然主要是水平極化（在寬邊方向），但由於兩臂下垂，也包含垂直極化分量。",
-    application:
-      "<strong>應用:</strong> 非常適合初學者作為第一個 HF (短波) 天線，用於 40米、20米波段等。",
+    theoryAnalysis: "理論分析",
+    theoryContent:
+      "倒V天線（Inverted V）是「窮人的法拉利」。它的核心優勢在於<strong>架設極簡</strong>和<strong>天然阻抗匹配</strong>。只需一根中心支撐桿，利用重力自然下垂。當兩臂夾角在 90° 到 120° 之間時，輸入阻抗會從平拉偶極子的 73Ω 自然降低到約 <strong>50Ω</strong>，無需任何阻抗變換器即可直接連接同軸電纜。此外，其垂直極化分量增強了全向輻射特性，非常適合近距離 NVIS 通訊。",
+    formulaImpedance: "輸入阻抗 (夾角 90°-120°)",
+    comparisonTable: {
+      title: "對比表：正V vs 倒V",
+      headers: ["特性", "正V天線 (Rigid V)", "倒V天線 (Inverted V)"],
+      rows: [
+        {
+          feature: "材質結構",
+          rigid: "鋁管 (硬/重)",
+          inverted: "電線 (軟/輕)",
+        },
+        {
+          feature: "支撐方式",
+          rigid: "旋轉器 + 底座",
+          inverted: "單根桅桿 (Mast)",
+        },
+        {
+          feature: "典型用途",
+          rigid: "DX (遠距離)",
+          inverted: "NVIS (中近) / 野外",
+        },
+        {
+          feature: "架設成本",
+          rigid: "高",
+          inverted: "極低",
+        },
+      ],
+    },
     physicsContent:
-      "倒V天線 (Inverted-V) 的兩臂下垂會影響其輻射阻抗和方向圖。隨著夾角小於 180°，輸入阻抗會降低（通常降至 50Ω 附近），使其能直接匹配同軸電纜。",
+      "倒V天線 (Inverted-V) 的兩臂下垂會影響其輻射阻抗和方向圖。隨著夾角小於 180°，輸入阻抗會降低（通常降至 50Ω 附近），使其能直接匹配同軸電纜。此外，垂直輻射分量會有所增加，填充了水平偶極子兩側的零點，使方向圖在全方位上更均勻。",
     physicsQuote:
       '"Dropping the ends of the dipole to form an Inverted-V lowers the resonant frequency and the feed-point impedance... somewhat more omnidirectional than a horizontal dipole."',
   },

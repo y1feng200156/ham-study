@@ -129,14 +129,41 @@ export default {
     title: "Ground Plane Antenna",
     about:
       "The GP antenna (Ground Plane) is the most basic and common vertical antenna. It consists of a vertical quarter-wavelength radiator and several (typically 3-4) horizontal or downward-sloping radials.",
-    artificialGround:
-      '<strong>Artificial Ground:</strong> The radial rods create a "mirror" that reflects an image of the antenna, forming an equivalent dipole.',
-    takeoffAngle:
-      "<strong>Takeoff Angle:</strong> Has a low radiation angle, meaning most energy is radiated horizontally, excellent for DX and local coverage.",
+    theoryAnalysis: "Theoretical Analysis",
+    theoryContent:
+      "The GP Antenna (Ground Plane) relies on <strong>Image Theory</strong>. The ground plane (radials) acts as an electromagnetic mirror, creating a virtual image of the radiator underground to form a complete vertical dipole. The combination of the physical 1/4 wave radiator and the virtual image achieves full-size antenna efficiency. Bending the radials down to ~135° raises the feed-point impedance to <strong>50Ω</strong> for a perfect match with coaxial cable. Its low take-off angle makes it a formidable tool for DX communication.",
+    formulaRadiation: "Radiation Pattern (Ideal Monopole)",
+    formulaImpedance: "Impedance Matching (Radials at 135°)",
+    comparisonTable: {
+      title: "Comparison: GP (Vertical) vs Dipole (Horizontal)",
+      headers: ["Feature", "GP Antenna (Vertical)", "Dipole (Horizontal)"],
+      rows: [
+        {
+          feature: "Directionality",
+          gp: "Omni (360°)",
+          dipole: "Bi-directional (Figure-8)",
+        },
+        {
+          feature: "Take-off Angle",
+          gp: "Low (Good for DX)",
+          dipole: "High (Good for NVIS)",
+        },
+        {
+          feature: "Noise Level",
+          gp: "High (Prone to noise)",
+          dipole: "Low (Quieter)",
+        },
+        {
+          feature: "Installation",
+          gp: "Small footprint",
+          dipole: "Large span required",
+        },
+      ],
+    },
     physicsContent:
-      "The GP antenna principle is based on <strong>Image Theory</strong>. The conductive ground plane (radials) acts as a reflector, making the monopole radiation equivalent to a complete dipole. A λ/4 monopole over perfect ground has 3dB more gain than a free-space dipole (energy concentrated in upper hemisphere), with ~37Ω input impedance (half of a dipole).",
+      "The operation of a GP antenna depends on Image Theory. A perfect conductive ground plane acts like an electromagnetic mirror, creating an image below ground with the same current direction (in phase) as the vertical radiator above. This makes a 1/4 wave monopole far-field equivalent to a 1/2 wave dipole. The radials simulate this conductive plane.",
     physicsQuote:
-      '"A monopole above a perfect ground plane... radiates only in the upper half-space... It is equivalent to a dipole in free space."',
+      '"The monopole above a ground plane creates an image current... The combination of the actual source and the image current produces the same fields as a dipole in the upper hemisphere."',
   },
 
   invertedVAntenna: {
@@ -148,16 +175,38 @@ export default {
     title: "Inverted V Antenna",
     about:
       "The Inverted V is essentially a dipole with the center raised and ends drooping. Its simple installation (needing only one support pole) makes it one of the most popular HF antennas among ham operators.",
-    impedance:
-      "<strong>Impedance Matching:</strong> The drooping arms lower the radiation impedance from a horizontal dipole's 73Ω to about 50Ω, directly matching common 50Ω coaxial cable.",
-    space:
-      "<strong>Space Efficiency:</strong> Compared to a horizontal dipole, the Inverted V has a smaller horizontal footprint.",
-    mixedPolarization:
-      "<strong>Mixed Polarization:</strong> While primarily horizontally polarized (broadside), the drooping arms add vertical components, making it more omnidirectional than a pure horizontal dipole.",
-    application:
-      "<strong>Application:</strong> Ideal as a beginner's first HF antenna, used for 40m, 20m bands and more.",
+    theoryAnalysis: "Theoretical Analysis",
+    theoryContent:
+      "The Inverted V is the \"Poor Man's Ferrari\". Its core advantages are <strong>extreme simplicity</strong> and <strong>natural impedance matching</strong>. Requiring only a single central mast, the wires slope down naturally. When the apex angle is between 90° and 120°, the feed-point impedance drops from a dipole's 73Ω to approximately <strong>50Ω</strong>, allowing direct connection to coaxial cable without matching units. Additionally, its vertical polarization component enhances omnidirectional radiation, making it excellent for NVIS.",
+    formulaImpedance: "Input Impedance (Angle 90°-120°)",
+    comparisonTable: {
+      title: "Comparison: Rigid V vs Inverted V",
+      headers: ["Feature", "Positive V (Rigid)", "Inverted V (Wire)"],
+      rows: [
+        {
+          feature: "Material",
+          rigid: "Aluminum Tubing",
+          inverted: "Wire",
+        },
+        {
+          feature: "Support",
+          rigid: "Rotator + Mount",
+          inverted: "Single Mast",
+        },
+        {
+          feature: "Application",
+          rigid: "DX (Long Distance)",
+          inverted: "NVIS (Regional) / Portable",
+        },
+        {
+          feature: "Cost",
+          rigid: "High",
+          inverted: "Very Low",
+        },
+      ],
+    },
     physicsContent:
-      "The drooping arms of an Inverted-V affect its radiation impedance and pattern. As the included angle decreases below 180°, input impedance drops (typically to ~50Ω), matching coaxial cable directly. The vertical radiation component increases, filling the nulls of a horizontal dipole for a more uniform pattern.",
+      "Dropping the ends of the dipole to form an Inverted-V affects both its impedance and radiation pattern. As the included angle becomes less than 180°, the input impedance decreases (typically to near 50Ω), providing a better match to coax. Vertically polarized radiation increases, filling in the nulls off the ends of the dipole, making the pattern more omnidirectional.",
     physicsQuote:
       '"Dropping the ends of the dipole to form an Inverted-V lowers the resonant frequency and the feed-point impedance... somewhat more omnidirectional than a horizontal dipole."',
   },

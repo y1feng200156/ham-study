@@ -49,6 +49,9 @@ const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 const LongWireAntennaScene = lazy(
   () => import("~/components/long-wire-antenna-scene"),
 );
+const DipoleAntennaScene = lazy(
+  () => import("~/components/dipole-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -201,6 +204,12 @@ export default function Home() {
       description: t("demos.elliptical.description"),
       href: "/demos/elliptical-polarization",
       component: EllipticalPolarizationScene,
+    },
+    {
+      title: t("demos.dipoleAntenna.title"),
+      description: t("demos.dipoleAntenna.description"),
+      href: "/demos/dipole-antenna",
+      component: DipoleAntennaScene,
     },
     {
       title: t("demos.yagi.title"),

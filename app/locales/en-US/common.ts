@@ -45,6 +45,12 @@ export default {
         "The general form of polarization, between linear and circular.",
       keywords: "elliptical polarization, polarization types",
     },
+    dipoleAntenna: {
+      title: "Dipole Antenna",
+      description:
+        "The most fundamental antenna type. Visualize standing waves and radiation patterns.",
+      keywords: "dipole antenna, half-wave, standing wave",
+    },
     yagi: {
       title: "Yagi-Uda Antenna",
       description:

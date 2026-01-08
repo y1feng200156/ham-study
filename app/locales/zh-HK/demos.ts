@@ -115,6 +115,54 @@ export default {
       '"Horizontally polarized antennas are less susceptible to man-made noise... The ground reflection factor reinforces the signal at certain takeoff angles."',
   },
 
+  dipoleAntenna: {
+    metaTitle: "偶極子天線 (Dipole Antenna) | 業餘無線電可視化",
+    metaDescription: "3D演示偶極子天線結構、駐波原理及輻射方向圖。",
+    metaKeywords:
+      "偶極子天線, dipole antenna, 半波偶極子, half-wave dipole, 駐波, standing wave, 倒V天線",
+    title: "偶極子天線 (Dipole Antenna)",
+    overviewTitle: "關於此演示 (About this Demo)",
+    overview:
+      "本頁面提供了<strong>偶極子天線</strong>的互動式 3D 模擬。你可以通過調整天線長度（0.5λ, 1.0λ, 1.5λ）來觀察駐波分佈的變化，也可以在「倒V」模式下直觀地看到天線變形對輻射特性的影響。綠色網格球體顯示了理想狀態下的輻射方向圖。",
+    structure:
+      "<strong>結構模擬</strong>：場景中紅白兩色的振子代表偶極子的兩臂，中間白色為饋電點。黃色線條動態展示了電流駐波的分佈。",
+    halfWave:
+      "<strong>實驗建議</strong>：嘗試將長度設為 standard <strong>0.5λ</strong>，觀察其經典的半波偶極子特性。然後切換到 <strong>1.5λ</strong>，觀察方向圖的分裂。",
+    principleTitle: "工作原理：駐波 (Standing Wave)",
+    principle:
+      "模擬中的黃色曲線展示了電流駐波的分佈。注意觀察電流波腹（最大值）和波節（零點）的位置變化。",
+    principleDetails: {
+      ends: "<strong>兩端</strong>：始終是電流波節 (0)，符合物理邊界條件。",
+      center:
+        "<strong>饋電點</strong>：在半波長時為電流波腹（最大），對應低阻抗（73Ω）；在全波長時為波節（0），對應高阻抗。",
+      impedance:
+        "<strong>阻抗暗示</strong>：通過觀察饋電點的電流大小，可以直觀推斷阻抗的高低（電流大則阻抗低，電流小則阻抗高）。",
+    },
+    patternTitle: "輻射方向圖 (Mathematical Model)",
+    patternIntro:
+      "綠色的 3D 網格可視化了由以下公式計算出的遠場輻射強度 <M>F(\\theta)</M>。注意它是如何隨著天線長度 <M>L</M> 的變化而“呼吸”的。",
+    halfWaveSpecialCase:
+      "半波偶極子特例 (<M>L=\\lambda/2 \\Rightarrow kL/2 = \\pi/2</M>)",
+    fullWaveTitle: "為什麼不用全波長偶極子？",
+    fullWaveIntro: "如果你在模擬器中將長度設為 <M>1.0\\lambda</M>，你會發現：",
+    fullWavePoints: {
+      pattern:
+        "<strong>方向圖</strong>：雖然變窄了一點，但依然是 8 字形，增益略有提升。",
+      impedance:
+        "<strong>阻抗災難</strong>：在中心點，全波長天線的電流為 0（波節），電壓極高。這意味著輸入阻抗 <strong>Z 趨近於無窮大</strong>（數千歐姆）。",
+      conclusion:
+        "<strong>結論</strong>：50Ω 的電台無法直接驅動全波長偶極子。如果非要用全波長，通常使用<strong>端饋</strong>（即 EFHW 的原理）或特殊的匹配網絡。",
+    },
+    impedanceTitle: "阻抗特性",
+    impedance73: "<strong>73Ω</strong>：理想自由空間中的半波偶極子。",
+    impedance50:
+      "<strong>50Ω</strong>：當偶極子被做成「倒V」形狀（夾角 90-120度）時，阻抗會降低到 50Ω 左右，這正是倒V天線流行的原因——省去了巴倫的阻抗變換功能，只需要 1:1 巴倫做平衡-不平衡轉換即可。",
+    physicsContent:
+      "細偶極子天線上的電流分佈近似為正弦分佈，兩端為零點。這種駐波分佈產生了向外輻射的電磁場。",
+    physicsQuote:
+      '"The current distribution on the antenna... is assumed to be sinusoidal... This approximation is quite accurate for thin dipoles."',
+  },
+
   gpAntenna: {
     metaTitle: "GP天線 (Ground Plane Antenna) | 業餘無線電可視化",
     metaDescription:

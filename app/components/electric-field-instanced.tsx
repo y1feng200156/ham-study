@@ -239,9 +239,98 @@ export function ElectricFieldInstanced({
 
           val = val ** 1.5;
           dirGain = val * 0.5 + 0.05;
-        } else if (antennaType === "vertical" || antennaType === "gp") {
-          hScale = 0;
-          dirGain = 1.0; // Omni
+        } else if (
+          antennaType === "vertical" ||
+          antennaType === "gp" ||
+          antennaType === "dp" // Dipole uses vertical's logic base but has its own pattern
+        ) {
+          if (antennaType === "dp") {
+            // Dipole (Horizontal usually, but here visualized in free space)
+            // If we assume the dipole is along the Z-axis (standard for "Vertical" logic here usually means Y, but let's check)
+
+            // In this scene, "Vertical" polarization means E-field along Y.
+            // "Horizontal" polarization means E-field along H (tangent).
+
+            // A standard dipole in free space:
+            // If oriented along Z-axis:
+            // Radiation is max at X (broadside).
+            // E-field is along Z (Horizontal/Tangent). (Wait, if dipole is Z, E is Z).
+            //
+            // If oriented along Y-axis (Vertical Dipole):
+            // Radiation is max at H plane.
+            // E-field is along Y (Vertical).
+            //
+            // Let's assume this "dp" visualization is for a Horizontal Dipole (standard Ham usage).
+            // Orientation: Along Z-axis (like Yagi elements).
+            // Radiation Pattern: F(theta) with theta from Z-axis.
+            // In our grid: angle is in X-Z plane. X is 0. Z is 90 deg (PI/2).
+            // "Angle from wire":
+            // If wire is Z, then angle from wire 'theta' is related to our grid angle 'phi':
+            // The grid is a slice.
+            // Wait, this visualization is a 2D slice/plane? E-field fabric is usually horizontal plane?
+            // "ElectricFieldInstanced" is usually X-Z plane grid.
+            //
+            // If we are visualizing a Horizontal Dipole (along Z):
+            // The X-Z plane contains the wire. So we are looking at the E-plane?
+            // No, if wire is Z, and we look at X-Z plane, we see the wire and the field around it.
+            // Angle theta is angle from Z-axis.
+            // Our grid point (x,z) has angle `phi = atan2(z,x)`.
+            // Angle from Z-axis:
+            // vector P = (x, 0, z). Wire is along Z.
+            // Angle between P and Z-axis is... 0 at Z, 90 at X.
+            // theta = 0 at Z-axis (phi=90).
+            // theta = 90 at X-axis (phi=0).
+            // So theta = |phi - PI/2| ? Or just use dot product.
+            // Let's rely on standard angles:
+            // grid angle 'angle' is from X axis.
+            // Wire is along Z (assume).
+            // Theta (angle from wire) = angle between (x,z) and (0,1).
+            // cos(theta) = z / rho = sin(angle).
+            //
+            // Formula: F(theta) = (cos(kL/2 * cos(theta)) - cos(kL/2)) / sin(theta)
+            //
+            // We need L (length in wavelengths).
+            // antennaLength = 2.5 usually means 2.5 units? Or 2.5 wavelengths?
+            // In other files `antennaLength` passed to E-field often maps to physical size.
+            // For "Half Wave Dipole", L = 0.5 lambda.
+            // Let's assume `antennaLength` prop IS L in wavelengths?
+            // Or is `antennaLength` just a scaler?
+            // In `yagi` scene, L is physical.
+            // Let's use `antennaLength` as L (wavelengths) if simpler, but likely it's arbitrary units.
+            // Let's HARDCODE L=0.5 for a "Half Wave Dipole" unless `antennaLength` is providing that info.
+            // User's slider might change it.
+            // Let's assume input `antennaLength` is in "Sim Units" and we need to map to Wavelengths.
+            // Standard dipole L=0.5.
+            // Let's try to map: if slider is 0.5 -> 0.5 lambda.
+            const L_lambda = lengthRef.current; // Assume input is in wavelengths (e.g. 0.5)
+
+            // Theta is angle from wire axis.
+            // Assume wire is along Z.
+            // Our `angle` is from X.
+            // cos(theta) = sin(angle) (projection on Z).
+            const cosTheta = Math.sin(angle);
+            const sinTheta = Math.cos(angle); // This is sin(theta) because theta is from Z.
+
+            const safeSinTheta = Math.max(0.001, Math.abs(sinTheta)); // Avoid div by zero at poles
+
+            const kL_2 = (Math.PI * 2 * L_lambda) / 2; // k * L / 2 = (2pi/lambda) * (L_lambda * lambda) / 2 = pi * L_lambda
+
+            const num = Math.cos(kL_2 * cosTheta) - Math.cos(kL_2);
+            dirGain = Math.abs(num / safeSinTheta);
+
+            // Dipole polarization
+            // If wire is Z, E-field is along Z?
+            // In far field broadside (X-axis), E is parallel to wire -> Z.
+            // So we need "Horizontal" polarization (tangent/Z).
+            yScale = 0;
+            // hscale?
+            // tangent vector at X-axis is Z.
+            // So hScale=1 means osc along Z.
+            hScale = 1.0;
+          } else if (antennaType === "vertical" || antennaType === "gp") {
+            hScale = 0;
+            dirGain = 1.0; // Omni
+          }
         } else if (polarizationType === "horizontal") {
           yScale = 0;
           hScale = Math.sin(angle);

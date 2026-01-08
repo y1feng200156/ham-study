@@ -46,6 +46,11 @@ export default {
       description: "极化的一般形式，介于线极化和圆极化之间。",
       keywords: "椭圆极化, 极化形式, elliptical polarization",
     },
+    dipoleAntenna: {
+      title: "偶极子天线 (Dipole Antenna)",
+      description: "最基础的天线类型。直观展示驻波原理与辐射方向图。",
+      keywords: "偶极子天线, 半波偶极子, 驻波",
+    },
     yagi: {
       title: "八木-宇田天线 (Yagi-Uda Antenna)",
       description: "著名的定向天线，由引向器、有源振子和反射器组成。",

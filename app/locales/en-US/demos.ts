@@ -120,6 +120,56 @@ export default {
       '"Horizontally polarized antennas are less susceptible to man-made noise... The ground reflection factor reinforces the signal at certain takeoff angles."',
   },
 
+  dipoleAntenna: {
+    metaTitle: "Dipole Antenna | Ham Radio Visualization",
+    metaDescription:
+      "3D visualization of Dipole Antenna structure, standing wave principle, and radiation pattern.",
+    metaKeywords:
+      "dipole antenna, half-wave, standing wave, radiation pattern, inverted v",
+    title: "Dipole Antenna",
+    overviewTitle: "About this Demo",
+    overview:
+      "This page provides an interactive 3D simulation of a <strong>Dipole Antenna</strong>. You can adjust the antenna length (0.5λ, 1.0λ, 1.5λ) to observe changes in standing wave distribution, or toggle 'Inverted V' mode to see how deformation affects radiation.",
+    structure:
+      "<strong>Structure Simulation</strong>: The red and blue cylinders represent the dipole arms, with a white feedpoint in the center. The yellow line dynamically visualizes the current standing wave.",
+    halfWave:
+      "<strong>Try This</strong>: Set the length to standard <strong>0.5λ</strong> to see the classic half-wave dipole characteristics. Then switch to <strong>1.5λ</strong> to observe pattern splitting.",
+    principleTitle: "Working Principle: Standing Wave",
+    principle:
+      "The yellow curve in the simulation shows the current standing wave distribution. Observe the position of current antinodes (max) and nodes (zero).",
+    principleDetails: {
+      ends: "<strong>Ends:</strong> Always Current Nodes (0), satisfying physical boundary conditions.",
+      center:
+        "<strong>Feedpoint:</strong> Current Antinode (Max) at half-wave, corresponding to low impedance (73Ω); Node (0) at full-wave, meaning high impedance.",
+      impedance:
+        "<strong>Impedance Hint:</strong> By observing the current magnitude at the feedpoint, you can intuitively infer impedance (High current = Low Z, Low current = High Z).",
+    },
+    patternTitle: "Radiation Pattern Formula (Mathematical Model)",
+    patternIntro:
+      "The green 3D mesh visualizes the far-field radiation intensity <M>F(\\theta)</M> calculated by the formula below. Notice how it 'breathes' as you change length <M>L</M>.",
+    halfWaveSpecialCase:
+      "Special case for Half-wave Dipole (<M>L=\\lambda/2 \\Rightarrow kL/2 = \\pi/2</M>)",
+    fullWaveTitle: "Why not Full-wave Dipole?",
+    fullWaveIntro:
+      "If you set the length to <M>1.0\\lambda</M> in the simulator:",
+    fullWavePoints: {
+      pattern:
+        "<strong>Pattern:</strong> Narrower but still figure-8, slightly higher gain.",
+      impedance:
+        "<strong>Impedance Disaster:</strong> At the center, current is 0 (Node). This implies input impedance <strong>Z approaches infinity</strong> (thousands of ohms).",
+      conclusion:
+        "<strong>Conclusion:</strong> A 50Ω radio cannot directly drive a full-wave dipole. It requires end-feeding (EFHW) or special matching.",
+    },
+    impedanceTitle: "Impedance Characteristics",
+    impedance73: "<strong>73Ω:</strong> Half-wave dipole in free space.",
+    impedance50:
+      "<strong>50Ω:</strong> When made into an 'Inverted V' (angle 90-120°), impedance drops to ~50Ω, allowing direct coax connection without a balun transformer (1:1 balun still recommended for balance).",
+    physicsContent:
+      "The current distribution on a thin dipole antenna is approximately sinusoidal with nulls at the ends. This standing wave distribution generates the electromagnetic field radiation.",
+    physicsQuote:
+      '"The current distribution on the antenna... is assumed to be sinusoidal... This approximation is quite accurate for thin dipoles."',
+  },
+
   gpAntenna: {
     metaTitle: "Ground Plane Antenna | Ham Radio Visualization",
     metaDescription:

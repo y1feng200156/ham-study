@@ -149,9 +149,9 @@ export default {
     home: {
       title: "Amateur Radio Visualization",
       description:
-        "A collection of amateur radio antenna visualizations: including 3D polarization and radiation demos for classic antennas such as Vertical/Horizontal/Circular Polarization, Yagi, Inverted V, GP, Positive V, Quad, Moxon, etc.",
+        "A collection of amateur radio antenna visualizations: including 3D polarization and radiation demos for classic antennas such as Vertical/Horizontal/Circular Polarization, Yagi, Inverted V, GP, Positive V, Quad, Moxon, End-Fed Half Wave, Long Wire, Windom, HB9CV, Magnetic Loop, etc.",
       keywords:
-        "amateur radio, antenna demos, 3D visualization, vertical polarization, horizontal polarization, circular polarization, Yagi antenna, GP antenna, Inverted V antenna, Positive V antenna, Quad antenna, Moxon antenna, ham radio demos, antenna visualization",
+        "amateur radio, antenna demos, 3D visualization, vertical polarization, horizontal polarization, circular polarization, Yagi antenna, GP antenna, Inverted V antenna, Positive V antenna, Quad antenna, Moxon antenna, End-Fed Half Wave, Long Wire, Windom antenna, HB9CV, Magnetic Loop, ham radio demos, antenna visualization",
     },
   },
 } satisfies typeof import("~/locales/zh/common").default;

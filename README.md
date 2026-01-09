@@ -30,6 +30,14 @@ Explore accurate, interactive models of various antenna configurations:
 - **Moxon Rectangle**: Study the compact directional wire antenna.
 - **Inverted V & Positive V**: Compare dipole variations.
 - **Ground Plane (GP)**: Understand vertical omnidirectional patterns.
+- **End-Fed Half Wave (EFHW)**: Multi-band wire antenna visualization.
+- **Long Wire**: Simple random length wire antenna analysis.
+- **Windom (OCFD)**: Off-Center Fed Dipole pattern visualization.
+- **HB9CV**: Two-element phased array with high gain.
+- **Magnetic Loop**: Compact high-Q loop antenna.
+
+#### 🧰 Tools
+- **Yagi Calculator**: Design and optimize DL6WU style Yagi-Uda antennas.
 
 #### 🌊 Wave Propagation & Physics
 - **Polarization Demos**: Interactive scenes for Vertical, Horizontal, Circular, and Elliptical polarization.
@@ -128,6 +136,14 @@ MIT License
 - **Moxon 天线 (Moxon Rectangle)**: 学习这种紧凑型定向线天线。
 - **倒 V 与 正 V 天线 (Inverted V & Positive V)**: 比较偶极天线的不同变体。
 - **地网天线 (GP)**: 理解垂直极化的全向辐射图。
+- **端馈半波天线 (EFHW)**: 多波段线天线可视化。
+- **长线天线 (Long Wire)**: 随机长度线天线分析。
+- **温顿天线 (Windom)**: 偏馈偶极天线辐射图可视化。
+- **HB9CV 天线**: 高增益双振子相控阵。
+- **磁环天线 (Magnetic Loop)**: 紧凑型高 Q 值环形天线。
+
+#### 🧰 实用工具
+- **八木天线计算器**: 设计和优化 DL6WU 风格的八木天线。
 
 #### 🌊 电波传播与物理原理
 - **极化演示**: 包含垂直、水平、圆极化和椭圆极化的交互场景。

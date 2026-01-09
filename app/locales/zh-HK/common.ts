@@ -138,9 +138,9 @@ export default {
     home: {
       title: "業餘無線電可視化",
       description:
-        "業餘無線電天線可視化合集：包含垂直/水平/圓極化、八木、倒V、GP、正V、方框、莫克森等經典天線的3D極化與輻射演示。",
+        "業餘無線電天線可視化合集：包含垂直/水平/圓極化、八木、倒V、GP、正V、方框、莫克森、端饋半波、長線、溫頓、HB9CV、磁環等經典天線的3D極化與輻射演示。",
       keywords:
-        "業餘無線電, 天線演示, 3D可視化, 垂直極化, 水平極化, 圓極化, 八木天線, GP天線, 倒V天線, 正V天線, 方框天線, 莫克森天線, ham radio demos, antenna visualization",
+        "業餘無線電, 天線演示, 3D可視化, 垂直極化, 水平極化, 圓極化, 八木天線, GP天線, 倒V天線, 正V天線, 方框天線, 莫克森天線, 端饋天線, 長線天線, 溫頓天線, HB9CV, 磁環天線, ham radio demos, antenna visualization",
     },
   },
 } satisfies typeof import("~/locales/zh/common").default;

@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/card";
 import { calculateYagi } from "~/lib/yagi-calc";
 import { getInstance } from "~/middleware/i18next";
+import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
 import type { Route } from "./+types/home";
 
 // Lazy load heavy 3D components
@@ -189,132 +190,167 @@ function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
 
 export default function Home() {
   const { t } = useTranslation();
-  const demos: Demo[] = [
-    {
-      title: t("demos.vertical.title"),
-      description: t("demos.vertical.description"),
-      href: "/demos/vertical-polarization",
-      component: VerticalPolarizationScene,
-    },
-    {
-      title: t("demos.horizontal.title"),
-      description: t("demos.horizontal.description"),
-      href: "/demos/horizontal-polarization",
-      component: HorizontalPolarizationScene,
-    },
-    {
-      title: t("demos.circular.title"),
-      description: t("demos.circular.description"),
-      href: "/demos/circular-polarization",
-      component: CircularPolarizationScene,
-    },
-    {
-      title: t("demos.elliptical.title"),
-      description: t("demos.elliptical.description"),
-      href: "/demos/elliptical-polarization",
-      component: EllipticalPolarizationScene,
-    },
-    {
-      title: t("demos.dipoleAntenna.title"),
-      description: t("demos.dipoleAntenna.description"),
-      href: "/demos/dipole-antenna",
-      component: DipoleAntennaScene,
-    },
-    {
-      title: t("demos.yagi.title"),
-      description: t("demos.yagi.description"),
-      href: "/demos/yagi-antenna",
-      component: YagiAntennaScene,
-    },
-    {
-      title: t("demos.invertedV.title"),
-      description: t("demos.invertedV.description"),
-      href: "/demos/inverted-v-antenna",
-      component: InvertedVAntennaScene,
-    },
-    {
-      title: t("demos.gp.title"),
-      description: t("demos.gp.description"),
-      href: "/demos/gp-antenna",
-      component: GPAntennaScene,
-    },
-    {
-      title: t("demos.positiveV.title"),
-      description: t("demos.positiveV.description"),
-      href: "/demos/positive-v-antenna",
-      component: PositiveVAntennaScene,
-    },
-    {
-      title: t("demos.quad.title"),
-      description: t("demos.quad.description"),
-      href: "/demos/quad-antenna",
-      component: QuadAntennaScene,
-    },
-    {
-      title: t("demos.moxon.title"),
-      description: t("demos.moxon.description"),
-      href: "/demos/moxon-antenna",
-      component: MoxonAntennaScene,
-    },
-    {
-      title: t("demos.endFed.title"),
-      description: t("demos.endFed.description"),
-      href: "/demos/end-fed-antenna",
-      component: EndFedAntennaScene,
-    },
-    {
-      title: t("demos.longWireAntenna.title"),
-      description: t("demos.longWireAntenna.description"),
-      href: "/demos/long-wire-antenna",
-      component: LongWireAntennaScene,
-    },
-    {
-      title: t("demos.windomAntenna.title"),
-      description: t("demos.windomAntenna.description"),
-      href: "/demos/windom-antenna",
-      component: WindomAntennaScene,
-    },
-    {
-      title: t("demos.hb9cv.title"),
-      description: t("demos.hb9cv.description"),
-      href: "/demos/hb9cv-antenna",
-      component: HB9CVAntennaScene,
-    },
-    {
-      title: t("demos.magneticLoopAntenna.title"),
-      description: t("demos.magneticLoopAntenna.description"),
-      href: "/demos/magnetic-loop-antenna",
-      component: MagneticLoopAntennaScene,
-    },
-  ];
+  const demoItems: Demo[] = demosConfig.map((item) => {
+    switch (item.i18nKey) {
+      case "demos.vertical":
+        return {
+          title: t(`${item.i18nKey}.title` as any),
+          description: t(`${item.i18nKey}.description` as any),
+          href: item.href,
+          component: VerticalPolarizationScene,
+        };
+      case "demos.horizontal":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: HorizontalPolarizationScene,
+        };
+      case "demos.circular":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: CircularPolarizationScene,
+        };
+      case "demos.elliptical":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: EllipticalPolarizationScene,
+        };
+      case "demos.dipoleAntenna":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: DipoleAntennaScene,
+        };
+      case "demos.yagi":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: YagiAntennaScene,
+        };
+      case "demos.invertedV":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: InvertedVAntennaScene,
+        };
+      case "demos.gp":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: GPAntennaScene,
+        };
+      case "demos.positiveV":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: PositiveVAntennaScene,
+        };
+      case "demos.quad":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: QuadAntennaScene,
+        };
+      case "demos.moxon":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: MoxonAntennaScene,
+        };
+      case "demos.endFed":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: EndFedAntennaScene,
+        };
+      case "demos.longWireAntenna":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: LongWireAntennaScene,
+        };
+      case "demos.windomAntenna":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: WindomAntennaScene,
+        };
+      case "demos.hb9cv":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: HB9CVAntennaScene,
+        };
+      case "demos.magneticLoopAntenna":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: MagneticLoopAntennaScene,
+        };
+      default:
+        return {
+          title: t(`${item.i18nKey}.title` as any),
+          description: t(`${item.i18nKey}.description` as any),
+          href: item.href,
+          component: VerticalPolarizationScene,
+        };
+    }
+  });
 
-  const tools: Tool[] = [
-    {
-      title: t("tools.yagiCalculator.title"),
-      description: t("tools.yagiCalculator.description"),
-      href: "/tools/yagi-calculator",
-      preview: (
-        <YagiSvgRenderer
-          design={calculateYagi({
-            frequency: 435.0,
-            elementCount: 5,
-            elementDiameter: 4.0,
-            boomDiameter: 20.0,
-            boomShape: "round",
-            mountMethod: "bonded",
-            feedGap: 10,
-            drivenElementType: "folded",
-            spacingType: "dl6wu",
-            manualSpacing: 0,
-            manualBCFactor: 0.7,
-          })}
-          width={600}
-          height={350}
-          minimal={true}
-        />
-      ),
-    },
-  ];
+  const toolItems: Tool[] = toolsConfig.map((item) => {
+    switch (item.i18nKey) {
+      case "tools.yagiCalculator":
+        return {
+          title: t(`${item.i18nKey}.title` as any),
+          description: t(`${item.i18nKey}.description` as any),
+          href: item.href,
+          preview: (
+            <YagiSvgRenderer
+              design={calculateYagi({
+                frequency: 435.0,
+                elementCount: 5,
+                elementDiameter: 4.0,
+                boomDiameter: 20.0,
+                boomShape: "round",
+                mountMethod: "bonded",
+                feedGap: 10,
+                drivenElementType: "folded",
+                spacingType: "dl6wu",
+                manualSpacing: 0,
+                manualBCFactor: 0.7,
+              })}
+              width={600}
+              height={350}
+              minimal={true}
+            />
+          ),
+        };
+      default:
+        return {
+          title: t(`${item.i18nKey}.title` as any),
+          description: t(`${item.i18nKey}.description` as any),
+          href: item.href,
+          preview: null,
+        };
+    }
+  });
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-6">
@@ -337,7 +373,7 @@ export default function Home() {
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {demos.map((demo) => (
+        {demoItems.map((demo) => (
           <DemoCard
             key={demo.href}
             demo={demo}
@@ -352,7 +388,7 @@ export default function Home() {
           {t("sections.tools")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
+          {toolItems.map((tool) => (
             <ToolCard
               key={tool.href}
               tool={tool}
@@ -373,7 +409,7 @@ export default function Home() {
             name: t("title"),
             description: t("description"),
             url: "https://ham.charlesify.com/",
-            hasPart: demos.map((demo) => ({
+            hasPart: demoItems.map((demo) => ({
               "@type": "CreativeWork",
               name: demo.title,
               description: demo.description,

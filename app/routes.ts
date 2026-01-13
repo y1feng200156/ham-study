@@ -81,11 +81,11 @@ export default [
   }),
 
   // Root routes (Default Language)
-  index("routes/home.tsx", { id: "root-home" }),
-  layout("routes/layout.tsx", { id: "root-layout" }, getDemoRoutes("root")),
+  // index("routes/home.tsx", { id: "root-home" }),
+  // layout("routes/layout.tsx", { id: "root-layout" }, getDemoRoutes("root")),
 
   // Language prefixed routes
-  route(":lang", "routes/i18n-layout.tsx", { id: "lang-root" }, [
+  route(":lang?", "routes/i18n-layout.tsx", { id: "lang-root" }, [
     index("routes/home.tsx", { id: "lang-home" }),
     layout("routes/layout.tsx", { id: "lang-layout" }, getDemoRoutes("lang")),
   ]),

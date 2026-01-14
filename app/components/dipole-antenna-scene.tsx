@@ -1,11 +1,10 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CatmullRomCurve3, Vector3, SphereGeometry, DoubleSide } from "three";
+import { CatmullRomCurve3, DoubleSide, SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-// import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 

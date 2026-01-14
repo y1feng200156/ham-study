@@ -18,7 +18,7 @@ export default {
     tools: "Tools",
   },
 
-  demos: {
+  demoCards: {
     vertical: {
       title: "Vertical Polarization",
       description:

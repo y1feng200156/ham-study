@@ -1,17 +1,26 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { BlockMath, InlineMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/long-wire-antenna";
 
 const LongWireAntennaScene = lazy(
   () => import("~/components/long-wire-antenna-scene"),
 );
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:longWireAntenna.metaTitle"),
     description: t("demos:longWireAntenna.metaDescription"),
@@ -34,12 +43,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function LongWireAntennaPage() {
   const { t } = useTranslation("demos");
-  const lw = "longWireAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${lw}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("longWireAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -64,26 +72,26 @@ export default function LongWireAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${lw}.about`)}</p>
+          <p>{t("longWireAntenna.about")}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${lw}.gain`}
+                i18nKey="longWireAntenna.gain"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${lw}.lobes`}
+                i18nKey="longWireAntenna.lobes"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${lw}.ground`}
+                i18nKey="longWireAntenna.ground"
                 components={{ strong: <strong /> }}
               />
             </li>
@@ -130,12 +138,12 @@ export default function LongWireAntennaPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${lw}.physicsContent`}
+                      i18nKey="longWireAntenna.physicsContent"
                       components={{ strong: <strong /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${lw}.physicsQuote`)}
+                    {t("longWireAntenna.physicsQuote")}
                   </p>
                 </>
               }

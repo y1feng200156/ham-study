@@ -298,7 +298,7 @@ function RadiationPattern({
       if (maxGain > 0.00001) normalized = gains[i] / maxGain;
 
       // Shaping for visuals
-      const rad = Math.pow(normalized, 0.8) * scale;
+      const rad = normalized ** 0.8 * scale;
       vertex.multiplyScalar(rad);
 
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
@@ -410,7 +410,7 @@ export default function WindomAntennaScene({
         </div>
         <RadioGroup
           value={harmonic.toString()}
-          onValueChange={(v) => setHarmonic(Number.parseInt(v))}
+          onValueChange={(v) => setHarmonic(Number.parseInt(v, 10))}
           className="flex flex-wrap flex-col gap-2"
         >
           <div className="flex items-center space-x-2">
@@ -475,7 +475,7 @@ export default function WindomAntennaScene({
         </div>
         <RadioGroup
           value={speedMode}
-          onValueChange={(v: any) => setSpeedMode(v)}
+          onValueChange={(v: never) => setSpeedMode(v)}
           className="flex gap-2"
         >
           <div className="flex items-center space-x-2">

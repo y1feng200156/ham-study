@@ -1,17 +1,23 @@
-import { lazy, Suspense } from "react";
-import { useTranslation, Trans } from "react-i18next";
-import { getInstance } from "~/middleware/i18next";
-import type { Route } from "./+types/magnetic-loop-antenna";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
+import { Suspense } from "react";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { InlineMath as M, BlockMath } from "~/components/math";
+import MagneticLoopAntennaScene from "~/components/magnetic-loop-antenna-scene";
+import { BlockMath, InlineMath as M } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
+import type { Route } from "./+types/magnetic-loop-antenna";
 
-const MagneticLoopAntennaScene = lazy(
-  () => import("~/components/magnetic-loop-antenna-scene"),
-);
-
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:magneticLoopAntenna.metaTitle"),
     description: t("demos:magneticLoopAntenna.metaDescription"),
@@ -34,13 +40,12 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function MagneticLoopAntenna() {
   const { t } = useTranslation("demos");
-  const key = "magneticLoopAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">{t(`${key}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("magneticLoopAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -67,36 +72,36 @@ export default function MagneticLoopAntenna() {
         {/* Content */}
         <div className="prose dark:prose-invert max-w-none">
           {/* Overview */}
-          <h3>{t(`${key}.overviewTitle`)}</h3>
+          <h3>{t("magneticLoopAntenna.overviewTitle")}</h3>
           <p>
             <Trans
-              i18nKey={`${key}.overview`}
+              i18nKey="magneticLoopAntenna.overview"
               ns="demos"
               components={{ M: <M /> }}
             />
           </p>
           <p>
-            <Trans i18nKey={`${key}.structure`} ns="demos" />
+            <Trans i18nKey="magneticLoopAntenna.structure" ns="demos" />
           </p>
           <p>
-            <Trans i18nKey={`${key}.features`} ns="demos" />
+            <Trans i18nKey="magneticLoopAntenna.features" ns="demos" />
           </p>
 
           {/* Physics Model */}
-          <h3>{t(`${key}.physicsModelTitle`)}</h3>
+          <h3>{t("magneticLoopAntenna.physicsModelTitle")}</h3>
           <p>
             <Trans
-              i18nKey={`${key}.physicsModel`}
+              i18nKey="magneticLoopAntenna.physicsModel"
               ns="demos"
               components={{ M: <M /> }}
             />
           </p>
 
           {/* Math Formula */}
-          <h3>{t(`${key}.fieldFormulaTitle`)}</h3>
+          <h3>{t("magneticLoopAntenna.fieldFormulaTitle")}</h3>
           <p>
             <Trans
-              i18nKey={`${key}.fieldFormulaDesc`}
+              i18nKey="magneticLoopAntenna.fieldFormulaDesc"
               ns="demos"
               components={{ M: <M /> }}
             />
@@ -107,35 +112,35 @@ export default function MagneticLoopAntenna() {
           <ul>
             <li>
               <Trans
-                i18nKey={`${key}.paramEta`}
+                i18nKey="magneticLoopAntenna.paramEta"
                 ns="demos"
                 components={{ M: <M /> }}
               />
             </li>
             <li>
               <Trans
-                i18nKey={`${key}.paramK`}
+                i18nKey="magneticLoopAntenna.paramK"
                 ns="demos"
                 components={{ M: <M /> }}
               />
             </li>
             <li>
               <Trans
-                i18nKey={`${key}.paramI`}
+                i18nKey="magneticLoopAntenna.paramI"
                 ns="demos"
                 components={{ M: <M /> }}
               />
             </li>
             <li>
               <Trans
-                i18nKey={`${key}.paramA`}
+                i18nKey="magneticLoopAntenna.paramA"
                 ns="demos"
                 components={{ M: <M /> }}
               />
             </li>
             <li>
               <Trans
-                i18nKey={`${key}.paramTheta`}
+                i18nKey="magneticLoopAntenna.paramTheta"
                 ns="demos"
                 components={{ M: <M /> }}
               />
@@ -143,10 +148,10 @@ export default function MagneticLoopAntenna() {
           </ul>
 
           {/* Pattern */}
-          <h3>{t(`${key}.patternTitle`)}</h3>
+          <h3>{t("magneticLoopAntenna.patternTitle")}</h3>
           <p>
             <Trans
-              i18nKey={`${key}.patternDesc`}
+              i18nKey="magneticLoopAntenna.patternDesc"
               ns="demos"
               components={{ M: <M /> }}
             />
@@ -155,7 +160,7 @@ export default function MagneticLoopAntenna() {
             <li>
               <strong className="text-red-500">NULL: </strong>
               <Trans
-                i18nKey={`${key}.patternNull`}
+                i18nKey="magneticLoopAntenna.patternNull"
                 ns="demos"
                 components={{ M: <M /> }}
               />
@@ -163,7 +168,7 @@ export default function MagneticLoopAntenna() {
             <li>
               <strong className="text-green-500">MAX: </strong>
               <Trans
-                i18nKey={`${key}.patternMax`}
+                i18nKey="magneticLoopAntenna.patternMax"
                 ns="demos"
                 components={{ M: <M /> }}
               />
@@ -171,9 +176,9 @@ export default function MagneticLoopAntenna() {
           </ul>
 
           {/* Anti-Noise / Advantages */}
-          <h3>{t(`${key}.advantageTitle`)}</h3>
+          <h3>{t("magneticLoopAntenna.advantageTitle")}</h3>
           <p>
-            <Trans i18nKey={`${key}.advantageDesc`} ns="demos" />
+            <Trans i18nKey="magneticLoopAntenna.advantageDesc" ns="demos" />
           </p>
 
           {/* Scientific Citation */}
@@ -184,13 +189,13 @@ export default function MagneticLoopAntenna() {
                 <>
                   <p className="mb-2">
                     <Trans
-                      i18nKey={`${key}.physicsContent`}
+                      i18nKey="magneticLoopAntenna.physicsContent"
                       ns="demos"
                       components={{ M: <M /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${key}.physicsQuote`)}
+                    {t("magneticLoopAntenna.physicsQuote")}
                   </p>
                 </>
               }

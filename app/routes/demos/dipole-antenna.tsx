@@ -1,17 +1,26 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { BlockMath, InlineMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
-import { getInstance } from "~/middleware/i18next";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
+import type { Route } from "./+types/dipole-antenna";
 
 const DipoleAntennaScene = lazy(
   () => import("~/components/dipole-antenna-scene"),
 );
 
-export const loader = ({ context }: LoaderFunctionArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:dipoleAntenna.metaTitle"),
     description: t("demos:dipoleAntenna.metaDescription"),
@@ -19,8 +28,8 @@ export const loader = ({ context }: LoaderFunctionArgs) => {
   };
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  const { title, description, keywords } = data || {};
+export const meta: Route.MetaFunction = ({ loaderData }) => {
+  const { title, description, keywords } = loaderData || {};
   return [
     { title },
     { name: "description", content: description },
@@ -34,12 +43,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function DipoleAntennaPage() {
   const { t } = useTranslation("demos");
-  const dp = "dipoleAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${dp}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("dipoleAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -64,11 +72,11 @@ export default function DipoleAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           {/* Overview */}
-          <h3>{t(`${dp}.overviewTitle`)}</h3>
+          <h3>{t("dipoleAntenna.overviewTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${dp}.overview`}
+              i18nKey="dipoleAntenna.overview"
               components={{ strong: <strong />, M: <InlineMath /> }}
             />
           </p>
@@ -76,25 +84,25 @@ export default function DipoleAntennaPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.structure`}
+                i18nKey="dipoleAntenna.structure"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.halfWave`}
+                i18nKey="dipoleAntenna.halfWave"
                 components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
           </ul>
 
           {/* Principle */}
-          <h3>{t(`${dp}.principleTitle`)}</h3>
+          <h3>{t("dipoleAntenna.principleTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${dp}.principle`}
+              i18nKey="dipoleAntenna.principle"
               components={{ strong: <strong /> }}
             />
           </p>
@@ -102,81 +110,81 @@ export default function DipoleAntennaPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.principleDetails.ends`}
+                i18nKey="dipoleAntenna.principleDetails.ends"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.principleDetails.center`}
+                i18nKey="dipoleAntenna.principleDetails.center"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.principleDetails.impedance`}
+                i18nKey="dipoleAntenna.principleDetails.impedance"
                 components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
           </ul>
 
           {/* Pattern */}
-          <h3>{t(`${dp}.patternTitle`)}</h3>
+          <h3>{t("dipoleAntenna.patternTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${dp}.patternIntro`}
+              i18nKey="dipoleAntenna.patternIntro"
               components={{ M: <InlineMath /> }}
             />
           </p>
           <BlockMath math="F(\theta) = \frac{\cos(\frac{kL}{2} \cos \theta) - \cos(\frac{kL}{2})}{\sin \theta}" />
 
-          <p>{t(`${dp}.halfWaveSpecialCase`)}:</p>
+          <p>{t("dipoleAntenna.halfWaveSpecialCase")}:</p>
           <BlockMath math="F(\theta) = \frac{\cos(\frac{\pi}{2} \cos \theta)}{\sin \theta}" />
 
           {/* Full Wave Note */}
-          <h3>{t(`${dp}.fullWaveTitle`)}</h3>
-          <p>{t(`${dp}.fullWaveIntro`)}</p>
+          <h3>{t("dipoleAntenna.fullWaveTitle")}</h3>
+          <p>{t("dipoleAntenna.fullWaveIntro")}</p>
           <ol>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.fullWavePoints.pattern`}
+                i18nKey="dipoleAntenna.fullWavePoints.pattern"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.fullWavePoints.impedance`}
+                i18nKey="dipoleAntenna.fullWavePoints.impedance"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.fullWavePoints.conclusion`}
+                i18nKey="dipoleAntenna.fullWavePoints.conclusion"
                 components={{ strong: <strong /> }}
               />
             </li>
           </ol>
 
           {/* Impedance & Inverted V */}
-          <h3>{t(`${dp}.impedanceTitle`)}</h3>
+          <h3>{t("dipoleAntenna.impedanceTitle")}</h3>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.impedance73`}
+                i18nKey="dipoleAntenna.impedance73"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${dp}.impedance50`}
+                i18nKey="dipoleAntenna.impedance50"
                 components={{ strong: <strong /> }}
               />
             </li>
@@ -190,12 +198,12 @@ export default function DipoleAntennaPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${dp}.physicsContent`}
+                      i18nKey="dipoleAntenna.physicsContent"
                       components={{ strong: <strong /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${dp}.physicsQuote`)}
+                    {t("dipoleAntenna.physicsQuote")}
                   </p>
                 </>
               }

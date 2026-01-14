@@ -1,16 +1,25 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { BlockMath, InlineMath } from "~/components/math";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/yagi-antenna";
 
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:yagiAntenna.metaTitle"),
     description: t("demos:yagiAntenna.metaDescription"),

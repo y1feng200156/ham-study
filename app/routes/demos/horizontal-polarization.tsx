@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/horizontal-polarization";
 
 const HorizontalPolarizationScene = lazy(
@@ -10,8 +13,14 @@ const HorizontalPolarizationScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:horizontalPolarization.metaTitle"),
     description: t("demos:horizontalPolarization.metaDescription"),
@@ -34,12 +43,13 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function HorizontalPolarizationPage() {
   const { t } = useTranslation("demos");
-  const hp = "horizontalPolarization";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${hp}.title`)}</h1>
+        <h1 className="text-2xl font-bold">
+          {t("horizontalPolarization.title")}
+        </h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -64,26 +74,26 @@ export default function HorizontalPolarizationPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${hp}.about`)}</p>
+          <p>{t("horizontalPolarization.about")}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.polarization`}
+                i18nKey="horizontalPolarization.polarization"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.horizontalDipole`}
+                i18nKey="horizontalPolarization.horizontalDipole"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.propagation`}
+                i18nKey="horizontalPolarization.propagation"
                 components={{ strong: <strong /> }}
               />
             </li>
@@ -94,19 +104,19 @@ export default function HorizontalPolarizationPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.hToH`}
+                i18nKey="horizontalPolarization.hToH"
                 components={{ strong: <strong /> }}
               />
               <span className="text-green-600 font-bold dark:text-green-400">
                 {" "}
                 {t("circularPolarization.bestMatch")}
               </span>
-              。{t(`${hp}.hToHNote`)}
+              。{t("horizontalPolarization.hToHNote")}
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.hToV`}
+                i18nKey="horizontalPolarization.hToV"
                 components={{ strong: <strong /> }}
               />
               <span className="text-red-600 font-bold dark:text-red-400">
@@ -116,7 +126,7 @@ export default function HorizontalPolarizationPage() {
               。
               <Trans
                 ns="demos"
-                i18nKey={`${hp}.hToVNote`}
+                i18nKey="horizontalPolarization.hToVNote"
                 components={{ strong: <strong /> }}
               />
             </li>
@@ -127,9 +137,11 @@ export default function HorizontalPolarizationPage() {
               title={t("physicsValidation")}
               content={
                 <>
-                  <p className="mb-2">{t(`${hp}.physicsContent`)}</p>
+                  <p className="mb-2">
+                    {t("horizontalPolarization.physicsContent")}
+                  </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${hp}.physicsQuote`)}
+                    {t("horizontalPolarization.physicsQuote")}
                   </p>
                 </>
               }

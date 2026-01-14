@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/elliptical-polarization";
 
 const EllipticalPolarizationScene = lazy(
@@ -11,8 +14,14 @@ const EllipticalPolarizationScene = lazy(
 import { InlineMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:ellipticalPolarization.metaTitle"),
     description: t("demos:ellipticalPolarization.metaDescription"),
@@ -35,12 +44,13 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function EllipticalPolarizationPage() {
   const { t } = useTranslation("demos");
-  const ep = "ellipticalPolarization";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${ep}.title`)}</h1>
+        <h1 className="text-2xl font-bold">
+          {t(`ellipticalPolarization.title`)}
+        </h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -68,40 +78,40 @@ export default function EllipticalPolarizationPage() {
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${ep}.about`}
+              i18nKey={`ellipticalPolarization.about`}
               components={{ b: <b />, M: <InlineMath /> }}
             />
           </p>
-          <p>{t(`${ep}.sliderNote`)}</p>
+          <p>{t(`ellipticalPolarization.sliderNote`)}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${ep}.linear`}
+                i18nKey={`ellipticalPolarization.linear`}
                 components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${ep}.circular`}
+                i18nKey={`ellipticalPolarization.circular`}
                 components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${ep}.elliptical`}
+                i18nKey={`ellipticalPolarization.elliptical`}
                 components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
           </ul>
 
-          <h3>{t(`${ep}.generalRulesTitle`)}</h3>
+          <h3>{t(`ellipticalPolarization.generalRulesTitle`)}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${ep}.generalRules`}
+              i18nKey={`ellipticalPolarization.generalRules`}
               components={{ strong: <strong />, M: <InlineMath /> }}
             />
           </p>
@@ -115,7 +125,7 @@ export default function EllipticalPolarizationPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${ep}.physicsContent`}
+                      i18nKey={`ellipticalPolarization.physicsContent`}
                       components={{
                         strong: <strong />,
                         M: <InlineMath />,
@@ -123,7 +133,7 @@ export default function EllipticalPolarizationPage() {
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${ep}.physicsQuote`)}
+                    {t(`ellipticalPolarization.physicsQuote`)}
                   </p>
                 </>
               }

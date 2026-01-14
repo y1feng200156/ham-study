@@ -6,82 +6,82 @@ export interface Item {
 
 export const demos: Item[] = [
   {
-    i18nKey: "demos.vertical",
+    i18nKey: "demoCards.vertical",
     href: "/demos/vertical-polarization",
     category: "demo",
   },
   {
-    i18nKey: "demos.horizontal",
+    i18nKey: "demoCards.horizontal",
     href: "/demos/horizontal-polarization",
     category: "demo",
   },
   {
-    i18nKey: "demos.circular",
+    i18nKey: "demoCards.circular",
     href: "/demos/circular-polarization",
     category: "demo",
   },
   {
-    i18nKey: "demos.elliptical",
+    i18nKey: "demoCards.elliptical",
     href: "/demos/elliptical-polarization",
     category: "demo",
   },
   {
-    i18nKey: "demos.dipoleAntenna",
+    i18nKey: "demoCards.dipoleAntenna",
     href: "/demos/dipole-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.yagi",
+    i18nKey: "demoCards.yagi",
     href: "/demos/yagi-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.invertedV",
+    i18nKey: "demoCards.invertedV",
     href: "/demos/inverted-v-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.gp",
+    i18nKey: "demoCards.gp",
     href: "/demos/gp-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.positiveV",
+    i18nKey: "demoCards.positiveV",
     href: "/demos/positive-v-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.quad",
+    i18nKey: "demoCards.quad",
     href: "/demos/quad-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.moxon",
+    i18nKey: "demoCards.moxon",
     href: "/demos/moxon-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.endFed",
+    i18nKey: "demoCards.endFed",
     href: "/demos/end-fed-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.longWireAntenna",
+    i18nKey: "demoCards.longWireAntenna",
     href: "/demos/long-wire-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.windomAntenna",
+    i18nKey: "demoCards.windomAntenna",
     href: "/demos/windom-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.hb9cv",
+    i18nKey: "demoCards.hb9cv",
     href: "/demos/hb9cv-antenna",
     category: "demo",
   },
   {
-    i18nKey: "demos.magneticLoopAntenna",
+    i18nKey: "demoCards.magneticLoopAntenna",
     href: "/demos/magnetic-loop-antenna",
     category: "demo",
   },

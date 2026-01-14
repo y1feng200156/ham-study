@@ -5,7 +5,9 @@ import {
   InfoIcon,
   LightningIcon,
 } from "@phosphor-icons/react";
+import i18next from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { initReactI18next } from "react-i18next";
 import { BasicSpecsCard } from "~/components/tools/yagi-calculator/BasicSpecsCard";
 import { ProModePanel } from "~/components/tools/yagi-calculator/ProModePanel";
 import {
@@ -24,11 +26,17 @@ import {
   type SpacingType,
   type YagiConfig,
 } from "~/lib/yagi-calc";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/yagi-calculator";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t = await i18next.use(initReactI18next).init({
+    lng: locale,
+    ns: "common",
+    resources,
+  });
   return {
     title: t("tools.yagiCalculator.title"),
     description: t("tools.yagiCalculator.description"),

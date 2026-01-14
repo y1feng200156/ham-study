@@ -1,62 +1,61 @@
-import { PassThrough } from "node:stream";
-import { createReadableStreamFromReadable } from "@react-router/node";
+import { createInstance } from "i18next";
 import { isbot } from "isbot";
-import type { RenderToPipeableStreamOptions } from "react-dom/server";
-import { renderToPipeableStream } from "react-dom/server";
-import { I18nextProvider } from "react-i18next";
-import type { EntryContext, RouterContextProvider } from "react-router";
+import { renderToReadableStream } from "react-dom/server";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
-import { getInstance } from "./middleware/i18next";
+import resources from "./locales";
+import { getLocale } from "./middleware/i18next";
 
-export const streamTimeout = 5_000;
-
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   entryContext: EntryContext,
-  routerContext: RouterContextProvider,
 ) {
-  return new Promise((resolve, reject) => {
-    let shellRendered = false;
-    const userAgent = request.headers.get("user-agent");
+  const shellRendered = false;
+  const userAgent = request.headers.get("user-agent");
 
-    const readyOption: keyof RenderToPipeableStreamOptions =
-      (userAgent && isbot(userAgent)) || entryContext.isSpaMode
-        ? "onAllReady"
-        : "onShellReady";
+  const instance = createInstance();
+  const lng = await getLocale(request);
+  const ns = ["common"]; // Default namespace
 
-    const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={getInstance(routerContext)}>
-        <ServerRouter context={entryContext} url={request.url} />
-      </I18nextProvider>,
-      {
-        [readyOption]() {
-          shellRendered = true;
-          const body = new PassThrough();
-          const stream = createReadableStreamFromReadable(body);
+  await instance.use(initReactI18next).init({
+    lng,
+    ns,
+    defaultNS: "common",
+    fallbackLng: "zh",
+    supportedLngs: ["zh", "zh-HK", "en-US"],
+    resources,
+    interpolation: {
+      escapeValue: false,
+    },
+    react: { useSuspense: false },
+  });
 
-          responseHeaders.set("Content-Type", "text/html");
-
-          resolve(
-            new Response(stream, {
-              headers: responseHeaders,
-              status: responseStatusCode,
-            }),
-          );
-
-          pipe(body);
-        },
-        onShellError(error: unknown) {
-          reject(error);
-        },
-        onError(error: unknown) {
-          responseStatusCode = 500;
-          if (shellRendered) console.error(error);
-        },
+  const body = await renderToReadableStream(
+    <I18nextProvider i18n={instance}>
+      <ServerRouter context={entryContext} url={request.url} />
+    </I18nextProvider>,
+    {
+      onError(error: unknown) {
+        responseStatusCode = 500;
+        if (shellRendered) {
+          console.error(error);
+        }
       },
-    );
+      signal: request.signal,
+    },
+  );
 
-    setTimeout(abort, streamTimeout + 1000);
+  if (isbot(userAgent || "")) {
+    await body.allReady;
+  }
+
+  responseHeaders.set("Content-Type", "text/html");
+
+  return new Response(body, {
+    headers: responseHeaders,
+    status: responseStatusCode,
   });
 }

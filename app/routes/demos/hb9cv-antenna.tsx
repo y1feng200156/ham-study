@@ -1,17 +1,26 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { BlockMath, InlineMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/hb9cv-antenna";
 
 const HB9CVAntennaScene = lazy(
   () => import("~/components/hb9cv-antenna-scene"),
 );
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:hb9cvAntenna.metaTitle"),
     description: t("demos:hb9cvAntenna.metaDescription"),
@@ -34,12 +43,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function HB9CVAntennaPage() {
   const { t } = useTranslation("demos");
-  const hb9cv = "hb9cvAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${hb9cv}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("hb9cvAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -67,25 +75,25 @@ export default function HB9CVAntennaPage() {
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${hb9cv}.about`}
+              i18nKey="hb9cvAntenna.about"
               components={{ strong: <strong /> }}
             />
           </p>
 
-          <h3>{t(`${hb9cv}.structureTitle`)}</h3>
+          <h3>{t("hb9cvAntenna.structureTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${hb9cv}.structureContent`}
+              i18nKey="hb9cvAntenna.structureContent"
               components={{ strong: <strong />, M: <InlineMath /> }}
             />
           </p>
 
-          <h3>{t(`${hb9cv}.phaseTitle`)}</h3>
+          <h3>{t("hb9cvAntenna.phaseTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${hb9cv}.phaseContent`}
+              i18nKey="hb9cvAntenna.phaseContent"
               components={{ strong: <strong />, M: <InlineMath /> }}
             />
           </p>
@@ -93,25 +101,25 @@ export default function HB9CVAntennaPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hb9cv}.phaseFront`}
+                i18nKey="hb9cvAntenna.phaseFront"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${hb9cv}.phaseRear`}
+                i18nKey="hb9cvAntenna.phaseRear"
                 components={{ strong: <strong /> }}
               />
             </li>
           </ul>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-6 my-6">
-            <h4 className="mt-0 mb-4">{t(`${hb9cv}.formulaTitle`)}</h4>
+            <h4 className="mt-0 mb-4">{t("hb9cvAntenna.formulaTitle")}</h4>
             <p>
               <Trans
                 ns="demos"
-                i18nKey={`${hb9cv}.formulaIntro`}
+                i18nKey="hb9cvAntenna.formulaIntro"
                 components={{ M: <InlineMath /> }}
               />
             </p>
@@ -125,7 +133,7 @@ export default function HB9CVAntennaPage() {
             <p>
               <Trans
                 ns="demos"
-                i18nKey={`${hb9cv}.afDef`}
+                i18nKey="hb9cvAntenna.afDef"
                 components={{ strong: <strong /> }}
               />
             </p>
@@ -138,32 +146,32 @@ export default function HB9CVAntennaPage() {
               <li>
                 <Trans
                   ns="demos"
-                  i18nKey={`${hb9cv}.paramK`}
+                  i18nKey="hb9cvAntenna.paramK"
                   components={{ M: <InlineMath /> }}
                 />
               </li>
               <li>
                 <Trans
                   ns="demos"
-                  i18nKey={`${hb9cv}.paramD`}
+                  i18nKey="hb9cvAntenna.paramD"
                   components={{ M: <InlineMath /> }}
                 />
               </li>
               <li>
                 <Trans
                   ns="demos"
-                  i18nKey={`${hb9cv}.paramDelta`}
+                  i18nKey="hb9cvAntenna.paramDelta"
                   components={{ M: <InlineMath /> }}
                 />
               </li>
             </ul>
           </div>
 
-          <h3>{t(`${hb9cv}.patternTitle`)}</h3>
+          <h3>{t("hb9cvAntenna.patternTitle")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${hb9cv}.patternContent`}
+              i18nKey="hb9cvAntenna.patternContent"
               components={{ strong: <strong /> }}
             />
           </p>
@@ -175,46 +183,50 @@ export default function HB9CVAntennaPage() {
             />
           </div>
 
-          <h3>{t(`${hb9cv}.comparisonTitle`)}</h3>
+          <h3>{t("hb9cvAntenna.comparisonTitle")}</h3>
           <div className="overflow-x-auto my-4">
             <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800">
-                  {["feature", "hb9cv", "yagi"].map((key) => (
+                  {(["feature", "hb9cv", "yagi"] as const).map((key) => (
                     <th
                       key={key}
                       className="border border-zinc-200 dark:border-zinc-700 p-2 text-left font-semibold"
                     >
-                      {t(`${hb9cv}.comparisonTable.headers.${key}`)}
+                      {t(`hb9cvAntenna.comparisonTable.headers.${key}`)}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {["gain", "fbRatio", "bandwidth", "feed"].map((rowKey) => (
-                  <tr
-                    key={rowKey}
-                    className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
-                  >
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2 font-semibold">
-                      {t(`${hb9cv}.comparisonTable.rows.${rowKey}.feature`)}
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
-                      <Trans
-                        ns="demos"
-                        i18nKey={`${hb9cv}.comparisonTable.rows.${rowKey}.hb9cv`}
-                        components={{ strong: <strong /> }}
-                      />
-                    </td>
-                    <td className="border border-zinc-200 dark:border-zinc-700 p-2">
-                      <Trans
-                        ns="demos"
-                        i18nKey={`${hb9cv}.comparisonTable.rows.${rowKey}.yagi`}
-                        components={{ strong: <strong /> }}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {(["gain", "fbRatio", "bandwidth", "feed"] as const).map(
+                  (rowKey) => (
+                    <tr
+                      key={rowKey}
+                      className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
+                    >
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2 font-semibold">
+                        {t(
+                          `hb9cvAntenna.comparisonTable.rows.${rowKey}.feature`,
+                        )}
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={`hb9cvAntenna.comparisonTable.rows.${rowKey}.hb9cv`}
+                          components={{ strong: <strong /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={`hb9cvAntenna.comparisonTable.rows.${rowKey}.yagi`}
+                          components={{ strong: <strong /> }}
+                        />
+                      </td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </div>
@@ -227,12 +239,12 @@ export default function HB9CVAntennaPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${hb9cv}.physicsContent`}
+                      i18nKey="hb9cvAntenna.physicsContent"
                       components={{ strong: <strong /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${hb9cv}.physicsQuote`)}
+                    {t("hb9cvAntenna.physicsQuote")}
                   </p>
                 </>
               }

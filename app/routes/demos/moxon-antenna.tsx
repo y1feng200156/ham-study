@@ -1,8 +1,11 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 import { BlockMath, InlineMath } from "~/components/math";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/moxon-antenna";
 
 const MoxonAntennaScene = lazy(
@@ -11,8 +14,14 @@ const MoxonAntennaScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:moxonAntenna.metaTitle"),
     description: t("demos:moxonAntenna.metaDescription"),
@@ -35,12 +44,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function MoxonAntennaPage() {
   const { t } = useTranslation("demos");
-  const mx = "moxonAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${mx}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("moxonAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -65,56 +73,56 @@ export default function MoxonAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${mx}.about`)}</p>
+          <p>{t("moxonAntenna.about")}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.fbRatio`}
+                i18nKey="moxonAntenna.fbRatio"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.compact`}
+                i18nKey="moxonAntenna.compact"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.bandwidth`}
+                i18nKey="moxonAntenna.bandwidth"
                 components={{ strong: <strong /> }}
               />
             </li>
           </ul>
 
-          <h3>{t(`${mx}.applicationTitle`)}</h3>
+          <h3>{t("moxonAntenna.applicationTitle")}</h3>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.foxHunting`}
+                i18nKey="moxonAntenna.foxHunting"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.limitedSpace`}
+                i18nKey="moxonAntenna.limitedSpace"
                 components={{ strong: <strong /> }}
               />
             </li>
           </ul>
 
           <div className="prose dark:prose-invert max-w-none mb-8">
-            <h3>{t(`${mx}.theoryAnalysis`)}</h3>
+            <h3>{t("moxonAntenna.theoryAnalysis")}</h3>
 
             <p>
               <Trans
                 ns="demos"
-                i18nKey={`${mx}.theoryContent`}
+                i18nKey="moxonAntenna.theoryContent"
                 components={{ strong: <strong /> }}
               />
             </p>
@@ -122,21 +130,21 @@ export default function MoxonAntennaPage() {
             <div className="my-6 space-y-4">
               <div>
                 <p className="font-semibold mb-2">
-                  {t(`${mx}.formulaRadiation`)}:
+                  {t("moxonAntenna.formulaRadiation")}:
                 </p>
                 <BlockMath math="F(\theta) \approx \left( \frac{1 + \cos \theta}{2} \right)^A" />
                 <ul className="list-disc pl-5 space-y-1">
                   <li>
                     <Trans
                       ns="demos"
-                      i18nKey={`${mx}.formulaAngle`}
+                      i18nKey="moxonAntenna.formulaAngle"
                       components={{ M: <InlineMath /> }}
                     />
                   </li>
                   <li>
                     <Trans
                       ns="demos"
-                      i18nKey={`${mx}.formulaShapeFactor`}
+                      i18nKey="moxonAntenna.formulaShapeFactor"
                       components={{ M: <InlineMath /> }}
                     />
                   </li>
@@ -144,13 +152,13 @@ export default function MoxonAntennaPage() {
               </div>
             </div>
 
-            <h4>{t(`${mx}.theorySummaryTable.title`)}</h4>
+            <h4>{t("moxonAntenna.theorySummaryTable.title")}</h4>
             <div className="overflow-x-auto my-4">
               <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
                 <thead>
                   <tr className="bg-zinc-100 dark:bg-zinc-800">
                     {Object.entries(
-                      t(`${mx}.theorySummaryTable.headers`, {
+                      t("moxonAntenna.theorySummaryTable.headers", {
                         returnObjects: true,
                       }) as string[],
                     ).map(([key, header]) => (
@@ -165,7 +173,7 @@ export default function MoxonAntennaPage() {
                 </thead>
                 <tbody>
                   {Object.entries(
-                    t(`${mx}.theorySummaryTable.rows`, {
+                    t("moxonAntenna.theorySummaryTable.rows", {
                       returnObjects: true,
                     }),
                   ).map(([key]) => (
@@ -177,8 +185,7 @@ export default function MoxonAntennaPage() {
                         <Trans
                           ns="demos"
                           i18nKey={
-                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
-                            `${mx}.theorySummaryTable.rows.${key}.feature` as any
+                            `moxonAntenna.theorySummaryTable.rows.${key}.feature` as never
                           }
                           components={{
                             strong: <strong />,
@@ -190,8 +197,7 @@ export default function MoxonAntennaPage() {
                         <Trans
                           ns="demos"
                           i18nKey={
-                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
-                            `${mx}.theorySummaryTable.rows.${key}.moxon` as any
+                            `moxonAntenna.theorySummaryTable.rows.${key}.moxon` as never
                           }
                           components={{
                             strong: <strong />,
@@ -203,8 +209,7 @@ export default function MoxonAntennaPage() {
                         <Trans
                           ns="demos"
                           i18nKey={
-                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
-                            `${mx}.theorySummaryTable.rows.${key}.yagi` as any
+                            `moxonAntenna.theorySummaryTable.rows.${key}.yagi` as never
                           }
                           components={{
                             strong: <strong />,
@@ -224,9 +229,9 @@ export default function MoxonAntennaPage() {
               title={t("physicsValidation")}
               content={
                 <>
-                  <p className="mb-2">{t(`${mx}.physicsContent`)}</p>
+                  <p className="mb-2">{t("moxonAntenna.physicsContent")}</p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${mx}.physicsQuote`)}
+                    {t("moxonAntenna.physicsQuote")}
                   </p>
                 </>
               }

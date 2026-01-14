@@ -1,6 +1,7 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
+import i18next from "i18next";
 import { lazy, Suspense, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
@@ -14,9 +15,10 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { calculateYagi } from "~/lib/yagi-calc";
-import { getInstance } from "~/middleware/i18next";
 import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
+import { calculateYagi } from "~/lib/yagi-calc";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
 
 // Lazy load heavy 3D components
@@ -88,8 +90,13 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
   ];
 };
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t = await i18next.use(initReactI18next).init({
+    lng: locale,
+    ns: "common",
+    resources,
+  });
 
   return {
     title: t("meta.home.title"),
@@ -192,112 +199,112 @@ export default function Home() {
   const { t } = useTranslation();
   const demoItems: Demo[] = demosConfig.map((item) => {
     switch (item.i18nKey) {
-      case "demos.vertical":
+      case "demoCards.vertical":
         return {
-          title: t(`${item.i18nKey}.title` as any),
-          description: t(`${item.i18nKey}.description` as any),
+          title: t(`${item.i18nKey}.title` as never),
+          description: t(`${item.i18nKey}.description` as never),
           href: item.href,
           component: VerticalPolarizationScene,
         };
-      case "demos.horizontal":
+      case "demoCards.horizontal":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: HorizontalPolarizationScene,
         };
-      case "demos.circular":
+      case "demoCards.circular":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: CircularPolarizationScene,
         };
-      case "demos.elliptical":
+      case "demoCards.elliptical":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: EllipticalPolarizationScene,
         };
-      case "demos.dipoleAntenna":
+      case "demoCards.dipoleAntenna":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: DipoleAntennaScene,
         };
-      case "demos.yagi":
+      case "demoCards.yagi":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: YagiAntennaScene,
         };
-      case "demos.invertedV":
+      case "demoCards.invertedV":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: InvertedVAntennaScene,
         };
-      case "demos.gp":
+      case "demoCards.gp":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: GPAntennaScene,
         };
-      case "demos.positiveV":
+      case "demoCards.positiveV":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: PositiveVAntennaScene,
         };
-      case "demos.quad":
+      case "demoCards.quad":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: QuadAntennaScene,
         };
-      case "demos.moxon":
+      case "demoCards.moxon":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: MoxonAntennaScene,
         };
-      case "demos.endFed":
+      case "demoCards.endFed":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: EndFedAntennaScene,
         };
-      case "demos.longWireAntenna":
+      case "demoCards.longWireAntenna":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: LongWireAntennaScene,
         };
-      case "demos.windomAntenna":
+      case "demoCards.windomAntenna":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: WindomAntennaScene,
         };
-      case "demos.hb9cv":
+      case "demoCards.hb9cv":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: HB9CVAntennaScene,
         };
-      case "demos.magneticLoopAntenna":
+      case "demoCards.magneticLoopAntenna":
         return {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
@@ -306,8 +313,8 @@ export default function Home() {
         };
       default:
         return {
-          title: t(`${item.i18nKey}.title` as any),
-          description: t(`${item.i18nKey}.description` as any),
+          title: t(`${item.i18nKey}.title` as never),
+          description: t(`${item.i18nKey}.description` as never),
           href: item.href,
           component: VerticalPolarizationScene,
         };
@@ -318,8 +325,8 @@ export default function Home() {
     switch (item.i18nKey) {
       case "tools.yagiCalculator":
         return {
-          title: t(`${item.i18nKey}.title` as any),
-          description: t(`${item.i18nKey}.description` as any),
+          title: t(`${item.i18nKey}.title` as never),
+          description: t(`${item.i18nKey}.description` as never),
           href: item.href,
           preview: (
             <YagiSvgRenderer
@@ -344,8 +351,8 @@ export default function Home() {
         };
       default:
         return {
-          title: t(`${item.i18nKey}.title` as any),
-          description: t(`${item.i18nKey}.description` as any),
+          title: t(`${item.i18nKey}.title` as never),
+          description: t(`${item.i18nKey}.description` as never),
           href: item.href,
           preview: null,
         };

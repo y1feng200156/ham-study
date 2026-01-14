@@ -37,7 +37,7 @@ function RadiationPattern() {
       let gain = Math.sqrt(2 * (1 + Math.cos(psi)));
 
       // Normalize max gain (sqrt(2) approx 1.414) to 1 for visual consistency
-      gain = gain / 1.414;
+      gain = gain / Math.SQRT2;
 
       // Add a small floor so the mesh doesn't disappear completely
       gain = Math.max(gain, 0.05);

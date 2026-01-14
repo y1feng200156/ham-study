@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -25,7 +24,7 @@ export const middleware = [i18nextMiddleware];
 
 import { redirect } from "react-router";
 
-export async function loader({ context, request }: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const segments = url.pathname.split("/").filter(Boolean);
 
@@ -36,7 +35,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     throw redirect(newPath, 301); // 301 Permanent Redirect
   }
 
-  const locale = getLocale(context);
+  const locale = await getLocale(request);
   return data(
     { locale },
     { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
@@ -133,7 +132,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Footer />
         <ScrollRestoration />
         <Scripts />
-        <Analytics />
       </body>
     </html>
   );

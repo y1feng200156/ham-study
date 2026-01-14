@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/inverted-v-antenna";
 
 const InvertedVAntennaScene = lazy(
@@ -11,8 +14,14 @@ const InvertedVAntennaScene = lazy(
 import { BlockMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:invertedVAntenna.metaTitle"),
     description: t("demos:invertedVAntenna.metaDescription"),
@@ -35,12 +44,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function InvertedVAntennaPage() {
   const { t } = useTranslation("demos");
-  const iv = "invertedVAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${iv}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("invertedVAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -65,12 +73,12 @@ export default function InvertedVAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${iv}.about`)}</p>
-          <h3>{t(`${iv}.theoryAnalysis`)}</h3>
+          <p>{t("invertedVAntenna.about")}</p>
+          <h3>{t("invertedVAntenna.theoryAnalysis")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${iv}.theoryContent`}
+              i18nKey="invertedVAntenna.theoryContent"
               components={{ strong: <strong /> }}
             />
           </p>
@@ -78,19 +86,19 @@ export default function InvertedVAntennaPage() {
           <div className="my-6 space-y-4">
             <div>
               <p className="font-semibold mb-2">
-                {t(`${iv}.formulaImpedance`)}:
+                {t("invertedVAntenna.formulaImpedance")}:
               </p>
               <BlockMath math="Z_{in} \approx 50\Omega \quad (90^{\circ} < \theta < 120^{\circ})" />
             </div>
           </div>
 
-          <h4>{t(`${iv}.comparisonTable.title`)}</h4>
+          <h4>{t("invertedVAntenna.comparisonTable.title")}</h4>
           <div className="overflow-x-auto my-4">
             <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
               <thead className="bg-zinc-50 dark:bg-zinc-900">
                 <tr>
                   {(
-                    t(`${iv}.comparisonTable.headers`, {
+                    t("invertedVAntenna.comparisonTable.headers", {
                       returnObjects: true,
                     }) as string[]
                   ).map((header) => (
@@ -105,7 +113,7 @@ export default function InvertedVAntennaPage() {
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 {(
-                  t(`${iv}.comparisonTable.rows`, {
+                  t("invertedVAntenna.comparisonTable.rows", {
                     returnObjects: true,
                   }) as Array<{
                     feature: string;
@@ -128,9 +136,9 @@ export default function InvertedVAntennaPage() {
               title={t("physicsValidation")}
               content={
                 <>
-                  <p className="mb-2">{t(`${iv}.physicsContent`)}</p>
+                  <p className="mb-2">{t("invertedVAntenna.physicsContent")}</p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${iv}.physicsQuote`)}
+                    {t("invertedVAntenna.physicsQuote")}
                   </p>
                 </>
               }

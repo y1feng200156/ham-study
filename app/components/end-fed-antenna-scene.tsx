@@ -1,19 +1,15 @@
 import { OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   BoxGeometry,
   BufferGeometry,
   CylinderGeometry,
-  InstancedMesh,
   Line,
   LineBasicMaterial,
   LineCurve3,
-  MeshBasicMaterial,
-  Object3D,
   SphereGeometry,
-  TorusGeometry,
   Vector3,
 } from "three";
 import { Label } from "~/components/ui/label";
@@ -242,7 +238,7 @@ export default function EndFedAntennaScene({
             </Label>
             <RadioGroup
               value={harmonic.toString()}
-              onValueChange={(v) => setHarmonic(parseInt(v))}
+              onValueChange={(v) => setHarmonic(parseInt(v, 10))}
               className="grid grid-cols-4 gap-2"
             >
               {[1, 2, 3, 4].map((n) => (

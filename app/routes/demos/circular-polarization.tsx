@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/circular-polarization";
 
 const CircularPolarizationScene = lazy(
@@ -10,8 +13,14 @@ const CircularPolarizationScene = lazy(
 
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:circularPolarization.metaTitle"),
     description: t("demos:circularPolarization.metaDescription"),
@@ -34,12 +43,13 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function CircularPolarizationPage() {
   const { t } = useTranslation("demos");
-  const cp = "circularPolarization";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${cp}.title`)}</h1>
+        <h1 className="text-2xl font-bold">
+          {t(`circularPolarization.title`)}
+        </h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -67,7 +77,7 @@ export default function CircularPolarizationPage() {
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${cp}.about`}
+              i18nKey={`circularPolarization.about`}
               components={{ b: <b /> }}
             />
           </p>
@@ -75,21 +85,21 @@ export default function CircularPolarizationPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.rhcp`}
+                i18nKey={`circularPolarization.rhcp`}
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.lhcp`}
+                i18nKey={`circularPolarization.lhcp`}
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.application`}
+                i18nKey={`circularPolarization.application`}
                 components={{ strong: <strong />, b: <b /> }}
               />
             </li>
@@ -100,40 +110,40 @@ export default function CircularPolarizationPage() {
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.matchRhcpToRhcp`}
+                i18nKey={`circularPolarization.matchRhcpToRhcp`}
                 components={{ strong: <strong /> }}
               />
               <span className="text-green-600 font-bold dark:text-green-400">
                 {" "}
-                {t(`${cp}.bestMatch`)}
+                {t(`circularPolarization.bestMatch`)}
               </span>
               。
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.matchRhcpToLhcp`}
+                i18nKey={`circularPolarization.matchRhcpToLhcp`}
                 components={{ strong: <strong /> }}
               />
               <span className="text-red-600 font-bold dark:text-red-400">
                 {" "}
-                {t(`${cp}.highLoss`)}
+                {t(`circularPolarization.highLoss`)}
               </span>
-              。 {t(`${cp}.rhcpToLhcpNote`)}
+              。 {t(`circularPolarization.rhcpToLhcpNote`)}
               <br />
-              <em>{t(`${cp}.reflectionNote`)}</em>
+              <em>{t(`circularPolarization.reflectionNote`)}</em>
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${cp}.matchCircularToLinear`}
+                i18nKey={`circularPolarization.matchCircularToLinear`}
                 components={{ strong: <strong /> }}
               />
               <span className="text-yellow-600 font-bold dark:text-yellow-400">
                 {" "}
-                {t(`${cp}.loss3db`)}
+                {t(`circularPolarization.loss3db`)}
               </span>
-              。 {t(`${cp}.circularToLinearNote`)}
+              。 {t(`circularPolarization.circularToLinearNote`)}
             </li>
           </ul>
 
@@ -145,12 +155,12 @@ export default function CircularPolarizationPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${cp}.physicsContent`}
+                      i18nKey={`circularPolarization.physicsContent`}
                       components={{ strong: <strong /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${cp}.physicsQuote`)}
+                    {t(`circularPolarization.physicsQuote`)}
                   </p>
                 </>
               }

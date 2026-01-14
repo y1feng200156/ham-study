@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/positive-v-antenna";
 
 const PositiveVAntennaScene = lazy(
@@ -11,8 +14,14 @@ const PositiveVAntennaScene = lazy(
 import { BlockMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:positiveVAntenna.metaTitle"),
     description: t("demos:positiveVAntenna.metaDescription"),
@@ -35,12 +44,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function PositiveVAntennaPage() {
   const { t } = useTranslation("demos");
-  const pv = "positiveVAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${pv}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("positiveVAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -65,29 +73,29 @@ export default function PositiveVAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${pv}.about`)}</p>
+          <p>{t("positiveVAntenna.about")}</p>
           <ul>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${pv}.structure`}
+                i18nKey="positiveVAntenna.structure"
                 components={{ strong: <strong /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
-                i18nKey={`${pv}.rotatable`}
+                i18nKey="positiveVAntenna.rotatable"
                 components={{ strong: <strong /> }}
               />
             </li>
           </ul>
 
-          <h3>{t(`${pv}.theoryAnalysis`)}</h3>
+          <h3>{t("positiveVAntenna.theoryAnalysis")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${pv}.theoryContent`}
+              i18nKey="positiveVAntenna.theoryContent"
               components={{ strong: <strong /> }}
             />
           </p>
@@ -95,19 +103,19 @@ export default function PositiveVAntennaPage() {
           <div className="my-6 space-y-4">
             <div>
               <p className="font-semibold mb-2">
-                {t(`${pv}.impedanceMathLabel`)}:
+                {t("positiveVAntenna.impedanceMathLabel")}:
               </p>
               <BlockMath math="Z_{in} \approx 50\Omega \quad (\text{at } 120^\circ)" />
             </div>
           </div>
 
-          <h4>{t(`${pv}.comparisonTable.title`)}</h4>
+          <h4>{t("positiveVAntenna.comparisonTable.title")}</h4>
           <div className="overflow-x-auto my-4">
             <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
               <thead className="bg-zinc-50 dark:bg-zinc-900">
                 <tr>
                   {(
-                    t(`${pv}.comparisonTable.headers`, {
+                    t("positiveVAntenna.comparisonTable.headers", {
                       returnObjects: true,
                     }) as string[]
                   ).map((header) => (
@@ -122,7 +130,7 @@ export default function PositiveVAntennaPage() {
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 {(
-                  t(`${pv}.comparisonTable.rows`, {
+                  t("positiveVAntenna.comparisonTable.rows", {
                     returnObjects: true,
                   }) as Array<{
                     feature: string;
@@ -140,16 +148,16 @@ export default function PositiveVAntennaPage() {
             </table>
           </div>
 
-          <h3>{t(`${pv}.polarizationTitle`)}</h3>
+          <h3>{t("positiveVAntenna.polarizationTitle")}</h3>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation
               title={t("physicsValidation")}
               content={
                 <>
-                  <p className="mb-2">{t(`${pv}.physicsContent`)}</p>
+                  <p className="mb-2">{t("positiveVAntenna.physicsContent")}</p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${pv}.physicsQuote`)}
+                    {t("positiveVAntenna.physicsQuote")}
                   </p>
                 </>
               }

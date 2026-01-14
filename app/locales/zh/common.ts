@@ -20,7 +20,7 @@ export default {
     tools: "实用工具",
   },
 
-  demos: {
+  demoCards: {
     vertical: {
       title: "垂直极化 (Vertical Polarization)",
       description:

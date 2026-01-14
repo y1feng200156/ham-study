@@ -296,7 +296,7 @@ export function ElectricFieldInstanced({
 
             // Magnitude of sum of two unit vectors with angle psi
             const mag = Math.sqrt(2 + 2 * Math.cos(psi));
-            dirGain = mag / 1.414; // Normalize peak
+            dirGain = mag / Math.SQRT2; // Normalize peak
             dirGain = dirGain ** 2; // Power pattern for sharpness
           }
 

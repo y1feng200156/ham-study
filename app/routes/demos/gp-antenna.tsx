@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { lazy, Suspense } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
+import resources from "~/locales";
+import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/gp-antenna";
 
 const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
@@ -9,8 +12,14 @@ const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 import { BlockMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const { t } = getInstance(context);
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const locale = getLocale(request);
+  const t: TFunction<["common", "demos"]> = await i18next
+    .use(initReactI18next)
+    .init({
+      lng: locale,
+      resources,
+    });
   return {
     title: t("demos:gpAntenna.metaTitle"),
     description: t("demos:gpAntenna.metaDescription"),
@@ -33,12 +42,11 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 
 export default function GPAntennaPage() {
   const { t } = useTranslation("demos");
-  const gp = "gpAntenna";
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold">{t(`${gp}.title`)}</h1>
+        <h1 className="text-2xl font-bold">{t("gpAntenna.title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
@@ -63,12 +71,12 @@ export default function GPAntennaPage() {
 
         <div className="prose dark:prose-invert max-w-none">
           <h3>{t("aboutTitle")}</h3>
-          <p>{t(`${gp}.about`)}</p>
-          <h3>{t(`${gp}.theoryAnalysis`)}</h3>
+          <p>{t("gpAntenna.about")}</p>
+          <h3>{t("gpAntenna.theoryAnalysis")}</h3>
           <p>
             <Trans
               ns="demos"
-              i18nKey={`${gp}.theoryContent`}
+              i18nKey={"gpAntenna.theoryContent"}
               components={{ strong: <strong /> }}
             />
           </p>
@@ -76,25 +84,25 @@ export default function GPAntennaPage() {
           <div className="my-6 space-y-4">
             <div>
               <p className="font-semibold mb-2">
-                {t(`${gp}.formulaRadiation`)}:
+                {t("gpAntenna.formulaRadiation")}:
               </p>
               <BlockMath math="F(\theta) = \frac{\cos(\frac{\pi}{2} \cos \theta)}{\sin \theta}" />
             </div>
             <div>
               <p className="font-semibold mb-2">
-                {t(`${gp}.formulaImpedance`)}:
+                {t("gpAntenna.formulaImpedance")}:
               </p>
               <BlockMath math="Z_{in} \approx 50\Omega \quad (\text{Radials at } 135^{\circ})" />
             </div>
           </div>
 
-          <h4>{t(`${gp}.comparisonTable.title`)}</h4>
+          <h4>{t("gpAntenna.comparisonTable.title")}</h4>
           <div className="overflow-x-auto my-4">
             <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
               <thead className="bg-zinc-50 dark:bg-zinc-900">
                 <tr>
                   {(
-                    t(`${gp}.comparisonTable.headers`, {
+                    t("gpAntenna.comparisonTable.headers", {
                       returnObjects: true,
                     }) as string[]
                   ).map((header) => (
@@ -109,7 +117,7 @@ export default function GPAntennaPage() {
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 {(
-                  t(`${gp}.comparisonTable.rows`, {
+                  t("gpAntenna.comparisonTable.rows", {
                     returnObjects: true,
                   }) as Array<{
                     feature: string;
@@ -135,12 +143,12 @@ export default function GPAntennaPage() {
                   <p className="mb-2">
                     <Trans
                       ns="demos"
-                      i18nKey={`${gp}.physicsContent`}
+                      i18nKey={"gpAntenna.physicsContent"}
                       components={{ strong: <strong /> }}
                     />
                   </p>
                   <p className="text-muted-foreground italic border-l-2 border-primary/20 pl-4 py-1">
-                    {t(`${gp}.physicsQuote`)}
+                    {t("gpAntenna.physicsQuote")}
                   </p>
                 </>
               }

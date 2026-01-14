@@ -18,18 +18,18 @@ export default function DemosLayout() {
 
   // Demo key mapping for translation lookup
   const demoKeyMap: Record<string, string> = {
-    "vertical-polarization": "demos.vertical.title",
-    "horizontal-polarization": "demos.horizontal.title",
-    "circular-polarization": "demos.circular.title",
-    "elliptical-polarization": "demos.elliptical.title",
-    "yagi-antenna": "demos.yagi.title",
-    "inverted-v-antenna": "demos.invertedV.title",
-    "gp-antenna": "demos.gp.title",
-    "positive-v-antenna": "demos.positiveV.title",
-    "quad-antenna": "demos.quad.title",
-    "moxon-antenna": "demos.moxon.title",
-    "end-fed-antenna": "demos.endFed.title",
-    "long-wire-antenna": "demos.longWireAntenna.title",
+    "vertical-polarization": "demoCards.vertical.title",
+    "horizontal-polarization": "demoCards.horizontal.title",
+    "circular-polarization": "demoCards.circular.title",
+    "elliptical-polarization": "demoCards.elliptical.title",
+    "yagi-antenna": "demoCards.yagi.title",
+    "inverted-v-antenna": "demoCards.invertedV.title",
+    "gp-antenna": "demoCards.gp.title",
+    "positive-v-antenna": "demoCards.positiveV.title",
+    "quad-antenna": "demoCards.quad.title",
+    "moxon-antenna": "demoCards.moxon.title",
+    "end-fed-antenna": "demoCards.endFed.title",
+    "long-wire-antenna": "demoCards.longWireAntenna.title",
   };
   const toolKeyMap: Record<string, string> = {
     "yagi-calculator": "tools.yagiCalculator.title",

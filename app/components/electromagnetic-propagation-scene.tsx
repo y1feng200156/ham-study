@@ -342,6 +342,7 @@ export default function ElectromagneticPropagationScene({
         depthWrite: false,
       }),
     );
+    ionosphere.renderOrder = 1;
     earthGroup.add(ionosphere);
 
     // 发射塔
@@ -352,18 +353,52 @@ export default function ElectromagneticPropagationScene({
     tower.position.set(0, EARTH_RADIUS + 2.5, 0);
     earthGroup.add(tower);
 
-    const beacon = new THREE.Mesh(
-      new THREE.PlaneGeometry(12, 12),
+    // --- 信号塔 3D 发光效果 (从 2D 平面升级为 3D 球体叠加) ---
+    const beaconGroup = new THREE.Group();
+    beaconGroup.position.set(0, 3, 0);
+    tower.add(beaconGroup);
+
+    // 1. 核心亮球 (底层，受深度影响)
+    const beaconCore = new THREE.Mesh(
+      new THREE.SphereGeometry(0.8, 16, 16),
       new THREE.MeshBasicMaterial({
-        map: glowTexture,
+        color: 0xffcc00,
+        transparent: true,
+        opacity: 0.9,
+      }),
+    );
+    beaconCore.renderOrder = 5;
+    beaconGroup.add(beaconCore);
+
+    // 2. 外层体积晕染 (顶层叠加，不受深度影响，确保发光感立体且始终可见)
+    const beaconGlow = new THREE.Mesh(
+      new THREE.SphereGeometry(3.0, 32, 32),
+      new THREE.MeshBasicMaterial({
+        map: glowTexture, // 使用之前的径向渐变纹理
         color: 0xffaa00,
         transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        depthTest: false, // 始终显示
+      }),
+    );
+    beaconGlow.renderOrder = 100;
+    beaconGroup.add(beaconGlow);
+
+    // 3. 次级核心层 (增加立体的发散感)
+    const beaconSecondary = new THREE.Mesh(
+      new THREE.SphereGeometry(1.2, 16, 16),
+      new THREE.MeshBasicMaterial({
+        color: 0xffaa00,
+        transparent: true,
+        opacity: 0.4,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       }),
     );
-    beacon.position.set(0, 3, 0);
-    tower.add(beacon);
+    beaconSecondary.renderOrder = 6;
+    beaconGroup.add(beaconSecondary);
 
     const signalGroup = new THREE.Group();
     earthGroup.add(signalGroup);
@@ -371,6 +406,8 @@ export default function ElectromagneticPropagationScene({
     earthGroup.add(scatterGroup);
     const groundBounceGroup = new THREE.Group();
     earthGroup.add(groundBounceGroup);
+    const pulseGroup = new THREE.Group();
+    earthGroup.add(pulseGroup);
 
     // --- 粒子系统 ---
     const spawnScatter = (pos: THREE.Vector3, color: number) => {
@@ -405,6 +442,7 @@ export default function ElectromagneticPropagationScene({
         }),
       );
       pts.userData = { life: 1.0, velocities: velocities };
+      pts.renderOrder = 30;
       scatterGroup.add(pts);
 
       const ringGeo = new THREE.RingGeometry(0.1, 0.5, 32);
@@ -420,6 +458,7 @@ export default function ElectromagneticPropagationScene({
       ring.position.copy(pos);
       ring.lookAt(camera.position);
       ring.userData = { life: 0.5, isRing: true, maxScale: 10 };
+      ring.renderOrder = 30;
       scatterGroup.add(ring);
     };
 
@@ -510,7 +549,7 @@ export default function ElectromagneticPropagationScene({
       const isPenetrating = mode === "UV" ? true : frequency > currentMUF;
 
       const baseColor =
-        mode === "HF" ? (isPenetrating ? 0xff0055 : 0x00ffff) : 0xaa00ff;
+        mode === "HF" ? (isPenetrating ? 0xf43f5e : 0x06b6d4) : 0xfacc15;
 
       // 1. 主地波
       if (mode === "HF") {
@@ -525,7 +564,7 @@ export default function ElectromagneticPropagationScene({
           );
           const gwMat = new THREE.MeshBasicMaterial({
             map: wifiTexture,
-            color: 0xffaa00,
+            color: 0x22c55e,
             transparent: true,
             opacity: 0.8,
             side: THREE.DoubleSide,
@@ -605,29 +644,43 @@ export default function ElectromagneticPropagationScene({
           0.05,
         );
 
-        const glowGeo = new THREE.TubeGeometry(curve, 100, 0.8, 8, false);
-        const glowMat = new THREE.MeshBasicMaterial({
+        // --- 方案：多层体积 3D 天波路径 ---
+
+        // 1. 最外层柔和光晕 (Volume Glow)
+        const outerGlowGeo = new THREE.TubeGeometry(curve, 100, 1.2, 8, false);
+        const outerGlowMat = new THREE.MeshBasicMaterial({
           color: baseColor,
           transparent: true,
-          opacity: 0.2,
+          opacity: 0.1,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         });
-        const glowMesh = new THREE.Mesh(glowGeo, glowMat);
-        signalGroup.add(glowMesh);
+        const outerGlowMesh = new THREE.Mesh(outerGlowGeo, outerGlowMat);
+        outerGlowMesh.renderOrder = 9;
+        // 存储曲线信息供底层的 3D 脉冲粒子使用
+        outerGlowMesh.userData = { isTube: true, curve: curve };
+        signalGroup.add(outerGlowMesh);
 
-        const coreGeo = new THREE.TubeGeometry(curve, 100, 0.3, 8, false);
-        const coreMat = new THREE.MeshBasicMaterial({
-          map: fiberTexture,
-          color: 0xffffff,
+        // 2. 中层流动能量管 (Energy Tube - 改为高透明度，不应有实体感)
+        const energyGeo = new THREE.TubeGeometry(curve, 100, 0.6, 8, false);
+        const energyMat = new THREE.MeshBasicMaterial({
+          color: baseColor,
           transparent: true,
-          opacity: 1.0,
+          opacity: 0.15, // 降低不透明度，使其看起来更像“外壳”而非实体
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         });
-        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-        coreMesh.userData = { isBeam: true };
-        signalGroup.add(coreMesh);
+        const energyMesh = new THREE.Mesh(energyGeo, energyMat);
+        energyMesh.renderOrder = 10;
+        signalGroup.add(energyMesh);
+
+        // 我们将脉冲的生成移至 animate 中，根据曲线动态生成几何体
+        // 这里仅保留基本标记
+        outerGlowMesh.userData = {
+          isTube: true,
+          curve: curve,
+          baseColor: baseColor,
+        };
 
         impactPoints.forEach((p) => {
           spawnScatter(p, baseColor);
@@ -641,6 +694,7 @@ export default function ElectromagneticPropagationScene({
     // --- Loop ---
     const clock = new THREE.Clock();
     let animationId: number;
+    let lastMode = paramsRef.current.mode;
     const cameraParams = {
       radius: initialRadius,
       phi: Math.PI / 2.1,
@@ -712,17 +766,100 @@ export default function ElectromagneticPropagationScene({
       earthGroup.rotation.y += delta * 0.02;
       ionosphere.rotation.y -= delta * 0.01;
 
+      // 检测模式切换并强制清理 (Force clear pulses on mode switch)
+      if (lastMode !== paramsRef.current.mode) {
+        pulseGroup.children.forEach((group) => {
+          group.children.forEach((c) => (c as THREE.Mesh).geometry.dispose());
+        });
+        pulseGroup.clear();
+        lastMode = paramsRef.current.mode;
+      }
+
       updateSignalPath();
 
+      // 1. 同步脉冲组 (Sync pulse groups with signal paths)
       signalGroup.children.forEach((child) => {
         const mesh = child as THREE.Mesh;
         const mat = mesh.material as THREE.MeshBasicMaterial;
-        // Check if map exists before accessing it
         if (mat?.map) {
           if (child.userData.isGroundWave) mat.map.offset.y -= delta * 1.5;
-          else if (child.userData.isBeam) mat.map.offset.x -= delta * 3.0;
+        }
+
+        // --- 真正的 3D 实体分段脉冲 (Segmented 3D Tube) ---
+        if (child.userData.isTube && child.userData.curve) {
+          const curve = child.userData.curve as THREE.Curve<THREE.Vector3>;
+
+          // 使用 child.uuid 或某种唯一标识来确保 pulseGroup 子项与 signalGroup 子项一一对应
+          // 目前使用 tubeIndex 依然可以，但我们需要在处理完所有活跃路径后，清理 pulseGroup 中多余的子项
+          const tubeIndex = signalGroup.children.indexOf(child);
+          const childPulseGroupName = `pulse-group-${tubeIndex}`;
+          let pSubGroup = pulseGroup.getObjectByName(childPulseGroupName);
+
+          if (pSubGroup) {
+            pSubGroup.children.forEach((c) => {
+              (c as THREE.Mesh).geometry.dispose();
+            });
+            pSubGroup.clear();
+          } else {
+            pSubGroup = new THREE.Group();
+            pSubGroup.name = childPulseGroupName;
+            pulseGroup.add(pSubGroup);
+          }
+
+          const time = clock.elapsedTime * 0.8;
+          const pulseCount = 3;
+          const pulseWidth = 0.15;
+
+          for (let i = 0; i < pulseCount; i++) {
+            const fraction = (time + i / pulseCount) % 1.0;
+            const start = Math.max(0, fraction - pulseWidth / 2);
+            const end = Math.min(1, fraction + pulseWidth / 2);
+
+            if (end - start < 0.01) continue;
+
+            const subPoints = [];
+            const segments = 20;
+            for (let j = 0; j <= segments; j++) {
+              subPoints.push(
+                curve.getPoint(start + (end - start) * (j / segments)),
+              );
+            }
+            const miniCurve = new THREE.CatmullRomCurve3(subPoints);
+
+            const miniGeo = new THREE.TubeGeometry(
+              miniCurve,
+              20,
+              0.35,
+              8,
+              false,
+            );
+            const miniMat = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: Math.sin(fraction * Math.PI),
+              blending: THREE.AdditiveBlending,
+              depthTest: true,
+              depthWrite: false,
+            });
+
+            const miniMesh = new THREE.Mesh(miniGeo, miniMat);
+            miniMesh.renderOrder = 100;
+            pSubGroup.add(miniMesh);
+          }
         }
       });
+
+      // 关键：在处理完所有当前活跃路径后，清理掉 pulseGroup 中任何名称不属于当前有效索引的组
+      const activePulseNames = new Set(
+        signalGroup.children.map((_, i) => `pulse-group-${i}`),
+      );
+      for (let i = pulseGroup.children.length - 1; i >= 0; i--) {
+        const group = pulseGroup.children[i];
+        if (!activePulseNames.has(group.name)) {
+          group.children.forEach((c) => (c as THREE.Mesh).geometry.dispose());
+          pulseGroup.remove(group);
+        }
+      }
 
       groundBounceGroup.children.forEach((child) => {
         const mesh = child as THREE.Mesh;

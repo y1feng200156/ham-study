@@ -8,6 +8,9 @@ import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/electromagnetic-propagation";
 
+const EARTH_RADIUS = 50;
+const CRITICAL_FREQUENCY_FOF2 = 7;
+
 function ClientOnly({
   children,
   fallback = null,
@@ -140,6 +143,30 @@ export default function PropagationApp() {
 
   // 模拟 HUD 数据波动
   const [hudData, setHudData] = useState({ signal: -80, noise: -110 });
+
+  // 计算当前颜色 (同步 3D 场景逻辑)
+  const rad = (angle * Math.PI) / 180;
+  const ionoR = EARTH_RADIUS + ionoHeight;
+  const incidenceAngle = Math.asin((EARTH_RADIUS / ionoR) * Math.cos(rad));
+  const currentMUF = CRITICAL_FREQUENCY_FOF2 / Math.cos(incidenceAngle);
+  const isPenetrating = mode === "UV" ? true : frequency > currentMUF;
+
+  // 颜色映射 (十六进制转 CSS)
+  // 同步 electromagnetic-propagation-scene.tsx 中的颜色定义
+  const COLORS = {
+    GW: "#22c55e", // 地波 (Green)
+    HF_REFLECT: "#06b6d4", // HF 反射 (Cyan)
+    HF_PENETRATE: "#f43f5e", // HF 穿透 (Pink)
+    UV: "#facc15", // UV (Yellow)
+  };
+
+  const skyWaveColor =
+    mode === "HF"
+      ? isPenetrating
+        ? COLORS.HF_PENETRATE
+        : COLORS.HF_REFLECT
+      : COLORS.UV;
+  const groundWaveColor = COLORS.GW;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -352,18 +379,44 @@ export default function PropagationApp() {
       {/* 左下角图例 */}
       <div className="absolute bottom-6 left-6 z-10 w-64 hidden md:block">
         <HUDBox title={t("electromagneticPropagation.legend.title")}>
-          <ul className="space-y-2 text-xs text-cyan-300">
-            <li className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-amber-500 shadow-[0_0_5px_orange]"></div>
-              <span>{t("electromagneticPropagation.legend.groundWave")}</span>
+          <ul className="space-y-3 text-xs">
+            {mode === "HF" && (
+              <li className="flex items-center gap-2 transition-colors duration-300">
+                <div
+                  className="w-2 h-2"
+                  style={{
+                    backgroundColor: groundWaveColor,
+                    boxShadow: `0 0 8px ${groundWaveColor}`,
+                  }}
+                ></div>
+                <span style={{ color: groundWaveColor }}>
+                  {t("electromagneticPropagation.legend.groundWave")}
+                </span>
+              </li>
+            )}
+            <li className="flex items-center gap-2 transition-colors duration-300">
+              <div
+                className="w-2 h-2"
+                style={{
+                  backgroundColor: skyWaveColor,
+                  boxShadow: `0 0 8px ${skyWaveColor}`,
+                }}
+              ></div>
+              <span style={{ color: skyWaveColor }}>
+                {t("electromagneticPropagation.legend.skyWave")}
+              </span>
             </li>
-            <li className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-cyan-400 shadow-[0_0_5px_cyan]"></div>
-              <span>{t("electromagneticPropagation.legend.skyWave")}</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white/50 border border-white"></div>
-              <span>{t("electromagneticPropagation.legend.scatter")}</span>
+            <li className="flex items-center gap-2 transition-colors duration-300">
+              <div
+                className="w-2 h-2 opacity-60"
+                style={{
+                  backgroundColor: skyWaveColor,
+                  border: `1px solid ${skyWaveColor}`,
+                }}
+              ></div>
+              <span className="opacity-80" style={{ color: skyWaveColor }}>
+                {t("electromagneticPropagation.legend.scatter")}
+              </span>
             </li>
           </ul>
         </HUDBox>

@@ -30,7 +30,7 @@
     "js-yaml": "^4.1.1",
     "katex": "^0.16.27",
     "pretty-cache-header": "^1.0.0",
-    "radix-ui": "^1.4.3",
+    "radix-ui": "^1.4.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-i18next": "^16.5.1",

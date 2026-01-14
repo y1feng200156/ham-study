@@ -13,7 +13,6 @@ export default async function handleRequest(
   responseHeaders: Headers,
   entryContext: EntryContext,
 ) {
-  const shellRendered = false;
   const userAgent = request.headers.get("user-agent");
 
   const instance = createInstance();
@@ -40,9 +39,8 @@ export default async function handleRequest(
     {
       onError(error: unknown) {
         responseStatusCode = 500;
-        if (shellRendered) {
-          console.error(error);
-        }
+        responseStatusCode = 500;
+        console.error("React Rendering Error:", error);
       },
       signal: request.signal,
     },

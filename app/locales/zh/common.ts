@@ -110,6 +110,13 @@ export default {
         "小环天线（磁偶极子）3D演示。直观展示其深零点抗干扰和高Q特性。",
       keywords: "磁环天线, 小环天线, 磁偶极子, 天线可视化",
     },
+    electromagneticPropagation: {
+      title: "电磁波传播 (Electromagnetic Propagation)",
+      description:
+        "3D演示电磁波在不同频段（HF/UV）的传播特性，展示地波、天波及电离层反射原理。",
+      keywords:
+        "电磁波传播, 地波, 天波, 电离层反射, electromagnetic propagation",
+    },
   },
 
   tools: {

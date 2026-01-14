@@ -125,8 +125,15 @@ function RadiationPattern({
     }
 
     geo.computeVertexNormals();
+    geo.computeVertexNormals();
     return geo;
   }, [length, isInvertedV]);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <mesh geometry={geometry}>
@@ -195,7 +202,7 @@ function StandingWaveVisualizer({
     return pts; // This is just the "Current" line
   }, [length, isInvertedV]);
 
-  // Create a curve from points for TubeGeometry
+  // curve is just data (CatmullRomCurve3), doesn't need dispose.
   const curve = useMemo(() => new CatmullRomCurve3(points), [points]);
 
   return (

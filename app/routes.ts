@@ -67,6 +67,13 @@ const getDemoRoutes = (idPrefix: string) => [
       id: `${idPrefix}-magnetic-loop`,
     },
   ),
+  route(
+    "demos/electromagnetic-propagation",
+    "routes/demos/electromagnetic-propagation.tsx",
+    {
+      id: `${idPrefix}-electromagnetic-propagation`,
+    },
+  ),
   route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx", {
     id: `${idPrefix}-yagi-tools`,
   }),

@@ -83,6 +83,12 @@ function RadiationPattern() {
     return geo;
   }, []);
 
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
     <group>
       <mesh geometry={geometry}>

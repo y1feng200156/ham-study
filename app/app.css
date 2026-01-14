@@ -144,3 +144,29 @@ body {
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .clip-path-slant {
+    clip-path: polygon(
+      10px 0,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+  }
+
+  .animate-spin-slow {
+    animation: spin 10s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

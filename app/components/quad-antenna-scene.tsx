@@ -49,6 +49,12 @@ function QuadElement({
     [points],
   );
 
+  useMemo(() => {
+    return () => {
+      lineGeo.dispose();
+    };
+  }, [lineGeo]);
+
   const lineObject = useMemo(() => {
     const line = new Line(
       lineGeo,
@@ -56,6 +62,12 @@ function QuadElement({
     );
     return line;
   }, [lineGeo, color]);
+
+  useMemo(() => {
+    return () => {
+      lineObject.material.dispose();
+    };
+  }, [lineObject]);
 
   return (
     <group position={position} rotation={rotation}>
@@ -160,6 +172,12 @@ function RadiationPattern({
     geo.computeVertexNormals();
     return geo;
   }, []); // Pattern geometry is static for now, or could depend on polarization for minor shape changes?
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <group position={[0, 2, 0]}>

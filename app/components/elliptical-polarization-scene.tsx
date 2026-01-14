@@ -56,8 +56,15 @@ function RadiationPattern({ ampY, ampZ }: { ampY: number; ampZ: number }) {
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
+
     return geo;
   }, [ampY, ampZ]);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <group>

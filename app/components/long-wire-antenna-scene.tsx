@@ -36,6 +36,12 @@ function LongWireAntenna({
     [],
   );
 
+  useMemo(() => {
+    return () => {
+      insulatorGeo.dispose();
+    };
+  }, [insulatorGeo]);
+
   const startPoint = useMemo(() => WIRE_START.clone(), []);
   const endPoint = useMemo(() => WIRE_END.clone(), []);
 
@@ -47,6 +53,12 @@ function LongWireAntenna({
     const points = wireCurve.getPoints(20);
     return new BufferGeometry().setFromPoints(points);
   }, [wireCurve]);
+
+  useMemo(() => {
+    return () => {
+      wireGeo.dispose();
+    };
+  }, [wireGeo]);
 
   // E-Field and H-Field visualization
   const segmentCount = 60; // Increased resolution for higher harmonics
@@ -82,6 +94,30 @@ function LongWireAntenna({
     );
     return mesh;
   }, []);
+
+  useMemo(() => {
+    return () => {
+      if (eFieldInstances.material) {
+        if (Array.isArray(eFieldInstances.material)) {
+          eFieldInstances.material.forEach((m) => {
+            m.dispose();
+          });
+        } else {
+          eFieldInstances.material.dispose();
+        }
+      }
+      hFieldInstances.geometry.dispose();
+      if (hFieldInstances.material) {
+        if (Array.isArray(hFieldInstances.material)) {
+          hFieldInstances.material.forEach((m) => {
+            m.dispose();
+          });
+        } else {
+          hFieldInstances.material.dispose();
+        }
+      }
+    };
+  }, [eFieldInstances, hFieldInstances]);
 
   useFrame((_, delta) => {
     timeRef.current += delta * 3 * speed;
@@ -225,8 +261,15 @@ function RadiationPattern({ length }: { length: number }) {
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
+    geo.computeVertexNormals();
     return geo;
   }, [length]);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   // Align pattern with the wire
   // Wire goes from (-5, -1, 0) to (5, 3, 0).

@@ -31,6 +31,14 @@ function EndFedAntenna() {
     [],
   );
 
+  useMemo(() => {
+    return () => {
+      ununBox.dispose();
+      connectorGeo.dispose();
+      insulatorBox.dispose();
+    };
+  }, [ununBox, connectorGeo, insulatorBox]);
+
   // Antenna wire points: Unun at origin (ish), wire extending in -X
   const startPoint = useMemo(() => new Vector3(0, 0, 0), []);
   const endPoint = useMemo(() => new Vector3(-wireLength, wireHeight, 0), []); // Sloper configuration
@@ -43,6 +51,12 @@ function EndFedAntenna() {
     const points = wireCurve.getPoints(20);
     return new BufferGeometry().setFromPoints(points);
   }, [wireCurve]);
+
+  useMemo(() => {
+    return () => {
+      wireGeo.dispose();
+    };
+  }, [wireGeo]);
 
   // E-Field and H-Field visualization
   // Removed internal field visualization in favor of ElectricFieldInstanced
@@ -140,8 +154,15 @@ function RadiationPattern({ harmonic = 1 }: { harmonic?: number }) {
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
+    geo.computeVertexNormals();
     return geo;
   }, [harmonic]);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <mesh geometry={geometry}>

@@ -85,6 +85,11 @@ export const demos: Item[] = [
     href: "/demos/magnetic-loop-antenna",
     category: "demo",
   },
+  {
+    i18nKey: "demoCards.electromagneticPropagation",
+    href: "/demos/electromagnetic-propagation",
+    category: "demo",
+  },
 ];
 
 export const tools: Item[] = [

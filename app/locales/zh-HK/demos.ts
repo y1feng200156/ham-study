@@ -736,4 +736,43 @@ export default {
     physicsQuote:
       '"The small loop antenna is equivalent to a magnetic dipole... it has a null along its axis and maximum radiation in the plane of the loop."',
   },
+  electromagneticPropagation: {
+    metaTitle: "電磁波傳播 (Electromagnetic Propagation) | 業餘無線電可視化",
+    metaDescription:
+      "3D演示電磁波在不同頻段（HF/UV）的傳播特性，展示地波、天波及電離層反射原理。",
+    metaKeywords:
+      "電磁波傳播, electromagnetic propagation, 地波, ground wave, 天波, sky wave, 電離層反射, ionosphere hop",
+    title: "電磁波傳播 (Electromagnetic Propagation)",
+    hudTitle: "無線電仿真系統",
+    systemStatus: {
+      online: "系統：在線",
+      ionosphereStable: "電離層：穩定",
+      transmissionActive: "傳輸狀態：活躍",
+    },
+    geoInfo: {
+      latitude: "緯度",
+      longitude: "經度",
+      altitude: "海拔",
+    },
+    controls: {
+      title: "主控制台",
+      mode: {
+        hf: "HF 短波",
+        uv: "UV 視距",
+      },
+      frequency: "發射頻率",
+      elevation: "發射仰角",
+      ionosphereHeight: "電離層高度",
+    },
+    metrics: {
+      snr: "信噪比",
+      ber: "誤碼率",
+    },
+    legend: {
+      title: "信號診斷",
+      groundWave: "地波 (表面波)",
+      skyWave: "天波 (反射)",
+      scatter: "次級散射",
+    },
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

@@ -50,6 +50,12 @@ function RadiationPattern() {
     return geo;
   }, []);
 
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
     <group>
       <mesh geometry={geometry}>
@@ -94,6 +100,12 @@ function HB9CVAntenna() {
     () => new CatmullRomCurve3(phaseLinePoints),
     [phaseLinePoints],
   );
+
+  // Note: TubeGeometry is created inline in the JSX like <tubeGeometry args={[curve, ...]} />.
+  // R3F handles automatic disposal for objects declared in JSX (primitives/elements).
+  // Only useMemo'd objects that aren't 'attached' need manual dispose.
+  // CatmullRomCurve3 doesn't have a dispose() (it's just data).
+  // The 'geometry' in RadiationPattern DOES need it.
 
   return (
     <group>

@@ -129,8 +129,15 @@ function RadiationPattern({ radialAngle }: { radialAngle: "60" | "135" }) {
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
+    geo.computeVertexNormals();
     return geo;
   }, [radialAngle]);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <group position={[0, 3, 0]}>

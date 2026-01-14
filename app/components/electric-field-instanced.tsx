@@ -641,6 +641,13 @@ export function ElectricFieldInstanced({
       meshRef.current.instanceColor.needsUpdate = true;
   });
 
+  // Manual cleanup for useMemo resources to prevent WebGL context leaks
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
     <instancedMesh
       ref={meshRef}

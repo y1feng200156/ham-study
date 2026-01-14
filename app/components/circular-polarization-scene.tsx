@@ -37,10 +37,22 @@ function HelicalAntenna() {
     return geo;
   }, [points]);
 
+  useMemo(() => {
+    return () => {
+      lineGeometry.dispose();
+    };
+  }, [lineGeometry]);
+
   const line = useMemo(() => {
     const mat = new LineBasicMaterial({ color: "#ef4444", linewidth: 3 });
     return new Line(lineGeometry, mat);
   }, [lineGeometry]);
+
+  useMemo(() => {
+    return () => {
+      line.material.dispose();
+    };
+  }, [line]);
 
   return (
     <group position={[-2, 0, 0]}>
@@ -80,6 +92,12 @@ function RadiationPattern() {
     geo.computeVertexNormals();
     return geo;
   }, []);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <group>

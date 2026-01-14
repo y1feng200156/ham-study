@@ -99,6 +99,13 @@ function RadiationPattern() {
     return geo;
   }, []);
 
+  // Cleanup to prevent WebGL context leaks
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
     <group>
       <mesh geometry={geometry}>

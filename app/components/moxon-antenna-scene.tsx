@@ -62,6 +62,14 @@ function MoxonAntenna() {
     [refPoints],
   );
 
+  useMemo(() => {
+    return () => {
+      drivenRightGeo.dispose();
+      drivenLeftGeo.dispose();
+      refGeo.dispose();
+    };
+  }, [drivenRightGeo, drivenLeftGeo, refGeo]);
+
   const drivenRightLine = useMemo(
     () =>
       new Line(
@@ -86,6 +94,14 @@ function MoxonAntenna() {
       new LineBasicMaterial({ color: "#3b82f6", linewidth: 3 }),
     );
   }, [refGeo]);
+
+  useMemo(() => {
+    return () => {
+      drivenRightLine.material.dispose();
+      drivenLeftLine.material.dispose();
+      refLine.material.dispose();
+    };
+  }, [drivenRightLine, drivenLeftLine, refLine]);
 
   return (
     <group position={[0, 2, 0]}>
@@ -138,8 +154,15 @@ function RadiationPattern() {
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
+    geo.computeVertexNormals();
     return geo;
   }, []);
+
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
 
   return (
     <group position={[0, 2, 0]}>

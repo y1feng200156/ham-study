@@ -738,4 +738,43 @@ export default {
     physicsQuote:
       "Phased arrays are the basis for modern radar and beamforming systems.",
   },
+  electromagneticPropagation: {
+    metaTitle: "Electromagnetic Propagation | Ham Radio Visualization",
+    metaDescription:
+      "3D visualization of electromagnetic wave propagation in different bands (HF/UV), demonstrating ground wave, sky wave, and ionospheric reflection principles.",
+    metaKeywords:
+      "electromagnetic propagation, ground wave, sky wave, ionosphere hop, HF, UV",
+    title: "Electromagnetic Propagation",
+    hudTitle: "RADIO SIMULATION SYSTEM",
+    systemStatus: {
+      online: "SYSTEM: ONLINE",
+      ionosphereStable: "IONOSPHERE: STABLE",
+      transmissionActive: "TX STATUS: ACTIVE",
+    },
+    geoInfo: {
+      latitude: "LAT",
+      longitude: "LON",
+      altitude: "ALT",
+    },
+    controls: {
+      title: "MAIN CONSOLE",
+      mode: {
+        hf: "HF (Shortwave)",
+        uv: "UV (Line of Sight)",
+      },
+      frequency: "TX FREQUENCY",
+      elevation: "TX ELEVATION",
+      ionosphereHeight: "IONO HEIGHT",
+    },
+    metrics: {
+      snr: "SNR",
+      ber: "BER",
+    },
+    legend: {
+      title: "SIGNAL DIAGNOSTICS",
+      groundWave: "Ground Wave (Surface)",
+      skyWave: "Sky Wave (Reflection)",
+      scatter: "Secondary Scatter",
+    },
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

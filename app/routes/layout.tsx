@@ -30,6 +30,7 @@ export default function DemosLayout() {
     "moxon-antenna": "demoCards.moxon.title",
     "end-fed-antenna": "demoCards.endFed.title",
     "long-wire-antenna": "demoCards.longWireAntenna.title",
+    "electromagnetic-propagation": "demoCards.electromagneticPropagation.title",
   };
   const toolKeyMap: Record<string, string> = {
     "yagi-calculator": "tools.yagiCalculator.title",

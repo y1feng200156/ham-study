@@ -308,6 +308,12 @@ function RadiationPattern({
     return geo;
   }, [harmonic, isInvertedV, visualScale]);
 
+  useMemo(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
     <mesh geometry={geometry}>
       <meshBasicMaterial

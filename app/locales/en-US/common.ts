@@ -120,6 +120,13 @@ export default {
       keywords:
         "magnet loop, small loop, magnetic dipole, antenna visualization",
     },
+    electromagneticPropagation: {
+      title: "Electromagnetic Propagation",
+      description:
+        "3D visualization of electromagnetic wave propagation in different bands (HF/UV), demonstrating ground wave, sky wave, and ionospheric reflection principles.",
+      keywords:
+        "electromagnetic propagation, ground wave, sky wave, ionosphere hop, hf, uv",
+    },
   },
 
   tools: {

@@ -84,7 +84,7 @@ function HUDBox({
           {title}
         </h3>
         <div className="flex gap-1">
-          {[...Array(3)].map((i) => (
+          {[1, 2, 3].map((i) => (
             <div
               key={`hud-deco-${i}`}
               className="w-1 h-3 bg-cyan-900/50 transform -skew-x-12"
@@ -364,13 +364,19 @@ export default function PropagationApp() {
               {Math.abs(hudData.noise)}
             </div>
             <div className="h-4 w-20 bg-slate-800 overflow-hidden flex items-end gap-[2px]">
-              {[...Array(10)].map((i) => (
-                <div
-                  key={`flow-${i}`}
-                  className="w-1 bg-cyan-600"
-                  style={{ height: `${Math.random() * 100}%` }}
-                ></div>
-              ))}
+              <ClientOnly>
+                {() => (
+                  <>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                      <div
+                        key={`flow-${i}`}
+                        className="w-1 bg-cyan-600"
+                        style={{ height: `${Math.random() * 100}%` }}
+                      ></div>
+                    ))}
+                  </>
+                )}
+              </ClientOnly>
             </div>
           </div>
         </HUDBox>

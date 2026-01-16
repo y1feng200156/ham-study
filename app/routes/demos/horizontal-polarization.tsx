@@ -107,7 +107,7 @@ export default function HorizontalPolarizationPage() {
                 i18nKey="horizontalPolarization.hToH"
                 components={{ strong: <strong /> }}
               />
-              <span className="text-green-600 font-bold dark:text-green-400">
+              <span className="text-green-700 font-bold dark:text-green-400">
                 {" "}
                 {t("circularPolarization.bestMatch")}
               </span>

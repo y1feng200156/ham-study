@@ -144,6 +144,7 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 className="rounded-full w-9 h-9"
+                aria-label="Toggle Menu"
               >
                 <TranslateIcon size={20} weight="duotone" />
               </Button>

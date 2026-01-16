@@ -106,7 +106,7 @@ export default function VerticalPolarizationPage() {
                 i18nKey={`${vp}.vToV`}
                 components={{ strong: <strong /> }}
               />
-              <span className="text-green-600 font-bold dark:text-green-400">
+              <span className="text-green-700 font-bold dark:text-green-400">
                 {" "}
                 {t("circularPolarization.bestMatch")}
               </span>
@@ -137,7 +137,7 @@ export default function VerticalPolarizationPage() {
                 i18nKey={`${vp}.vToC`}
                 components={{ strong: <strong /> }}
               />
-              <span className="text-yellow-600 font-bold dark:text-yellow-400">
+              <span className="text-yellow-700 font-bold dark:text-yellow-400">
                 {" "}
                 {t("circularPolarization.loss3db")}
               </span>

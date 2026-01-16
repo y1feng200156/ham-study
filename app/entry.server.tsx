@@ -71,16 +71,6 @@ export default async function handleRequest(
   });
   // --- 动态注入 CSS 预加载结束 ---
 
-  // 2. 核心优化：设置缓存控制策略 [cite: 80, 81, 84]
-  // 判断是否为静态资源请求。React Router 编译后的 JS/CSS 通常在 /assets/ 目录下 [cite: 60, 188]
-  if (url.pathname.startsWith("/assets/")) {
-    // 针对带哈希的不可变资源，设置长达一年的强缓存 [cite: 84, 89]
-    responseHeaders.set("Cache-Control", "public, max-age=31536000, immutable");
-  } else {
-    // 针对 HTML 页面，要求浏览器每次都向服务器验证，确保内容最新 [cite: 111, 116]
-    responseHeaders.set("Cache-Control", "public, max-age=0, must-revalidate");
-  }
-
   responseHeaders.set("Content-Type", "text/html");
 
   return new Response(body, {

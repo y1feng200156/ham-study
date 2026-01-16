@@ -24,49 +24,49 @@ import type { Route } from "./+types/home";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
-  () => import("~/components/circular-polarization-scene"),
+  () => import("~/components/circular-polarization-scene")
 );
 const EllipticalPolarizationScene = lazy(
-  () => import("~/components/elliptical-polarization-scene"),
+  () => import("~/components/elliptical-polarization-scene")
 );
 const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 const HorizontalPolarizationScene = lazy(
-  () => import("~/components/horizontal-polarization-scene"),
+  () => import("~/components/horizontal-polarization-scene")
 );
 const InvertedVAntennaScene = lazy(
-  () => import("~/components/inverted-v-scene"),
+  () => import("~/components/inverted-v-scene")
 );
 const MoxonAntennaScene = lazy(
-  () => import("~/components/moxon-antenna-scene"),
+  () => import("~/components/moxon-antenna-scene")
 );
 const EndFedAntennaScene = lazy(
-  () => import("~/components/end-fed-antenna-scene"),
+  () => import("~/components/end-fed-antenna-scene")
 );
 const PositiveVAntennaScene = lazy(
-  () => import("~/components/positive-v-scene"),
+  () => import("~/components/positive-v-scene")
 );
 const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 const VerticalPolarizationScene = lazy(
-  () => import("~/components/vertical-polarization-scene"),
+  () => import("~/components/vertical-polarization-scene")
 );
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 const LongWireAntennaScene = lazy(
-  () => import("~/components/long-wire-antenna-scene"),
+  () => import("~/components/long-wire-antenna-scene")
 );
 const DipoleAntennaScene = lazy(
-  () => import("~/components/dipole-antenna-scene"),
+  () => import("~/components/dipole-antenna-scene")
 );
 const WindomAntennaScene = lazy(
-  () => import("~/components/windom-antenna-scene"),
+  () => import("~/components/windom-antenna-scene")
 );
 const HB9CVAntennaScene = lazy(
-  () => import("~/components/hb9cv-antenna-scene"),
+  () => import("~/components/hb9cv-antenna-scene")
 );
 const MagneticLoopAntennaScene = lazy(
-  () => import("~/components/magnetic-loop-antenna-scene"),
+  () => import("~/components/magnetic-loop-antenna-scene")
 );
 const ElectromagneticPropagationScene = lazy(
-  () => import("~/components/electromagnetic-propagation-scene"),
+  () => import("~/components/electromagnetic-propagation-scene")
 );
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
@@ -194,9 +194,7 @@ function DemoCard({ demo, actionText }: DemoCardProps) {
                   <demo.component isThumbnail={true} isHovered={isHovered} />
                 </Suspense>
               ) : (
-                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground/50">...</span>
-                </div>
+                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
               )}
             </ClientOnly>
             <div

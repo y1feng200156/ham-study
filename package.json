@@ -1,7 +1,7 @@
 {
   "name": "ham-study",
   "type": "module",
-  "version": "1.4.13",
+  "version": "1.4.14",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",

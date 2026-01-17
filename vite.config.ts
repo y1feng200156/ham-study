@@ -4,8 +4,11 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import { imagetools } from "vite-imagetools";
+
 export default defineConfig({
   plugins: [
+    imagetools(),
     cloudflare({ viteEnvironment: { name: "ssr" } }),
     tailwindcss(),
     reactRouter(),

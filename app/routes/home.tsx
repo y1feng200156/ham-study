@@ -2,7 +2,6 @@ import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import i18next from "i18next";
 import { lazy, Suspense, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { useInView } from "react-intersection-observer";
 import { Link } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
@@ -113,6 +112,7 @@ interface Demo {
   title: string;
   description: string;
   href: string;
+  image: string;
   component: React.ComponentType<{
     isThumbnail?: boolean;
     isHovered?: boolean;
@@ -158,15 +158,14 @@ interface DemoCardProps {
 
 function DemoCard({ demo, actionText }: DemoCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const { ref, inView } = useInView({
-    triggerOnce: false,
-    threshold: 0.1,
-    rootMargin: "100px 0px", // Preload slightly before appearing
-  });
+  // Keep track if we should load the 3D model. once loaded, keep it?
+  // User requested "mouse over to show animation".
+  // To save resources, we should unload when not hovered, OR we can keep it if we want smoother re-entry.
+  // Given the "Performance Report" context, unloading is safer for LCP/Memory.
+  const shouldLoad3D = isHovered;
 
   return (
     <Card
-      ref={ref}
       className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -179,29 +178,25 @@ function DemoCard({ demo, actionText }: DemoCardProps) {
       </CardHeader>
       <CardContent>
         <LocaleLink to={demo.href} className="flex-1 flex flex-col gap-y-6">
-          <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative">
-            <ClientOnly
-              fallback={
-                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
-              }
-            >
-              {inView ? (
-                <Suspense
-                  fallback={
-                    <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
-                  }
-                >
-                  <demo.component isThumbnail={true} isHovered={isHovered} />
-                </Suspense>
-              ) : (
-                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
-              )}
-            </ClientOnly>
-            <div
-              className={`absolute inset-0 bg-black/5 flex items-center justify-center transition-opacity duration-300 ${
-                isHovered ? "opacity-0" : "opacity-0"
-              }`}
+          <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative isolate">
+            {/* Layer 1 (Bottom): Static Image - Always rendered */}
+            <img
+              src={demo.image}
+              alt={demo.title}
+              className={`w-full z-1 relative h-[200px] object-cover  ${isHovered ? "opacity-0 transition-opacity delay-400 duration-300" : "opacity-100"}`}
+              loading="lazy"
             />
+
+            {/* Layer 2 (Top): 3D Scene - Only if hovered */}
+            {isHovered && (
+              <div className="absolute inset-0 z-0 w-full h-[200px] grid">
+                <ClientOnly fallback={null}>
+                  <Suspense fallback={null}>
+                    <demo.component isThumbnail={true} isHovered={isHovered} />
+                  </Suspense>
+                </ClientOnly>
+              </div>
+            )}
           </div>
         </LocaleLink>
       </CardContent>
@@ -217,12 +212,16 @@ function DemoCard({ demo, actionText }: DemoCardProps) {
 export default function Home() {
   const { t } = useTranslation();
   const demoItems: Demo[] = demosConfig.map((item) => {
+    const imageName = item.href.split("/").pop();
+    const imagePath = `/images/demos/${imageName}.webp`;
+
     switch (item.i18nKey) {
       case "demoCards.vertical":
         return {
           title: t(`${item.i18nKey}.title` as never),
           description: t(`${item.i18nKey}.description` as never),
           href: item.href,
+          image: imagePath,
           component: VerticalPolarizationScene,
         };
       case "demoCards.horizontal":
@@ -230,6 +229,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: HorizontalPolarizationScene,
         };
       case "demoCards.circular":
@@ -237,6 +237,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: CircularPolarizationScene,
         };
       case "demoCards.elliptical":
@@ -244,6 +245,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: EllipticalPolarizationScene,
         };
       case "demoCards.dipoleAntenna":
@@ -251,6 +253,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: DipoleAntennaScene,
         };
       case "demoCards.yagi":
@@ -258,6 +261,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: YagiAntennaScene,
         };
       case "demoCards.invertedV":
@@ -265,6 +269,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: InvertedVAntennaScene,
         };
       case "demoCards.gp":
@@ -272,6 +277,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: GPAntennaScene,
         };
       case "demoCards.positiveV":
@@ -279,6 +285,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: PositiveVAntennaScene,
         };
       case "demoCards.quad":
@@ -286,6 +293,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: QuadAntennaScene,
         };
       case "demoCards.moxon":
@@ -293,6 +301,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: MoxonAntennaScene,
         };
       case "demoCards.endFed":
@@ -300,6 +309,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: EndFedAntennaScene,
         };
       case "demoCards.longWireAntenna":
@@ -307,6 +317,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: LongWireAntennaScene,
         };
       case "demoCards.windomAntenna":
@@ -314,6 +325,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: WindomAntennaScene,
         };
       case "demoCards.hb9cv":
@@ -321,6 +333,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: HB9CVAntennaScene,
         };
       case "demoCards.magneticLoopAntenna":
@@ -328,6 +341,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: MagneticLoopAntennaScene,
         };
       case "demoCards.electromagneticPropagation":
@@ -335,6 +349,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title`),
           description: t(`${item.i18nKey}.description`),
           href: item.href,
+          image: imagePath,
           component: ElectromagneticPropagationScene,
         };
       default:
@@ -342,6 +357,7 @@ export default function Home() {
           title: t(`${item.i18nKey}.title` as never),
           description: t(`${item.i18nKey}.description` as never),
           href: item.href,
+          image: imagePath,
           component: VerticalPolarizationScene,
         };
     }

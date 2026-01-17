@@ -19,6 +19,7 @@ import type { Route } from "./+types/root";
 import "~/app.css";
 import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
+import { useNonce } from "./components/nonce-context";
 
 export const middleware = [i18nextMiddleware];
 
@@ -102,6 +103,8 @@ export function Layout({
   const { i18n } = useTranslation();
   const location = useLocation();
   const origin = loaderData?.origin || "https://ham.charlesify.com";
+  const nonce = useNonce();
+
   return (
     <html lang={i18n.language} dir={i18n.dir(i18n.language)} className="h-full">
       <head>
@@ -127,8 +130,8 @@ export function Layout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <ScrollRestoration />
-        <Scripts />
+        <ScrollRestoration nonce={nonce} />
+        <Scripts nonce={nonce} />
       </body>
     </html>
   );

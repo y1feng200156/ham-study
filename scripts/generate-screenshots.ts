@@ -1,7 +1,7 @@
+import fs from "fs";
+import path from "path";
 import puppeteer from "puppeteer";
 import { demos } from "../app/data/items";
-import path from "path";
-import fs from "fs";
 
 // Use the local dev server
 const BASE_URL = "http://localhost:5173";
@@ -32,7 +32,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
   page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
   page.on("pageerror", (err) =>
-    console.log("PAGE ERROR:", (err as Error).toString())
+    console.log("PAGE ERROR:", (err as Error).toString()),
   );
 
   for (const demo of demos) {

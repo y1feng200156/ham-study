@@ -6,6 +6,7 @@ import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
 import resources from "./locales";
 import { getLocale } from "./middleware/i18next";
+import { NonceProvider } from "./components/nonce-context";
 
 export default async function handleRequest(
   request: Request,
@@ -14,7 +15,7 @@ export default async function handleRequest(
   entryContext: EntryContext,
 ) {
   const userAgent = request.headers.get("user-agent");
-  const url = new URL(request.url);
+  const nonce = crypto.randomUUID();
 
   const instance = createInstance();
   const lng = await getLocale(request);
@@ -34,12 +35,14 @@ export default async function handleRequest(
   });
 
   const body = await renderToReadableStream(
-    <I18nextProvider i18n={instance}>
-      <ServerRouter context={entryContext} url={request.url} />
-    </I18nextProvider>,
+    <NonceProvider value={nonce}>
+      <I18nextProvider i18n={instance}>
+        <ServerRouter context={entryContext} url={request.url} nonce={nonce} />
+      </I18nextProvider>
+    </NonceProvider>,
     {
+      nonce,
       onError(error: unknown) {
-        responseStatusCode = 500;
         responseStatusCode = 500;
         console.error("React Rendering Error:", error);
       },
@@ -72,6 +75,10 @@ export default async function handleRequest(
   // --- 动态注入 CSS 预加载结束 ---
 
   responseHeaders.set("Content-Type", "text/html");
+  responseHeaders.set(
+    "Content-Security-Policy",
+    `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https: data:; connect-src 'self' https:; upgrade-insecure-requests`,
+  );
 
   return new Response(body, {
     headers: responseHeaders,

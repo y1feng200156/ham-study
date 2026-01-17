@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
+import { ImageSizes } from "~/lib/images";
 import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
@@ -190,7 +191,7 @@ const DemoCard = memo(function DemoCard({
                   ? "opacity-0 transition-opacity delay-400 duration-300"
                   : "opacity-100"
               }
-              sizes="(min-width: 64rem) 33vw, (min-width: 48rem) 50vw, 100vw"
+              sizes={ImageSizes.GRID_3_COL}
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : undefined}
             />
@@ -223,7 +224,7 @@ export default function Home() {
     return demosConfig.map((item) => {
       const imageName = item.href.split("/").pop();
       // Pass relative path "demos/filename", let BlurImage resolve it internaly
-      const imageUrl = `demos/${imageName}`;
+      const imageUrl = `images/demos/${imageName}`;
 
       switch (item.i18nKey) {
         case "demoCards.vertical":

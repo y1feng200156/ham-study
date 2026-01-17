@@ -1,12 +1,13 @@
 import { ImageBrokenIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { getImageProps } from "~/lib/images";
 import { cn } from "~/lib/utils";
 
 export interface BlurImageProps
   extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> {
   /**
-   * Image source URL (local or external)
-   * Local: "/images/hero.jpeg"
+   * Image source URL (local path or external)
+   * Local: "demos/vertical" -> resolves to assets
    * External: "https://example.com/image.jpg"
    */
   src: string;
@@ -23,7 +24,7 @@ export interface BlurImageProps
 
   /**
    * Placeholder mode
-   * - "blur": Auto-generate blur placeholder
+   * - "blur": Auto-generate blur placeholder (default if available)
    * - "empty": No placeholder
    * - Custom base64 string: Use provided placeholder
    */
@@ -42,46 +43,8 @@ export interface BlurImageProps
 
 /**
  * BlurImage component with automatic blur placeholder
- * Similar to next/image but works with IPX
+ * Delegates asset resolution to ~/lib/images
  */
-// Import all local images
-// Import all local images
-const mainImages = import.meta.glob<ImageMetadata[]>(
-  "../../assets/images/**/*.{png,jpg,jpeg,webp}",
-  {
-    eager: true,
-    query: { w: "400;800;1200", format: "webp", as: "metadata" },
-  },
-);
-
-interface ImageMetadata {
-  src: string;
-  width: number;
-  height: number;
-  format: string;
-}
-
-const blurImages = import.meta.glob(
-  "../../assets/images/**/*.{png,jpg,jpeg,webp}",
-  {
-    eager: true,
-    query: { w: 20, blur: 5, quality: 10, format: "webp", as: "url" },
-  },
-);
-
-function resolveAsset<T>(glob: Record<string, T>, path: string): T | null {
-  // Try to match the path in the glob keys
-  // path example: "demos/vertical-polarization"
-  // glob keys example: "../../assets/images/demos/vertical-polarization.webp"
-  const key = Object.keys(glob).find(
-    (k) => k.includes(`/${path}.`) || k.includes(`/${path}/`),
-  );
-  if (!key) return null;
-  const mod = glob[key];
-  // @ts-expect-error - Vite module structure
-  return (mod?.default ?? mod) as T;
-}
-
 export function BlurImage({
   src,
   width,
@@ -93,42 +56,21 @@ export function BlurImage({
   sizes = "(max-width: 48rem) 100vw, 860px",
   ...props
 }: BlurImageProps & { sizes?: string }) {
-  // Resolve local assets if src is not a URL
-  const isExternal = src.startsWith("http") || src.startsWith("data:");
-
-  const resolvedData = useMemo(() => {
-    if (isExternal) return src;
-    // Remove leading slash if present for lookup
-    const lookupPath = src.startsWith("/") ? src.slice(1) : src;
-    return resolveAsset(mainImages, lookupPath) || src;
-  }, [src, isExternal]);
-
-  const { mainSrc, srcSet } = useMemo(() => {
-    if (Array.isArray(resolvedData)) {
-      // It's metadata array
-      const sorted = [...resolvedData].sort((a, b) => a.width - b.width);
-      const srcSetString = sorted
-        .map((img) => `${img.src} ${img.width}w`)
-        .join(", ");
-      const fallback = sorted[sorted.length - 1].src; // Use largest as fallback
-      return { mainSrc: fallback, srcSet: srcSetString };
-    }
-    return { mainSrc: resolvedData as string, srcSet: undefined };
-  }, [resolvedData]);
+  // Resolve asset props using the repository helper
+  const {
+    src: mainSrc,
+    srcSet,
+    placeholder: autoPlaceholder,
+  } = useMemo(() => getImageProps(src), [src]);
 
   const resolvedPlaceholder = useMemo(() => {
     if (typeof placeholder === "string" && placeholder !== "empty")
       return placeholder;
-    if (isExternal) return null;
+    if (placeholder === "empty") return undefined;
 
-    // Remove leading slash if present for lookup
-    const lookupPath = src.startsWith("/") ? src.slice(1) : src;
-    // Cast to unknown to match generic constraint or let inference work if I fix definition
-    return resolveAsset(
-      blurImages as Record<string, unknown>,
-      lookupPath,
-    ) as string;
-  }, [src, placeholder, isExternal]);
+    // Default to auto-generated placeholder if available
+    return autoPlaceholder;
+  }, [placeholder, autoPlaceholder]);
 
   const isValidSrc = typeof mainSrc === "string" && mainSrc.length > 0;
   const finalPlaceholder = resolvedPlaceholder;

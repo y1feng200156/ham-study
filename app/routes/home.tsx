@@ -5,6 +5,7 @@ import { initReactI18next, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
+import { BlurImage } from "~/components/ui/blur-image";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,17 +21,6 @@ import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
-
-export const links: Route.LinksFunction = () => {
-  return [
-    {
-      rel: "preload",
-      as: "image",
-      href: "/images/demos/vertical-polarization.webp",
-      fetchPriority: "high",
-    },
-  ];
-};
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
@@ -191,10 +181,16 @@ const DemoCard = memo(function DemoCard({
         <LocaleLink to={demo.href} className="flex-1 flex flex-col gap-y-6">
           <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative isolate">
             {/* Layer 1 (Bottom): Static Image - Always rendered */}
-            <img
+            <BlurImage
               src={demo.image}
               alt={demo.title}
-              className={`w-full z-1 relative h-[200px] object-cover  ${isHovered ? "opacity-0 transition-opacity delay-400 duration-300" : "opacity-100"}`}
+              className="w-full z-1 relative h-[200px]"
+              imgClassName={
+                isHovered
+                  ? "opacity-0 transition-opacity delay-400 duration-300"
+                  : "opacity-100"
+              }
+              sizes="(min-width: 64rem) 33vw, (min-width: 48rem) 50vw, 100vw"
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : undefined}
             />
@@ -226,7 +222,8 @@ export default function Home() {
   const demoItems: Demo[] = useMemo(() => {
     return demosConfig.map((item) => {
       const imageName = item.href.split("/").pop();
-      const imagePath = `/images/demos/${imageName}.webp`;
+      // Pass relative path "demos/filename", let BlurImage resolve it internaly
+      const imageUrl = `demos/${imageName}`;
 
       switch (item.i18nKey) {
         case "demoCards.vertical":
@@ -234,7 +231,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title` as never),
             description: t(`${item.i18nKey}.description` as never),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: VerticalPolarizationScene,
           };
         case "demoCards.horizontal":
@@ -242,7 +239,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: HorizontalPolarizationScene,
           };
         case "demoCards.circular":
@@ -250,7 +247,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: CircularPolarizationScene,
           };
         case "demoCards.elliptical":
@@ -258,7 +255,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: EllipticalPolarizationScene,
           };
         case "demoCards.dipoleAntenna":
@@ -266,7 +263,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: DipoleAntennaScene,
           };
         case "demoCards.yagi":
@@ -274,7 +271,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: YagiAntennaScene,
           };
         case "demoCards.invertedV":
@@ -282,7 +279,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: InvertedVAntennaScene,
           };
         case "demoCards.gp":
@@ -290,7 +287,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: GPAntennaScene,
           };
         case "demoCards.positiveV":
@@ -298,7 +295,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: PositiveVAntennaScene,
           };
         case "demoCards.quad":
@@ -306,7 +303,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: QuadAntennaScene,
           };
         case "demoCards.moxon":
@@ -314,7 +311,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: MoxonAntennaScene,
           };
         case "demoCards.endFed":
@@ -322,7 +319,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: EndFedAntennaScene,
           };
         case "demoCards.longWireAntenna":
@@ -330,7 +327,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: LongWireAntennaScene,
           };
         case "demoCards.windomAntenna":
@@ -338,7 +335,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: WindomAntennaScene,
           };
         case "demoCards.hb9cv":
@@ -346,7 +343,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: HB9CVAntennaScene,
           };
         case "demoCards.magneticLoopAntenna":
@@ -354,7 +351,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: MagneticLoopAntennaScene,
           };
         case "demoCards.electromagneticPropagation":
@@ -362,7 +359,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title`),
             description: t(`${item.i18nKey}.description`),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: ElectromagneticPropagationScene,
           };
         default:
@@ -370,7 +367,7 @@ export default function Home() {
             title: t(`${item.i18nKey}.title` as never),
             description: t(`${item.i18nKey}.description` as never),
             href: item.href,
-            image: imagePath,
+            image: imageUrl,
             component: VerticalPolarizationScene,
           };
       }

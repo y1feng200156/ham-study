@@ -1,6 +1,6 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import i18next from "i18next";
-import { lazy, Suspense, useState } from "react";
+import { lazy, memo, Suspense, useMemo, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { ClientOnly } from "~/components/client-only";
@@ -20,6 +20,17 @@ import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
+
+export const links: Route.LinksFunction = () => {
+  return [
+    {
+      rel: "preload",
+      as: "image",
+      href: "/images/demos/vertical-polarization.webp",
+      fetchPriority: "high",
+    },
+  ];
+};
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
@@ -154,15 +165,15 @@ function ToolCard({ tool, actionText }: { tool: Tool; actionText: string }) {
 interface DemoCardProps {
   demo: Demo;
   actionText: string;
+  priority?: boolean;
 }
 
-function DemoCard({ demo, actionText }: DemoCardProps) {
+const DemoCard = memo(function DemoCard({
+  demo,
+  actionText,
+  priority = false,
+}: DemoCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  // Keep track if we should load the 3D model. once loaded, keep it?
-  // User requested "mouse over to show animation".
-  // To save resources, we should unload when not hovered, OR we can keep it if we want smoother re-entry.
-  // Given the "Performance Report" context, unloading is safer for LCP/Memory.
-  const shouldLoad3D = isHovered;
 
   return (
     <Card
@@ -184,7 +195,8 @@ function DemoCard({ demo, actionText }: DemoCardProps) {
               src={demo.image}
               alt={demo.title}
               className={`w-full z-1 relative h-[200px] object-cover  ${isHovered ? "opacity-0 transition-opacity delay-400 duration-300" : "opacity-100"}`}
-              loading="lazy"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : undefined}
             />
 
             {/* Layer 2 (Top): 3D Scene - Only if hovered */}
@@ -207,199 +219,203 @@ function DemoCard({ demo, actionText }: DemoCardProps) {
       </CardFooter>
     </Card>
   );
-}
+});
 
 export default function Home() {
   const { t } = useTranslation();
-  const demoItems: Demo[] = demosConfig.map((item) => {
-    const imageName = item.href.split("/").pop();
-    const imagePath = `/images/demos/${imageName}.webp`;
+  const demoItems: Demo[] = useMemo(() => {
+    return demosConfig.map((item) => {
+      const imageName = item.href.split("/").pop();
+      const imagePath = `/images/demos/${imageName}.webp`;
 
-    switch (item.i18nKey) {
-      case "demoCards.vertical":
-        return {
-          title: t(`${item.i18nKey}.title` as never),
-          description: t(`${item.i18nKey}.description` as never),
-          href: item.href,
-          image: imagePath,
-          component: VerticalPolarizationScene,
-        };
-      case "demoCards.horizontal":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: HorizontalPolarizationScene,
-        };
-      case "demoCards.circular":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: CircularPolarizationScene,
-        };
-      case "demoCards.elliptical":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: EllipticalPolarizationScene,
-        };
-      case "demoCards.dipoleAntenna":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: DipoleAntennaScene,
-        };
-      case "demoCards.yagi":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: YagiAntennaScene,
-        };
-      case "demoCards.invertedV":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: InvertedVAntennaScene,
-        };
-      case "demoCards.gp":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: GPAntennaScene,
-        };
-      case "demoCards.positiveV":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: PositiveVAntennaScene,
-        };
-      case "demoCards.quad":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: QuadAntennaScene,
-        };
-      case "demoCards.moxon":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: MoxonAntennaScene,
-        };
-      case "demoCards.endFed":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: EndFedAntennaScene,
-        };
-      case "demoCards.longWireAntenna":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: LongWireAntennaScene,
-        };
-      case "demoCards.windomAntenna":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: WindomAntennaScene,
-        };
-      case "demoCards.hb9cv":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: HB9CVAntennaScene,
-        };
-      case "demoCards.magneticLoopAntenna":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: MagneticLoopAntennaScene,
-        };
-      case "demoCards.electromagneticPropagation":
-        return {
-          title: t(`${item.i18nKey}.title`),
-          description: t(`${item.i18nKey}.description`),
-          href: item.href,
-          image: imagePath,
-          component: ElectromagneticPropagationScene,
-        };
-      default:
-        return {
-          title: t(`${item.i18nKey}.title` as never),
-          description: t(`${item.i18nKey}.description` as never),
-          href: item.href,
-          image: imagePath,
-          component: VerticalPolarizationScene,
-        };
-    }
-  });
+      switch (item.i18nKey) {
+        case "demoCards.vertical":
+          return {
+            title: t(`${item.i18nKey}.title` as never),
+            description: t(`${item.i18nKey}.description` as never),
+            href: item.href,
+            image: imagePath,
+            component: VerticalPolarizationScene,
+          };
+        case "demoCards.horizontal":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: HorizontalPolarizationScene,
+          };
+        case "demoCards.circular":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: CircularPolarizationScene,
+          };
+        case "demoCards.elliptical":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: EllipticalPolarizationScene,
+          };
+        case "demoCards.dipoleAntenna":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: DipoleAntennaScene,
+          };
+        case "demoCards.yagi":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: YagiAntennaScene,
+          };
+        case "demoCards.invertedV":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: InvertedVAntennaScene,
+          };
+        case "demoCards.gp":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: GPAntennaScene,
+          };
+        case "demoCards.positiveV":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: PositiveVAntennaScene,
+          };
+        case "demoCards.quad":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: QuadAntennaScene,
+          };
+        case "demoCards.moxon":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: MoxonAntennaScene,
+          };
+        case "demoCards.endFed":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: EndFedAntennaScene,
+          };
+        case "demoCards.longWireAntenna":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: LongWireAntennaScene,
+          };
+        case "demoCards.windomAntenna":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: WindomAntennaScene,
+          };
+        case "demoCards.hb9cv":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: HB9CVAntennaScene,
+          };
+        case "demoCards.magneticLoopAntenna":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: MagneticLoopAntennaScene,
+          };
+        case "demoCards.electromagneticPropagation":
+          return {
+            title: t(`${item.i18nKey}.title`),
+            description: t(`${item.i18nKey}.description`),
+            href: item.href,
+            image: imagePath,
+            component: ElectromagneticPropagationScene,
+          };
+        default:
+          return {
+            title: t(`${item.i18nKey}.title` as never),
+            description: t(`${item.i18nKey}.description` as never),
+            href: item.href,
+            image: imagePath,
+            component: VerticalPolarizationScene,
+          };
+      }
+    });
+  }, [t]);
 
-  const toolItems: Tool[] = toolsConfig.map((item) => {
-    switch (item.i18nKey) {
-      case "tools.yagiCalculator":
-        return {
-          title: t(`${item.i18nKey}.title` as never),
-          description: t(`${item.i18nKey}.description` as never),
-          href: item.href,
-          preview: (
-            <YagiSvgRenderer
-              design={calculateYagi({
-                frequency: 435.0,
-                elementCount: 5,
-                elementDiameter: 4.0,
-                boomDiameter: 20.0,
-                boomShape: "round",
-                mountMethod: "bonded",
-                feedGap: 10,
-                drivenElementType: "folded",
-                spacingType: "dl6wu",
-                manualSpacing: 0,
-                manualBCFactor: 0.7,
-              })}
-              width={600}
-              height={350}
-              minimal={true}
-            />
-          ),
-        };
-      default:
-        return {
-          title: t(`${item.i18nKey}.title` as never),
-          description: t(`${item.i18nKey}.description` as never),
-          href: item.href,
-          preview: null,
-        };
-    }
-  });
+  const toolItems: Tool[] = useMemo(() => {
+    return toolsConfig.map((item) => {
+      switch (item.i18nKey) {
+        case "tools.yagiCalculator":
+          return {
+            title: t(`${item.i18nKey}.title` as never),
+            description: t(`${item.i18nKey}.description` as never),
+            href: item.href,
+            preview: (
+              <YagiSvgRenderer
+                design={calculateYagi({
+                  frequency: 435.0,
+                  elementCount: 5,
+                  elementDiameter: 4.0,
+                  boomDiameter: 20.0,
+                  boomShape: "round",
+                  mountMethod: "bonded",
+                  feedGap: 10,
+                  drivenElementType: "folded",
+                  spacingType: "dl6wu",
+                  manualSpacing: 0,
+                  manualBCFactor: 0.7,
+                })}
+                width={600}
+                height={350}
+                minimal={true}
+              />
+            ),
+          };
+        default:
+          return {
+            title: t(`${item.i18nKey}.title` as never),
+            description: t(`${item.i18nKey}.description` as never),
+            href: item.href,
+            preview: null,
+          };
+      }
+    });
+  }, [t]);
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-6">
@@ -422,11 +438,12 @@ export default function Home() {
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {demoItems.map((demo) => (
+        {demoItems.map((demo, index) => (
           <DemoCard
             key={demo.href}
             demo={demo}
             actionText={t("actions.viewDemo")}
+            priority={index === 0}
           />
         ))}
       </div>

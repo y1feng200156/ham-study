@@ -21,7 +21,7 @@ const blurImages = import.meta.glob(
   "../assets/images/**/*.{png,jpg,jpeg,webp}",
   {
     eager: true,
-    query: { w: 20, blur: 2, quality: 60, format: "webp", inline: "" },
+    query: { w: 20, blur: 2, format: "png", inline: "" },
     import: "default",
   },
 );

@@ -57,21 +57,24 @@ export default async function handleRequest(
   // 动态注入 CSS 预加载
   const routes = entryContext.manifest.routes;
 
-  Object.values(routes).forEach((route: any) => {
-    if (route.imports) {
-      route.imports.forEach((file: string) => {
-        if (file.endsWith(".css")) {
+  Object.values(routes).forEach(
+    (route: { imports?: string[]; css?: string[] } | undefined) => {
+      if (!route) return;
+      if (route.imports) {
+        route.imports.forEach((file: string) => {
+          if (file.endsWith(".css")) {
+            responseHeaders.append("Link", `<${file}>; rel=preload; as=style`);
+          }
+        });
+      }
+      // 也要检查路由本身定义的 css 文件
+      if (route.css) {
+        route.css.forEach((file: string) => {
           responseHeaders.append("Link", `<${file}>; rel=preload; as=style`);
-        }
-      });
-    }
-    // 也要检查路由本身定义的 css 文件
-    if (route.css) {
-      route.css.forEach((file: string) => {
-        responseHeaders.append("Link", `<${file}>; rel=preload; as=style`);
-      });
-    }
-  });
+        });
+      }
+    },
+  );
   // --- 动态注入 CSS 预加载结束 ---
 
   responseHeaders.set("Content-Type", "text/html");

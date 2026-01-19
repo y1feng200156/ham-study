@@ -34,7 +34,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
   page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
   page.on("pageerror", (err) =>
-    console.log("PAGE ERROR:", (err as Error).toString())
+    console.log("PAGE ERROR:", (err as Error).toString()),
   );
 
   for (const demo of demos) {

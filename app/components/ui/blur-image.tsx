@@ -75,6 +75,8 @@ export function BlurImage({
   const isValidSrc = typeof mainSrc === "string" && mainSrc.length > 0;
   const finalPlaceholder = resolvedPlaceholder;
 
+  // console.log("[BlurImage] Render:", { src, mainSrc, finalPlaceholder });
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -137,16 +139,16 @@ export function BlurImage({
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
-      {/* Placeholder (blur) */}
+      {/* Placeholder (Base64) */}
       {finalPlaceholder && !error && isValidSrc && (
         <img
           src={finalPlaceholder}
-          alt={alt || ""}
+          alt={alt}
           className={cn(
             "absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-in-out",
             isLoaded ? "opacity-0" : "opacity-100",
           )}
-          onError={handleError}
+          loading="eager"
           aria-hidden="true"
         />
       )}

@@ -224,7 +224,7 @@ export default function Home() {
     return demosConfig.map((item) => {
       const imageName = item.href.split("/").pop();
       // Pass relative path "demos/filename", let BlurImage resolve it internaly
-      const imageUrl = `images/demos/${imageName}`;
+      const imageUrl = `images/demos/${imageName}.webp`;
 
       switch (item.i18nKey) {
         case "demoCards.vertical":

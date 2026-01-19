@@ -13,16 +13,17 @@ const demoImages = import.meta.glob<ImageMetadata[]>(
   {
     eager: true,
     query: { w: "400;800;1200", format: "webp", as: "metadata" },
-  }
+  },
 );
 
+// 2. Placeholder Configuration (Unified low-quality blur)
 // 2. Placeholder Configuration (Unified low-quality blur)
 const blurImages = import.meta.glob(
   "../assets/images/**/*.{png,jpg,jpeg,webp}",
   {
     eager: true,
-    query: { w: 20, blur: 5, quality: 10, format: "webp", as: "url" },
-  }
+    query: { w: 20, blur: 2, quality: 100, format: "webp", as: "base64" },
+  },
 );
 
 // Helper: Normalize path to match glob keys

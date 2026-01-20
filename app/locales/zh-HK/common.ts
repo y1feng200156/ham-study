@@ -2,22 +2,18 @@ export default {
   title: "業餘無線電可視化",
   description:
     "歡迎來到業餘無線電可視化實驗室。這裏匯集了各種經典天線和電磁波極化的 3D 仿真演示。通過交互式的 3D 場景，您可以直觀地探索天線原理與電波傳播特性，深入理解無線電通信背後的物理機制。",
-
   nav: {
     home: "首頁",
     back: "返回",
   },
-
   actions: {
     viewDemo: "查看演示",
     openTool: "打開工具",
     github: "GitHub 倉庫",
   },
-
   sections: {
     tools: "實用工具",
   },
-
   demoCards: {
     vertical: {
       title: "垂直極化 (Vertical Polarization)",
@@ -116,7 +112,6 @@ export default {
         "電磁波傳播, 地波, 天波, 電離層反射, electromagnetic propagation",
     },
   },
-
   tools: {
     yagiCalculator: {
       title: "八木天線計算器 (Yagi Calculator)",
@@ -126,7 +121,6 @@ export default {
         "八木計算器, 天線設計, DL6WU, VK5DJ, yagi calculator, antenna design",
     },
   },
-
   footer: {
     feedback: {
       title: "有想法或建議？",
@@ -137,7 +131,6 @@ export default {
     copyright: "© {{year}} BG8ROM. All rights reserved.",
     credits: "特別感謝",
   },
-
   meta: {
     siteName: "業餘無線電可視化",
     keywords:

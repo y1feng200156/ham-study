@@ -40,15 +40,10 @@ chokidar
 
 // 2. 调度逻辑 (带防抖的队列)
 function triggerTranslation(filePath) {
-  // 如果任务已经在队列中，不用重复添加
   if (!jobQueue.includes(filePath)) {
     jobQueue.push(filePath);
   }
-
-  // 防抖：重置计时器
   if (debounceTimer) clearTimeout(debounceTimer);
-
-  // 延迟 500ms 后开始处理队列
   debounceTimer = setTimeout(() => {
     processQueue();
   }, 500);
@@ -56,11 +51,11 @@ function triggerTranslation(filePath) {
 
 // 3. 队列处理逻辑
 async function processQueue() {
-  if (isProcessing) return; // 如果正在处理，等它处理完会自动调用 processQueue
-  if (jobQueue.length === 0) return; // 队列空了
+  if (isProcessing) return;
+  if (jobQueue.length === 0) return;
 
   isProcessing = true;
-  const currentFile = jobQueue.shift(); // 取出第一个任务
+  const currentFile = jobQueue.shift();
 
   try {
     await executeTranslation(currentFile);
@@ -68,14 +63,12 @@ async function processQueue() {
     console.error(`❌ Error processing ${currentFile}:`, err);
   } finally {
     isProcessing = false;
-    // 继续处理下一个
     processQueue();
   }
 }
 
 // 4. 单个文件执行逻辑
 async function executeTranslation(srcPath) {
-  // 计算目标路径: app/locales/zh/xxx.ts -> app/locales/zh-HK/xxx.ts
   const destPath = srcPath.replace("/zh/", "/zh-HK/");
   const basename = path.basename(srcPath, path.extname(srcPath));
 
@@ -84,58 +77,62 @@ async function executeTranslation(srcPath) {
   try {
     const content = fs.readFileSync(srcPath, "utf-8");
 
-    // 提取 export default { ... } 中的对象部分
-    // 假设文件格式比较规范，包含 export default { ... }
-    const startIndex = content.indexOf("export default");
-    if (startIndex === -1) {
-      throw new Error("Could not find 'export default' in source file");
+    // 动态构建替换字典
+    const fileSpecificDict = { ...CUSTOM_DICT };
+
+    // 1. 针对 common.ts 的 import 移除
+    // 如果文件中包含该 import，则替换为空
+    const importStr = 'import type { ResourceLanguage } from "i18next";';
+    if (content.includes(importStr)) {
+      fileSpecificDict[importStr] = "";
     }
 
-    // 找到 default 后的第一个 {
-    const openBraceIndex = content.indexOf("{", startIndex);
-    // 找到最后一个 }
-    const closeBraceIndex = content.lastIndexOf("}");
+    // 2. 针对 satisfies 的处理
+    // 能够处理常见的几种 satisfies 结尾
+    // 注意：如果有其他形式，需要在这里添加
+    const knownSatisfies = [
+      `} satisfies ResourceLanguage["common"];`,
+      `} satisfies Record<string, unknown>;`,
+    ];
 
-    if (
-      openBraceIndex === -1 ||
-      closeBraceIndex === -1 ||
-      closeBraceIndex <= openBraceIndex
-    ) {
-      throw new Error("Could not parse object literal from source file");
+    for (const s of knownSatisfies) {
+      if (content.includes(s)) {
+        // 关键点：将原始的 satisfies 替换为带动态 basename 的格式
+        fileSpecificDict[s] =
+          `} satisfies typeof import("~/locales/zh/${basename}").default;`;
+      }
     }
 
-    const objectLiteral = content.substring(
-      openBraceIndex,
-      closeBraceIndex + 1,
-    );
+    // 调用 API，传入特定字典
+    // 这里使用 PreReplace，意味着这些替换会在繁化姬处理“转换”之前就执行
+    // 这样 'import ...' 就会被删掉，'satisfies ...' 会变成最终的代码
+    // 繁化姬通常不会去翻译看起来像代码的英文，所以这样是安全的
+    const convertedText = await convertWithFanhuaji(content, fileSpecificDict);
 
-    // --- 调用 API ---
-    // 只翻译对象部分，保持代码结构纯净
-    const convertedObject = await convertWithFanhuaji(objectLiteral);
-    // ---------------
+    // 简单清理多余空行（Fanhuaji 有时会因为移除内容留下空行）
+    const finalContent = convertedText.replace(/^\s*[\r\n]/gm, "");
 
-    // 构造新的文件内容 (对应用户的要求: satisfies typeof import(...))
-    // 注意：这里我们假设不需要额外的头部 import，因为 typeof import(...) 是动态引入
-    // 如果原文件有头部 import 且被对象内部引用了（比较少见），这里可能会有问题，但在当前 locales 场景下通常是纯数据
-    const newContent = `export default ${convertedObject} satisfies typeof import("~/locales/zh/${basename}").default;\n`;
-
-    // 确保目标目录存在
+    // 确保目录存在并写入
     const destDir = path.dirname(destPath);
     if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
     }
 
-    fs.writeFileSync(destPath, newContent);
+    fs.writeFileSync(destPath, finalContent);
     console.log(`✅ Saved: ${destPath}`);
   } catch (err) {
-    throw err; // 抛出给 processQueue 处理
+    throw err;
   }
 }
 
 // API 请求函数
-async function convertWithFanhuaji(content) {
-  // 生成 "视频号=影音號\n智能手机=智慧型手機" 这样的字符串
-  const replaceStr = buildReplaceString(CUSTOM_DICT);
+async function convertWithFanhuaji(content, replaceDict) {
+  if (!content) return "";
+
+  // 构建替换字符串 "A=B\nC=D"
+  const replaceStr = Object.entries(replaceDict)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
 
   const response = await fetch("https://api.zhconvert.org/convert", {
     method: "POST",
@@ -150,11 +147,4 @@ async function convertWithFanhuaji(content) {
   const data = await response.json();
   if (data.code !== 0) throw new Error(data.msg);
   return data.data.text;
-}
-
-// 辅助函数
-function buildReplaceString(dict) {
-  return Object.entries(dict)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("\n");
 }

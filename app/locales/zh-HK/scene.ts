@@ -144,7 +144,6 @@ export default {
     loop: "主環 (Main Loop)",
     capacitor: "調諧電容 (Capacitor)",
     pattern: "輻射方向圖 (軸向零點)",
-
     strength: "電場強度",
   },
 } satisfies typeof import("~/locales/zh/scene").default;

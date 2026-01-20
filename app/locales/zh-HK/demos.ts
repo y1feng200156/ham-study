@@ -5,7 +5,6 @@ export default {
   polarizationMatch: "極化匹配與損耗 (Polarization Match & Loss)",
   polarizationTitle: "極化特性與應用",
   physicsValidation: "物理原理驗證 (Physics Validation)",
-
   circularPolarization: {
     metaTitle: "圓極化 (Circular Polarization) | 業餘無線電可視化",
     metaDescription: "3D演示圓極化電波的傳播特性，包括右旋(RHCP)和左旋(LHCP)。",
@@ -35,7 +34,6 @@ export default {
     physicsQuote:
       '"The axial mode of radiation... maximum radiation is along the helix axis... The polarization is circularly polarized."',
   },
-
   ellipticalPolarization: {
     metaTitle: "橢圓極化 (Elliptical Polarization) | 業餘無線電可視化",
     metaDescription: "3D演示極化的一般形式——橢圓極化，介於線極化和圓極化之間。",
@@ -58,7 +56,6 @@ export default {
     physicsQuote:
       '"In the general case, the trace of the tip of the electric field vector... forms an ellipse... The ratio of the major axis to the minor axis is called the Axial Ratio."',
   },
-
   verticalPolarization: {
     metaTitle: "垂直極化 (Vertical Polarization) | 業餘無線電可視化",
     metaDescription: "3D演示垂直極化偶極子天線的電場傳播與極化匹配原理。",
@@ -89,7 +86,6 @@ export default {
     physicsQuote:
       '"The radiation pattern of a vertical dipole is omnidirectional in the horizontal plane... The E-field lines are vertical, parallel to the dipole axis."',
   },
-
   horizontalPolarization: {
     metaTitle: "水平極化 (Horizontal Polarization) | 業餘無線電可視化",
     metaDescription: "3D演示水平極化偶極子天線的電場傳播與極化匹配原理。",
@@ -114,7 +110,6 @@ export default {
     physicsQuote:
       '"Horizontally polarized antennas are less susceptible to man-made noise... The ground reflection factor reinforces the signal at certain takeoff angles."',
   },
-
   dipoleAntenna: {
     metaTitle: "偶極子天線 (Dipole Antenna) | 業餘無線電可視化",
     metaDescription: "3D演示偶極子天線結構、駐波原理及輻射方向圖。",
@@ -162,7 +157,6 @@ export default {
     physicsQuote:
       '"The current distribution on the antenna... is assumed to be sinusoidal... This approximation is quite accurate for thin dipoles."',
   },
-
   gpAntenna: {
     metaTitle: "GP天線 (Ground Plane Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -208,7 +202,6 @@ export default {
     physicsQuote:
       '"The monopole above a ground plane creates an image current... The combination of the actual source and the image current produces the same fields as a dipole in the upper hemisphere."',
   },
-
   invertedVAntenna: {
     metaTitle: "倒V天線 (Inverted V Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -253,7 +246,6 @@ export default {
     physicsQuote:
       '"Dropping the ends of the dipole to form an Inverted-V lowers the resonant frequency and the feed-point impedance... somewhat more omnidirectional than a horizontal dipole."',
   },
-
   moxonAntenna: {
     metaTitle: "莫克森天線 (Moxon Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -317,7 +309,6 @@ export default {
       ],
     },
   },
-
   positiveVAntenna: {
     metaTitle: "正V天線 (Positive V Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -336,7 +327,6 @@ export default {
       "正V天線 (Positive-V) 將高電壓點（天線末端）抬高並遠離地面或屋頂結構。這顯著減少了由周圍物體引起的電容效應和介質損耗，從而保持了較高的輻射效率。同時，V形結構會輕微改變遠場輻射方向圖，使'8字形'凹陷變淺。",
     physicsQuote:
       '"Raising the ends of the dipole in a V-shape keeps the high-voltage points away from lossy structures... minimizing ground losses."',
-
     // New Content
     theoryAnalysis: "理論分析",
     theoryContent:
@@ -369,7 +359,6 @@ export default {
       ],
     },
   },
-
   quadAntenna: {
     metaTitle: "方框天線 (Quad Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -419,7 +408,6 @@ export default {
     physicsQuote:
       '"The closed-loop configuration of the Quad antenna results in a lower Q and wider bandwidth... and is less susceptible to static noise."',
   },
-
   yagiAntenna: {
     metaTitle: "八木-宇田天線 (Yagi-Uda Antenna) | 業餘無線電可視化",
     metaDescription:
@@ -478,7 +466,6 @@ export default {
       ],
     },
   },
-
   endFedAntenna: {
     metaTitle: "端饋半波天線 (End-Fed Half Wave) | 業餘無線電可視化",
     metaDescription:
@@ -512,7 +499,6 @@ export default {
     commonMode:
       "<strong>共模電流風險:</strong> 同軸電纜的屏蔽層通常充當了地網 (Counterpoise)。強烈建議加裝共模扼流圈 (Choke) 以防止射頻干擾 (RFI) 回流到電台。",
   },
-
   longWireAntenna: {
     metaTitle: "長線天線 (Long Wire Antenna) | 業餘無線電可視化",
     metaDescription: "3D演示長線天線的多瓣輻射特性，展示長度與方向性的關係。",
@@ -540,7 +526,6 @@ export default {
     theoryResult:
       "由於 <M>n=5</M> 是奇數，當 <M>\\theta = 90^\\circ</M> 時，項 <M>\\cos(\\frac{5\\pi}{2} \\cos \\theta)</M> 變為 <M>\\cos(0) = 1</M>。這解釋了為甚麼會存在垂直於導線的寬邊波瓣，這是奇次諧波駐波天線的一個顯著特徵。",
   },
-
   windomAntenna: {
     metaTitle: "溫頓天線 (Windom Antenna) | 業餘無線電可視化",
     metaDescription:

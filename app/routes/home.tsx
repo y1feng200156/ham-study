@@ -1,11 +1,18 @@
-import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
+import {
+  ArrowClockwiseIcon,
+  CalculatorIcon,
+  GithubLogoIcon,
+  HouseIcon,
+  WarningIcon,
+} from "@phosphor-icons/react";
 import i18next from "i18next";
-import { lazy, memo, Suspense, useMemo, useState } from "react";
+import { Suspense, memo, useEffect, useMemo, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, isRouteErrorResponse, useRouteError } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { BlurImage } from "~/components/ui/blur-image";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,11 +25,11 @@ import {
 } from "~/components/ui/card";
 import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
 import { ImageSizes } from "~/lib/images";
+import { lazyWithRetry } from "~/lib/lazy-retry";
 import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
-import { lazyWithRetry } from "~/lib/lazy-retry";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazyWithRetry(
@@ -95,6 +102,7 @@ const ElectromagneticPropagationScene = lazyWithRetry(
 );
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
+  if (!loaderData) return [];
   const { title, description, keywords } = loaderData;
   return [
     { title },
@@ -506,6 +514,84 @@ export default function Home() {
           }),
         }}
       />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  // const location = useLocation(); // Unused
+
+  // Core logic: Detect chunk loading failure
+  useEffect(() => {
+    if (error instanceof Error) {
+      // Match common chunk loading error messages
+      const isChunkError =
+        error.message.includes("Loading chunk") ||
+        error.message.includes("Importing a module script failed") ||
+        error.message.includes("Failed to fetch dynamically imported module") ||
+        error.name === "ChunkLoadError";
+
+      if (isChunkError) {
+        console.error("Chunk load failed, reloading page...", error);
+        // Use replace to avoid destroying browser history stack
+        // window.location.reload() forces browser to fetch latest index.html from server
+        window.location.reload();
+      }
+    }
+  }, [error]);
+
+  // If chunk error, the effect above will trigger refresh
+  // Render a simple Loading state to prevent user from seeing error flash
+  if (error instanceof Error && error.message.includes("Loading chunk")) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-background">
+        <div className="animate-spin text-primary">
+          <ArrowClockwiseIcon size={32} />
+        </div>
+        <p className="text-muted-foreground">Updating application...</p>
+      </div>
+    );
+  }
+
+  // Common UI State
+  let title = "Something went wrong";
+  let description = "We encountered an unexpected error.";
+  let details = null;
+
+  if (isRouteErrorResponse(error)) {
+    title = `${error.status} ${error.statusText}`;
+    description =
+      error.data ||
+      "The page you're looking for doesn't exist or an error occurred.";
+  } else if (error instanceof Error) {
+    title = error.name || "Error";
+    description = error.message;
+    details = error.stack;
+  } else {
+    details = String(error);
+  }
+
+  return (
+    <div className="container mx-auto flex min-h-[600px] flex-col items-center justify-center gap-6 px-4 py-16">
+      <Alert variant="destructive" className="max-w-2xl">
+        <WarningIcon />
+        <AlertTitle>{title}</AlertTitle>
+        <AlertDescription className="mt-2">{description}</AlertDescription>
+      </Alert>
+
+      <div className="flex gap-4">
+        <Button variant="outline" asChild>
+          <Link to="/" className="gap-2">
+            <HouseIcon size={18} />
+            Back Home
+          </Link>
+        </Button>
+        <Button onClick={() => window.location.reload()} className="gap-2">
+          <ArrowClockwiseIcon size={18} />
+          Try Again
+        </Button>
+      </div>
     </div>
   );
 }

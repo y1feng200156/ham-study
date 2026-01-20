@@ -1,11 +1,14 @@
 import { type ComponentType, type LazyExoticComponent, lazy } from "react";
 
+// biome-ignore lint/suspicious/noExplicitAny: React requires ComponentType<any> for lazy loading compatibility
+type AnyComponent = ComponentType<any>;
+
 /**
  * 带有重试机制的 lazy 函数
  * @param importer - import() 函数
  * @param name - 组件名称（用于调试日志）
  */
-export function lazyWithRetry<T extends ComponentType<unknown>>(
+export function lazyWithRetry<T extends AnyComponent>(
   importer: () => Promise<{ default: T }>,
   name = "Component",
 ): LazyExoticComponent<T> {

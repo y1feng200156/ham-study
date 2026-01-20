@@ -22,52 +22,76 @@ import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
+import { lazyWithRetry } from "~/lib/lazy-retry";
 
 // Lazy load heavy 3D components
-const CircularPolarizationScene = lazy(
+const CircularPolarizationScene = lazyWithRetry(
   () => import("~/components/circular-polarization-scene"),
+  "CircularPolarizationScene",
 );
-const EllipticalPolarizationScene = lazy(
+const EllipticalPolarizationScene = lazyWithRetry(
   () => import("~/components/elliptical-polarization-scene"),
+  "EllipticalPolarizationScene",
 );
-const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
-const HorizontalPolarizationScene = lazy(
+const GPAntennaScene = lazyWithRetry(
+  () => import("~/components/gp-antenna-scene"),
+  "GPAntennaScene",
+);
+const HorizontalPolarizationScene = lazyWithRetry(
   () => import("~/components/horizontal-polarization-scene"),
+  "HorizontalPolarizationScene",
 );
-const InvertedVAntennaScene = lazy(
+const InvertedVAntennaScene = lazyWithRetry(
   () => import("~/components/inverted-v-scene"),
+  "InvertedVAntennaScene",
 );
-const MoxonAntennaScene = lazy(
+const MoxonAntennaScene = lazyWithRetry(
   () => import("~/components/moxon-antenna-scene"),
+  "MoxonAntennaScene",
 );
-const EndFedAntennaScene = lazy(
+const EndFedAntennaScene = lazyWithRetry(
   () => import("~/components/end-fed-antenna-scene"),
+  "EndFedAntennaScene",
 );
-const PositiveVAntennaScene = lazy(
+const PositiveVAntennaScene = lazyWithRetry(
   () => import("~/components/positive-v-scene"),
+  "PositiveVAntennaScene",
 );
-const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
-const VerticalPolarizationScene = lazy(
+const QuadAntennaScene = lazyWithRetry(
+  () => import("~/components/quad-antenna-scene"),
+  "QuadAntennaScene",
+);
+const VerticalPolarizationScene = lazyWithRetry(
   () => import("~/components/vertical-polarization-scene"),
+  "VerticalPolarizationScene",
 );
-const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
-const LongWireAntennaScene = lazy(
+const YagiAntennaScene = lazyWithRetry(
+  () => import("~/components/yagi-antenna-scene"),
+  "YagiAntennaScene",
+);
+const LongWireAntennaScene = lazyWithRetry(
   () => import("~/components/long-wire-antenna-scene"),
+  "LongWireAntennaScene",
 );
-const DipoleAntennaScene = lazy(
+const DipoleAntennaScene = lazyWithRetry(
   () => import("~/components/dipole-antenna-scene"),
+  "DipoleAntennaScene",
 );
-const WindomAntennaScene = lazy(
+const WindomAntennaScene = lazyWithRetry(
   () => import("~/components/windom-antenna-scene"),
+  "WindomAntennaScene",
 );
-const HB9CVAntennaScene = lazy(
+const HB9CVAntennaScene = lazyWithRetry(
   () => import("~/components/hb9cv-antenna-scene"),
+  "HB9CVAntennaScene",
 );
-const MagneticLoopAntennaScene = lazy(
+const MagneticLoopAntennaScene = lazyWithRetry(
   () => import("~/components/magnetic-loop-antenna-scene"),
+  "MagneticLoopAntennaScene",
 );
-const ElectromagneticPropagationScene = lazy(
+const ElectromagneticPropagationScene = lazyWithRetry(
   () => import("~/components/electromagnetic-propagation-scene"),
+  "ElectromagneticPropagationScene",
 );
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {

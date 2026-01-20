@@ -1,0 +1,31 @@
+# Static assets (hashed files)
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.avif
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.bmp
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.tiff
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.tif
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+  

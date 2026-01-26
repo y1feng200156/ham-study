@@ -1,6 +1,7 @@
+import { Camera } from "@phosphor-icons/react";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   BoxGeometry,
@@ -12,6 +13,7 @@ import {
   SphereGeometry,
   Vector3,
 } from "three";
+import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
@@ -192,6 +194,16 @@ export default function EndFedAntennaScene({
   );
   const [harmonic, setHarmonic] = useState(1);
   const uniqueId = useId();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const handleDownload = () => {
+    if (canvasRef.current) {
+      const link = document.createElement("a");
+      link.download = "end-fed-antenna.png";
+      link.href = canvasRef.current.toDataURL("image/png");
+      link.click();
+    }
+  };
 
   const speedMultiplier = {
     slow: 0.3,
@@ -378,6 +390,18 @@ export default function EndFedAntennaScene({
           </div>
         </RadioGroup>
       </div>
+
+      <div className="pt-3 border-t border-white/10">
+        <Button
+          variant="secondary"
+          size="sm"
+          className="w-full"
+          onClick={handleDownload}
+        >
+          <Camera className="mr-2 size-4" />
+          {t("common.controls.download")}
+        </Button>
+      </div>
     </div>
   );
 
@@ -387,6 +411,8 @@ export default function EndFedAntennaScene({
         className={`relative w-full ${isThumbnail ? "h-full" : "h-[450px] md:h-[600px]"} border rounded-lg overflow-hidden bg-black touch-none`}
       >
         <Canvas
+          ref={canvasRef}
+          gl={{ preserveDrawingBuffer: true }}
           camera={{ position: [5, 4, 8], fov: 50 }}
           frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >

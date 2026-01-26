@@ -33,7 +33,7 @@ chokidar
       pollInterval: 100,
     },
   })
-  .on("all", (event, filePath) => {
+  .on("all", (_event, filePath) => {
     console.log(`📝 File changed: ${filePath}`);
     triggerTranslation(filePath);
   });
@@ -74,55 +74,51 @@ async function executeTranslation(srcPath) {
 
   console.log(`🚀 Translating: ${srcPath} -> ${destPath}`);
 
-  try {
-    const content = fs.readFileSync(srcPath, "utf-8");
+  const content = fs.readFileSync(srcPath, "utf-8");
 
-    // 动态构建替换字典
-    const fileSpecificDict = { ...CUSTOM_DICT };
+  // 动态构建替换字典
+  const fileSpecificDict = { ...CUSTOM_DICT };
 
-    // 1. 针对 common.ts 的 import 移除
-    // 如果文件中包含该 import，则替换为空
-    const importStr = 'import type { ResourceLanguage } from "i18next";';
-    if (content.includes(importStr)) {
-      fileSpecificDict[importStr] = "";
-    }
-
-    // 2. 针对 satisfies 的处理
-    // 能够处理常见的几种 satisfies 结尾
-    // 注意：如果有其他形式，需要在这里添加
-    const knownSatisfies = [
-      `} satisfies ResourceLanguage["common"];`,
-      `} satisfies Record<string, unknown>;`,
-    ];
-
-    for (const s of knownSatisfies) {
-      if (content.includes(s)) {
-        // 关键点：将原始的 satisfies 替换为带动态 basename 的格式
-        fileSpecificDict[s] =
-          `} satisfies typeof import("~/locales/zh/${basename}").default;`;
-      }
-    }
-
-    // 调用 API，传入特定字典
-    // 这里使用 PreReplace，意味着这些替换会在繁化姬处理“转换”之前就执行
-    // 这样 'import ...' 就会被删掉，'satisfies ...' 会变成最终的代码
-    // 繁化姬通常不会去翻译看起来像代码的英文，所以这样是安全的
-    const convertedText = await convertWithFanhuaji(content, fileSpecificDict);
-
-    // 简单清理多余空行（Fanhuaji 有时会因为移除内容留下空行）
-    const finalContent = convertedText.replace(/^\s*[\r\n]/gm, "");
-
-    // 确保目录存在并写入
-    const destDir = path.dirname(destPath);
-    if (!fs.existsSync(destDir)) {
-      fs.mkdirSync(destDir, { recursive: true });
-    }
-
-    fs.writeFileSync(destPath, finalContent);
-    console.log(`✅ Saved: ${destPath}`);
-  } catch (err) {
-    throw err;
+  // 1. 针对 common.ts 的 import 移除
+  // 如果文件中包含该 import，则替换为空
+  const importStr = 'import type { ResourceLanguage } from "i18next";';
+  if (content.includes(importStr)) {
+    fileSpecificDict[importStr] = "";
   }
+
+  // 2. 针对 satisfies 的处理
+  // 能够处理常见的几种 satisfies 结尾
+  // 注意：如果有其他形式，需要在这里添加
+  const knownSatisfies = [
+    `} satisfies ResourceLanguage["common"];`,
+    `} satisfies Record<string, unknown>;`,
+  ];
+
+  for (const s of knownSatisfies) {
+    if (content.includes(s)) {
+      // 关键点：将原始的 satisfies 替换为带动态 basename 的格式
+      fileSpecificDict[s] =
+        `} satisfies typeof import("~/locales/zh/${basename}").default;`;
+    }
+  }
+
+  // 调用 API，传入特定字典
+  // 这里使用 PreReplace，意味着这些替换会在繁化姬处理“转换”之前就执行
+  // 这样 'import ...' 就会被删掉，'satisfies ...' 会变成最终的代码
+  // 繁化姬通常不会去翻译看起来像代码的英文，所以这样是安全的
+  const convertedText = await convertWithFanhuaji(content, fileSpecificDict);
+
+  // 简单清理多余空行（Fanhuaji 有时会因为移除内容留下空行）
+  const finalContent = convertedText.replace(/^\s*[\r\n]/gm, "");
+
+  // 确保目录存在并写入
+  const destDir = path.dirname(destPath);
+  if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir, { recursive: true });
+  }
+
+  fs.writeFileSync(destPath, finalContent);
+  console.log(`✅ Saved: ${destPath}`);
 }
 
 // API 请求函数

@@ -6,9 +6,9 @@ import {
   WarningIcon,
 } from "@phosphor-icons/react";
 import i18next from "i18next";
-import { Suspense, memo, useEffect, useMemo, useState } from "react";
+import { memo, Suspense, useEffect, useMemo, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { Link, isRouteErrorResponse, useRouteError } from "react-router";
+import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
@@ -557,7 +557,7 @@ export function ErrorBoundary() {
   // Common UI State
   let title = "Something went wrong";
   let description = "We encountered an unexpected error.";
-  let details = null;
+  let _details = null;
 
   if (isRouteErrorResponse(error)) {
     title = `${error.status} ${error.statusText}`;
@@ -567,9 +567,9 @@ export function ErrorBoundary() {
   } else if (error instanceof Error) {
     title = error.name || "Error";
     description = error.message;
-    details = error.stack;
+    _details = error.stack;
   } else {
-    details = String(error);
+    _details = String(error);
   }
 
   return (

@@ -1,5 +1,8 @@
+import { Camera } from "@phosphor-icons/react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import * as THREE from "three";
+import { Button } from "~/components/ui/button";
 
 // --- 核心配置常量 ---
 const EARTH_RADIUS = 50;
@@ -251,6 +254,17 @@ export default function ElectromagneticPropagationScene({
     ionoHeight,
     isHovered,
   });
+  const { t } = useTranslation("scene");
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const handleDownload = () => {
+    if (canvasRef.current) {
+      const link = document.createElement("a");
+      link.download = "electromagnetic-propagation.png";
+      link.href = canvasRef.current.toDataURL("image/png");
+      link.click();
+    }
+  };
 
   useEffect(() => {
     paramsRef.current = { mode, angle, frequency, ionoHeight, isHovered };
@@ -275,11 +289,13 @@ export default function ElectromagneticPropagationScene({
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
+      preserveDrawingBuffer: true,
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mountRef.current.appendChild(renderer.domElement);
+    canvasRef.current = renderer.domElement;
 
     // Disable interactions if in thumbnail mode
     if (isThumbnail) {
@@ -972,6 +988,15 @@ export default function ElectromagneticPropagationScene({
   }, [isThumbnail]); // Only re-init if isThumbnail changes radically
 
   return (
-    <div ref={mountRef} className="w-full h-full cursor-move relative z-0" />
+    <div ref={mountRef} className="w-full h-full cursor-move relative z-0">
+      {!isThumbnail && (
+        <div className="absolute bottom-4 right-4 z-50">
+          <Button variant="secondary" size="sm" onClick={handleDownload}>
+            <Camera className="mr-2 size-4" />
+            {t("common.controls.download")}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

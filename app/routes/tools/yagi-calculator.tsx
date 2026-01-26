@@ -7,7 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import i18next from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { initReactI18next } from "react-i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
 import { BasicSpecsCard } from "~/components/tools/yagi-calculator/BasicSpecsCard";
 import { ProModePanel } from "~/components/tools/yagi-calculator/ProModePanel";
 import {
@@ -58,6 +58,8 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 };
 
 export default function YagiCalculator() {
+  const { t } = useTranslation("common");
+
   // --- UI State ---
   const [mode, setMode] = useState<"quick" | "pro">("quick");
 
@@ -179,20 +181,21 @@ export default function YagiCalculator() {
 
   // --- Handlers ---
   const copyTable = () => {
-    const header =
-      "单元(Element)\t位置(Pos)\t间距(Space)\t半长(Half)\t切割长(Cut)\t备注(Note)\n";
+    const header = `${t("tools.yagiCalculator.results.headers.element")}\t${t("tools.yagiCalculator.results.headers.pos")}\t${t("tools.yagiCalculator.results.headers.space")}\t${t("tools.yagiCalculator.results.headers.half")}\t${t("tools.yagiCalculator.results.headers.cut")}\t${t("tools.yagiCalculator.results.headers.note")}\n`;
     const body = design.elements
       .map((e) => {
         let note = "-";
         if (e.type === "DE") {
-          if (e.style === "folded") note = "折合振子";
-          else if (e.gap) note = `间隙: ${e.gap}mm`;
+          if (e.style === "folded")
+            note = t("tools.yagiCalculator.results.notes.folded");
+          else if (e.gap)
+            note = t("tools.yagiCalculator.results.notes.gap", { val: e.gap });
         }
         return `${e.name}\t${e.position.toFixed(1)}\t${e.spacing > 0 ? e.spacing.toFixed(1) : "-"}\t${e.halfLength.toFixed(1)}\t${e.cutLength.toFixed(1)}\t${note}`;
       })
       .join("\n");
     navigator.clipboard.writeText(header + body);
-    alert("数据已复制到剪贴板！");
+    alert(t("tools.yagiCalculator.ui.copySuccess"));
   };
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -201,7 +204,7 @@ export default function YagiCalculator() {
     console.log("[YagiDownload] Starting download process...");
     if (!svgRef.current) {
       console.error("[YagiDownload] svgRef.current is null!");
-      alert("错误：无法获取图纸数据，请刷新页面重试。");
+      alert(t("tools.yagiCalculator.ui.downloadError"));
       return;
     }
 
@@ -247,7 +250,11 @@ export default function YagiCalculator() {
         const startY = h_svg;
         ctx.fillStyle = "#e2e8f0";
         ctx.font = "bold 20px sans-serif";
-        ctx.fillText("切割尺寸表 (CUT LIST)", 40, startY + 40);
+        ctx.fillText(
+          `${t("tools.yagiCalculator.results.title")} (CUT LIST)`,
+          40,
+          startY + 40,
+        );
 
         ctx.strokeStyle = "#475569";
         ctx.lineWidth = 1;
@@ -257,12 +264,12 @@ export default function YagiCalculator() {
         ctx.stroke();
 
         const headers = [
-          "ELEMENT / 单元",
-          "POS (mm)",
-          "SPACE (mm)",
-          "HALF LEN (mm)",
-          "CUT LEN (mm)",
-          "NOTES / 备注",
+          t("tools.yagiCalculator.results.headers.element") + " / Element",
+          t("tools.yagiCalculator.results.headers.pos") + " (mm)",
+          t("tools.yagiCalculator.results.headers.space") + " (mm)",
+          t("tools.yagiCalculator.results.headers.half") + " (mm)",
+          t("tools.yagiCalculator.results.headers.cut") + " (mm)",
+          t("tools.yagiCalculator.results.headers.note") + " / Note",
         ];
         const colX = [40, 200, 350, 500, 650, 800];
 
@@ -283,8 +290,12 @@ export default function YagiCalculator() {
 
           let note = "-";
           if (isDE) {
-            if (el.style === "folded") note = "Folded Loop";
-            else if (el.gap) note = `Gap: ${el.gap}mm`;
+            if (el.style === "folded")
+              note = t("tools.yagiCalculator.results.notes.folded");
+            else if (el.gap)
+              note = t("tools.yagiCalculator.results.notes.gap", {
+                val: el.gap,
+              });
           }
 
           const rowData = [
@@ -330,11 +341,11 @@ export default function YagiCalculator() {
 
       img.onerror = (e) => {
         console.error("[YagiDownload] Image load error:", e);
-        alert("图片生成失败，请稍后重试");
+        alert(t("tools.yagiCalculator.ui.downloadFail"));
       };
     } catch (e) {
       console.error("[YagiDownload] Exception:", e);
-      alert("下载过程中发生未知错误，详情请查看控制台。");
+      alert(t("tools.yagiCalculator.ui.downloadUnknownError"));
     }
   };
 
@@ -347,10 +358,10 @@ export default function YagiCalculator() {
             <CalculatorIcon className="w-8 h-8 text-sky-400" />
             <div>
               <h1 className="text-xl font-bold tracking-tight">
-                八木天线计算器
+                {t("tools.yagiCalculator.ui.title")}
               </h1>
               <p className="text-xs text-slate-400 uppercase tracking-widest">
-                DL6WU 工程工具
+                {t("tools.yagiCalculator.ui.subtitle")}
               </p>
             </div>
           </div>
@@ -365,7 +376,7 @@ export default function YagiCalculator() {
                 className="size-5 text-yellow-400"
                 weight="duotone"
               />{" "}
-              快速模式
+              {t("tools.yagiCalculator.ui.quickMode")}
             </button>
             <button
               type="button"
@@ -376,7 +387,7 @@ export default function YagiCalculator() {
                 className="size-5 text-blue-400"
                 weight="duotone"
               />{" "}
-              专业工程模式
+              {t("tools.yagiCalculator.ui.proMode")}
             </button>
           </div>
         </div>
@@ -429,7 +440,7 @@ export default function YagiCalculator() {
             <div className="bg-slate-900 rounded-xl shadow-lg border border-slate-700 p-1">
               <div className="flex justify-between items-center px-4 py-2 bg-slate-800 rounded-t-lg">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  设计蓝图预览 (Blueprint Preview)
+                  {t("tools.yagiCalculator.ui.blueprintPreview")}
                 </span>
                 <Button
                   variant="default"
@@ -438,7 +449,8 @@ export default function YagiCalculator() {
                   className="h-7 text-xs bg-sky-600 hover:bg-sky-500 font-bold"
                   onClick={downloadPng}
                 >
-                  <DownloadIcon className="mr-2 w-3 h-3" /> 保存图纸+表格
+                  <DownloadIcon className="mr-2 w-3 h-3" />{" "}
+                  {t("tools.yagiCalculator.ui.imgDownload")}
                 </Button>
               </div>
               <div className="bg-slate-950 min-h-[400px] flex items-center justify-center overflow-auto rounded-b-lg scrollbar-none relative">
@@ -456,14 +468,15 @@ export default function YagiCalculator() {
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-800 animate-in fade-in">
                 <p className="font-bold flex items-center mb-1 text-xs uppercase tracking-wide text-amber-900">
                   <InfoIcon className="w-4 h-4 mr-1.5" />
-                  物理修正已应用
+                  {t("tools.yagiCalculator.ui.boomCorrectionApplied")}
                 </p>
                 <p className="text-xs opacity-90 leading-relaxed font-mono">
-                  基于 B/d=
-                  {(
-                    design.config.boomDiameter / design.config.elementDiameter
-                  ).toFixed(2)}{" "}
-                  和 k={design.bcFactor.toFixed(3)}. 所有振子已延长{" "}
+                  {t("tools.yagiCalculator.ui.boomCorrectionDetails", {
+                    ratio: (
+                      design.config.boomDiameter / design.config.elementDiameter
+                    ).toFixed(2),
+                    k: design.bcFactor.toFixed(3),
+                  })}{" "}
                   <span className="font-bold underline bg-amber-100 px-1 rounded">
                     {design.boomCorrection.toFixed(2)} mm
                   </span>

@@ -6,6 +6,7 @@ import {
 } from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import { Slider } from "~/components/ui/slider";
+import { useTranslation } from "react-i18next";
 
 interface BasicSpecsCardProps {
   frequency: number;
@@ -20,15 +21,17 @@ export function BasicSpecsCard({
   elementCount,
   setElementCount,
 }: BasicSpecsCardProps) {
+  const { t } = useTranslation("common");
+
   return (
     <Card className="shadow-sm">
       <CardContent className="space-y-4">
         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-          基础规格 (Basic Specs)
+          {t("tools.yagiCalculator.specs.title")}
         </h3>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label>中心频率 (Frequency)</Label>
+            <Label>{t("tools.yagiCalculator.specs.frequency")}</Label>
             <InputGroup>
               <InputGroupInput
                 type="number"
@@ -41,7 +44,7 @@ export function BasicSpecsCard({
           </div>
           <div>
             <div className="flex justify-between mb-1">
-              <Label>单元数量 (Elements)</Label>
+              <Label>{t("tools.yagiCalculator.specs.elements")}</Label>
               <span className="text-sm font-mono text-primary font-bold">
                 {elementCount}
               </span>

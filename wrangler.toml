@@ -2,11 +2,13 @@ name = "ham-study"
 compatibility_date = "2024-11-12"
 compatibility_flags = ["nodejs_compat"]
 main = "./workers/app.ts"
-assets = { binding = "ASSETS", directory = "./build/client" }
-
 routes = [
   { pattern = "ham.charlesify.com", custom_domain = true }
 ]
+
+[assets]
+binding = "ASSETS"
+directory = "./build/client"
 
 [placement]
 mode = "smart"

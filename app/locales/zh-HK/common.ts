@@ -1,23 +1,19 @@
 export default {
   title: "業餘無線電可視化",
   description:
-    "歡迎來到業餘無線電可視化實驗室。這裏彙集了各種經典天線和電磁波極化的 3D 模擬演示。通過互動式的 3D 場景，您可以直觀地探索天線原理與電波傳播特性，深入理解無線電通訊背後的物理機制。",
-
+    "歡迎來到業餘無線電可視化實驗室。這裏匯集了各種經典天線和電磁波極化的 3D 仿真演示。通過交互式的 3D 場景，您可以直觀地探索天線原理與電波傳播特性，深入理解無線電通信背後的物理機制。",
   nav: {
     home: "首頁",
     back: "返回",
   },
-
   actions: {
     viewDemo: "查看演示",
     openTool: "打開工具",
     github: "GitHub 倉庫",
   },
-
   sections: {
     tools: "實用工具",
   },
-
   demoCards: {
     vertical: {
       title: "垂直極化 (Vertical Polarization)",
@@ -35,9 +31,9 @@ export default {
     },
     circular: {
       title: "圓極化 (Circular Polarization)",
-      description: "可視化電場向量旋轉的圓極化傳播 (Circular Polarization)。",
+      description: "可視化電場矢量旋轉的圓極化傳播 (Circular Polarization)。",
       keywords:
-        "圓極化, 旋轉向量, 衞星通訊, circular polarization, rotating vector",
+        "圓極化, 旋轉矢量, 衛星通信, circular polarization, rotating vector",
     },
     elliptical: {
       title: "橢圓極化 (Elliptical Polarization)",
@@ -51,7 +47,7 @@ export default {
     },
     yagi: {
       title: "八木-宇田天線 (Yagi-Uda Antenna)",
-      description: "著名的定向天線，由引向器、驅動元件和反射器組成。",
+      description: "著名的定向天線，由引向器、有源振子和反射器組成。",
       keywords:
         "八木天線, 定向天線, 引向器, 反射器, yagi-uda antenna, directional antenna",
     },
@@ -72,12 +68,12 @@ export default {
     },
     quad: {
       title: "方框天線 (Quad Antenna)",
-      description: "方形迴路構成的定向天線，具有高增益和低雜訊的特點。",
+      description: "方形迴路構成的定向天線，具有高增益和低底噪的特點。",
       keywords: "方框天線, 環形天線, 高增益, quad antenna, loop antenna",
     },
     moxon: {
       title: "莫克森天線 (Moxon Antenna)",
-      description: "矩形緊湊型定向天線，擁有卓越的前後比和寬頻寬。",
+      description: "矩形緊湊型定向天線，擁有卓越的前後比和寬帶寬。",
       keywords: "莫克森天線, 矩形天線, moxon antenna, rectangular antenna",
     },
     endFed: {
@@ -93,7 +89,7 @@ export default {
     },
     windomAntenna: {
       title: "溫頓天線 (Windom Antenna)",
-      description: "3D演示溫頓天線(OCFD)的偏饋結構與多寬頻特性。",
+      description: "3D演示溫頓天線(OCFD)的偏饋結構與多波段特性。",
       keywords: "溫頓天線, Windom antenna, OCFD, 偏饋偶極子",
     },
     hb9cv: {
@@ -116,28 +112,25 @@ export default {
         "電磁波傳播, 地波, 天波, 電離層反射, electromagnetic propagation",
     },
   },
-
   tools: {
     yagiCalculator: {
       title: "八木天線計算器 (Yagi Calculator)",
       description:
-        "基於 DL6WU 長動臂設計模型 & VK5DJ 修正演算法的八木天線設計工具。",
+        "基於 DL6WU 長動臂設計模型 & VK5DJ 修正算法的八木天線設計工具。",
       keywords:
         "八木計算器, 天線設計, DL6WU, VK5DJ, yagi calculator, antenna design",
     },
   },
-
   footer: {
     feedback: {
       title: "有想法或建議？",
       subtitle: "歡迎隨時反饋，幫助改進這個項目",
-      emailTitle: "發送電郵給 ham@charlesify.com",
+      emailTitle: "發送郵件給 ham@charlesify.com",
       githubTitle: "View on GitHub",
     },
     copyright: "© {{year}} BG8ROM. All rights reserved.",
     credits: "特別感謝",
   },
-
   meta: {
     siteName: "業餘無線電可視化",
     keywords:

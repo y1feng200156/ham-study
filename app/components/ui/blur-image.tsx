@@ -61,6 +61,7 @@ export function BlurImage({
     src: mainSrc,
     srcSet,
     placeholder: autoPlaceholder,
+    sources,
   } = useMemo(() => getImageProps(src), [src]);
 
   const resolvedPlaceholder = useMemo(() => {
@@ -155,24 +156,34 @@ export function BlurImage({
 
       {/* Main image */}
       {isValidSrc && mainSrc && (
-        <img
-          ref={imgRef}
-          src={mainSrc}
-          srcSet={srcSet}
-          sizes={sizes}
-          alt={alt}
-          width={width}
-          height={height}
-          className={cn(
-            "h-full w-full object-cover transition-opacity duration-500 ease-in-out",
-            isLoaded ? "opacity-100" : "opacity-0",
-            imgClassName,
-          )}
-          onLoad={handleLoad}
-          onError={handleError}
-          loading={props.loading || "lazy"}
-          {...props}
-        />
+        <picture>
+          {sources &&
+            Object.entries(sources).map(([format, srcSet]) => (
+              <source
+                key={format}
+                srcSet={srcSet as string}
+                type={`image/${format}`}
+                sizes={sizes}
+              />
+            ))}
+          <img
+            ref={imgRef}
+            src={mainSrc}
+            srcSet={!sources ? srcSet : undefined} // Only use srcSet if not using picture sources (legacy fallback)
+            alt={alt}
+            width={width}
+            height={height}
+            className={cn(
+              "h-full w-full object-cover transition-opacity duration-500 ease-in-out",
+              isLoaded ? "opacity-100" : "opacity-0",
+              imgClassName,
+            )}
+            onLoad={handleLoad}
+            onError={handleError}
+            loading={props.loading || "lazy"}
+            {...props}
+          />
+        </picture>
       )}
 
       {/* Error fallback */}

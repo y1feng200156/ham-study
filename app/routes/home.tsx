@@ -1,11 +1,18 @@
-import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
+import {
+  ArrowClockwiseIcon,
+  CalculatorIcon,
+  GithubLogoIcon,
+  HouseIcon,
+  WarningIcon,
+} from "@phosphor-icons/react";
 import i18next from "i18next";
-import { lazy, memo, Suspense, useMemo, useState } from "react";
+import { memo, Suspense, useEffect, useMemo, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { BlurImage } from "~/components/ui/blur-image";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,59 +25,84 @@ import {
 } from "~/components/ui/card";
 import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
 import { ImageSizes } from "~/lib/images";
+import { lazyWithRetry } from "~/lib/lazy-retry";
 import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/home";
 
 // Lazy load heavy 3D components
-const CircularPolarizationScene = lazy(
+const CircularPolarizationScene = lazyWithRetry(
   () => import("~/components/circular-polarization-scene"),
+  "CircularPolarizationScene",
 );
-const EllipticalPolarizationScene = lazy(
+const EllipticalPolarizationScene = lazyWithRetry(
   () => import("~/components/elliptical-polarization-scene"),
+  "EllipticalPolarizationScene",
 );
-const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
-const HorizontalPolarizationScene = lazy(
+const GPAntennaScene = lazyWithRetry(
+  () => import("~/components/gp-antenna-scene"),
+  "GPAntennaScene",
+);
+const HorizontalPolarizationScene = lazyWithRetry(
   () => import("~/components/horizontal-polarization-scene"),
+  "HorizontalPolarizationScene",
 );
-const InvertedVAntennaScene = lazy(
+const InvertedVAntennaScene = lazyWithRetry(
   () => import("~/components/inverted-v-scene"),
+  "InvertedVAntennaScene",
 );
-const MoxonAntennaScene = lazy(
+const MoxonAntennaScene = lazyWithRetry(
   () => import("~/components/moxon-antenna-scene"),
+  "MoxonAntennaScene",
 );
-const EndFedAntennaScene = lazy(
+const EndFedAntennaScene = lazyWithRetry(
   () => import("~/components/end-fed-antenna-scene"),
+  "EndFedAntennaScene",
 );
-const PositiveVAntennaScene = lazy(
+const PositiveVAntennaScene = lazyWithRetry(
   () => import("~/components/positive-v-scene"),
+  "PositiveVAntennaScene",
 );
-const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
-const VerticalPolarizationScene = lazy(
+const QuadAntennaScene = lazyWithRetry(
+  () => import("~/components/quad-antenna-scene"),
+  "QuadAntennaScene",
+);
+const VerticalPolarizationScene = lazyWithRetry(
   () => import("~/components/vertical-polarization-scene"),
+  "VerticalPolarizationScene",
 );
-const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
-const LongWireAntennaScene = lazy(
+const YagiAntennaScene = lazyWithRetry(
+  () => import("~/components/yagi-antenna-scene"),
+  "YagiAntennaScene",
+);
+const LongWireAntennaScene = lazyWithRetry(
   () => import("~/components/long-wire-antenna-scene"),
+  "LongWireAntennaScene",
 );
-const DipoleAntennaScene = lazy(
+const DipoleAntennaScene = lazyWithRetry(
   () => import("~/components/dipole-antenna-scene"),
+  "DipoleAntennaScene",
 );
-const WindomAntennaScene = lazy(
+const WindomAntennaScene = lazyWithRetry(
   () => import("~/components/windom-antenna-scene"),
+  "WindomAntennaScene",
 );
-const HB9CVAntennaScene = lazy(
+const HB9CVAntennaScene = lazyWithRetry(
   () => import("~/components/hb9cv-antenna-scene"),
+  "HB9CVAntennaScene",
 );
-const MagneticLoopAntennaScene = lazy(
+const MagneticLoopAntennaScene = lazyWithRetry(
   () => import("~/components/magnetic-loop-antenna-scene"),
+  "MagneticLoopAntennaScene",
 );
-const ElectromagneticPropagationScene = lazy(
+const ElectromagneticPropagationScene = lazyWithRetry(
   () => import("~/components/electromagnetic-propagation-scene"),
+  "ElectromagneticPropagationScene",
 );
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
+  if (!loaderData) return [];
   const { title, description, keywords } = loaderData;
   return [
     { title },
@@ -224,7 +256,7 @@ export default function Home() {
     return demosConfig.map((item) => {
       const imageName = item.href.split("/").pop();
       // Pass relative path "demos/filename", let BlurImage resolve it internaly
-      const imageUrl = `images/demos/${imageName}`;
+      const imageUrl = `images/demos/${imageName}.webp`;
 
       switch (item.i18nKey) {
         case "demoCards.vertical":
@@ -482,6 +514,84 @@ export default function Home() {
           }),
         }}
       />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  // const location = useLocation(); // Unused
+
+  // Core logic: Detect chunk loading failure
+  useEffect(() => {
+    if (error instanceof Error) {
+      // Match common chunk loading error messages
+      const isChunkError =
+        error.message.includes("Loading chunk") ||
+        error.message.includes("Importing a module script failed") ||
+        error.message.includes("Failed to fetch dynamically imported module") ||
+        error.name === "ChunkLoadError";
+
+      if (isChunkError) {
+        console.error("Chunk load failed, reloading page...", error);
+        // Use replace to avoid destroying browser history stack
+        // window.location.reload() forces browser to fetch latest index.html from server
+        window.location.reload();
+      }
+    }
+  }, [error]);
+
+  // If chunk error, the effect above will trigger refresh
+  // Render a simple Loading state to prevent user from seeing error flash
+  if (error instanceof Error && error.message.includes("Loading chunk")) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-background">
+        <div className="animate-spin text-primary">
+          <ArrowClockwiseIcon size={32} />
+        </div>
+        <p className="text-muted-foreground">Updating application...</p>
+      </div>
+    );
+  }
+
+  // Common UI State
+  let title = "Something went wrong";
+  let description = "We encountered an unexpected error.";
+  let _details = null;
+
+  if (isRouteErrorResponse(error)) {
+    title = `${error.status} ${error.statusText}`;
+    description =
+      error.data ||
+      "The page you're looking for doesn't exist or an error occurred.";
+  } else if (error instanceof Error) {
+    title = error.name || "Error";
+    description = error.message;
+    _details = error.stack;
+  } else {
+    _details = String(error);
+  }
+
+  return (
+    <div className="container mx-auto flex min-h-[600px] flex-col items-center justify-center gap-6 px-4 py-16">
+      <Alert variant="destructive" className="max-w-2xl">
+        <WarningIcon />
+        <AlertTitle>{title}</AlertTitle>
+        <AlertDescription className="mt-2">{description}</AlertDescription>
+      </Alert>
+
+      <div className="flex gap-4">
+        <Button variant="outline" asChild>
+          <Link to="/" className="gap-2">
+            <HouseIcon size={18} />
+            Back Home
+          </Link>
+        </Button>
+        <Button onClick={() => window.location.reload()} className="gap-2">
+          <ArrowClockwiseIcon size={18} />
+          Try Again
+        </Button>
+      </div>
     </div>
   );
 }

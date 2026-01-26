@@ -11,6 +11,7 @@ import { initReactI18next, useTranslation } from "react-i18next";
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
+import { MoxonSvgRenderer } from "~/components/tools/moxon-calculator/MoxonSvgRenderer";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { BlurImage } from "~/components/ui/blur-image";
@@ -26,6 +27,7 @@ import {
 import { demos as demosConfig, tools as toolsConfig } from "~/data/items";
 import { ImageSizes } from "~/lib/images";
 import { lazyWithRetry } from "~/lib/lazy-retry";
+import { calculateMoxon } from "~/lib/moxon-calc";
 import { calculateYagi } from "~/lib/yagi-calc";
 import resources from "~/locales";
 import { getLocale } from "~/middleware/i18next";
@@ -433,6 +435,22 @@ export default function Home() {
                 width={600}
                 height={350}
                 minimal={true}
+              />
+            ),
+          };
+        case "tools.moxonCalculator":
+          return {
+            title: t(`${item.i18nKey}.title` as never),
+            description: t(`${item.i18nKey}.description` as never),
+            href: item.href,
+            preview: (
+              <MoxonSvgRenderer
+                design={calculateMoxon({
+                  frequency: 435.0,
+                  wireDiameter: 3.0,
+                })}
+                width={600}
+                height={350}
               />
             ),
           };

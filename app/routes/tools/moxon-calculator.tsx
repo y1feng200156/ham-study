@@ -1,8 +1,7 @@
 import { CalculatorIcon, DownloadIcon, Square } from "@phosphor-icons/react";
 import i18next from "i18next";
-import { useTranslation } from "react-i18next";
 import { useMemo, useRef, useState } from "react";
-import { initReactI18next } from "react-i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
 import { MoxonResultsTable } from "~/components/tools/moxon-calculator/MoxonResultsTable";
 import { MoxonSpecsCard } from "~/components/tools/moxon-calculator/MoxonSpecsCard";
 import { MoxonSvgRenderer } from "~/components/tools/moxon-calculator/MoxonSvgRenderer";
@@ -145,7 +144,9 @@ Freq\t${config.frequency}\tMHz
       ctx.font = "bold 14px sans-serif";
       let y = tableStartY + 80;
 
-      headers.forEach((h, i) => ctx.fillText(h, colX[i], y));
+      headers.forEach((h, i) => {
+        ctx.fillText(h, colX[i], y);
+      });
 
       // 6. Draw Rows
       const data = [
@@ -257,7 +258,7 @@ Freq\t${config.frequency}\tMHz
                   className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 font-bold"
                   onClick={downloadPng}
                 >
-                  <DownloadIcon className="mr-2 w-3 h-3" />⬇{" "}
+                  <DownloadIcon className="mr-2 w-3 h-3" />
                   {t("tools.moxonCalculator.blueprint.download")}
                 </Button>
               </div>

@@ -131,34 +131,22 @@ export function calculateMoxon(config: MoxonConfig): MoxonDesign {
   // Poly: 0.284203 + 0.054366*X - 0.010186*X^2 + 0.000636*X^3
   // Note: Standard MoxGen uses this for the main width.
   const A_factor =
-    0.284203 +
-    0.054366 * X -
-    0.010186 * Math.pow(X, 2) +
-    0.000636 * Math.pow(X, 3);
+    0.284203 + 0.054366 * X - 0.010186 * X ** 2 + 0.000636 * X ** 3;
 
   // B Factor (Reflector Tail Length)
   // Poly: 0.024443 + 0.027038*X - 0.006927*X^2 + 0.000624*X^3
   const B_factor_refTail =
-    0.024443 +
-    0.027038 * X -
-    0.006927 * Math.pow(X, 2) +
-    0.000624 * Math.pow(X, 3);
+    0.024443 + 0.027038 * X - 0.006927 * X ** 2 + 0.000624 * X ** 3;
 
   // D Factor (Driven Element Tail Length)
   // Poly: 0.012921 + 0.027735*X - 0.007624*X^2 + 0.000713*X^3
   const D_factor_drivenTail =
-    0.012921 +
-    0.027735 * X -
-    0.007624 * Math.pow(X, 2) +
-    0.000713 * Math.pow(X, 3);
+    0.012921 + 0.027735 * X - 0.007624 * X ** 2 + 0.000713 * X ** 3;
 
   // C Factor (Total Depth / Front-to-Back Spacing)
   // Poly: 0.170617 - 0.026772*X + 0.004944*X^2 - 0.000297*X^3
   const C_factor_depth =
-    0.170617 -
-    0.026772 * X +
-    0.004944 * Math.pow(X, 2) -
-    0.000297 * Math.pow(X, 3);
+    0.170617 - 0.026772 * X + 0.004944 * X ** 2 - 0.000297 * X ** 3;
 
   // 3. Convert to Dimensions
   // Note: These factors scale with WAVELENGTH (lambda)

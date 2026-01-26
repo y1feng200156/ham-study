@@ -438,7 +438,7 @@ export default function YagiCalculator() {
                   className="h-7 text-xs bg-sky-600 hover:bg-sky-500 font-bold"
                   onClick={downloadPng}
                 >
-                  <DownloadIcon className="mr-2 w-3 h-3" />⬇ 保存图纸+表格
+                  <DownloadIcon className="mr-2 w-3 h-3" /> 保存图纸+表格
                 </Button>
               </div>
               <div className="bg-slate-950 min-h-[400px] flex items-center justify-center overflow-auto rounded-b-lg scrollbar-none relative">

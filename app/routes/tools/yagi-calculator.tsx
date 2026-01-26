@@ -246,12 +246,12 @@ export default function YagiCalculator() {
         ctx.stroke();
 
         const headers = [
-          t("tools.yagiCalculator.results.headers.element") + " / Element",
-          t("tools.yagiCalculator.results.headers.pos") + " (mm)",
-          t("tools.yagiCalculator.results.headers.space") + " (mm)",
-          t("tools.yagiCalculator.results.headers.half") + " (mm)",
-          t("tools.yagiCalculator.results.headers.cut") + " (mm)",
-          t("tools.yagiCalculator.results.headers.note") + " / Note",
+          `${t("tools.yagiCalculator.results.headers.element")} / Element`,
+          `${t("tools.yagiCalculator.results.headers.pos")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.space")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.half")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.cut")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.note")} / Note`,
         ];
         const colX = [40, 200, 350, 500, 650, 800];
 

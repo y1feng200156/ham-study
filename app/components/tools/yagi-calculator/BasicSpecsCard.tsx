@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "~/components/ui/card";
 import {
   InputGroup,
@@ -6,7 +7,6 @@ import {
 } from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import { Slider } from "~/components/ui/slider";
-import { useTranslation } from "react-i18next";
 
 interface BasicSpecsCardProps {
   frequency: number;

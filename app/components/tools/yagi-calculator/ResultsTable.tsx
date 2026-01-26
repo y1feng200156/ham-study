@@ -1,11 +1,17 @@
 import {
   ApproximateEqualsIcon,
-  CopyIcon,
   QuestionIcon,
   TableIcon,
 } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -29,20 +35,18 @@ interface ResultsTableProps {
 export function ResultsTable({ design }: ResultsTableProps) {
   const { t } = useTranslation("common");
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-        <div className="flex flex-col">
-          <h3 className="font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
-            <TableIcon className="w-5 h-5 text-indigo-500" />
-            {t("tools.yagiCalculator.results.title")}
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5 ml-7">
-            {t("tools.yagiCalculator.results.tolerance")}
-          </p>
-        </div>
-      </div>
+    <Card className="gap-0">
+      <CardHeader className="pb-6 border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
+          <TableIcon className="w-5 h-5 text-indigo-500" />
+          {t("tools.yagiCalculator.results.title")}
+        </CardTitle>
+        <CardDescription>
+          {t("tools.yagiCalculator.results.tolerance")}
+        </CardDescription>
+      </CardHeader>
 
-      <div className="p-0">
+      <CardContent className="p-0 border-t border-slate-100 dark:border-slate-800">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent bg-slate-50/50 dark:bg-slate-900/50">
@@ -119,9 +123,9 @@ export function ResultsTable({ design }: ResultsTableProps) {
             })}
           </TableBody>
         </Table>
-      </div>
+      </CardContent>
 
-      <div className="bg-slate-50 dark:bg-slate-950 px-6 py-3 text-xs text-slate-500 flex justify-between border-t border-slate-200 dark:border-slate-800">
+      <CardFooter className="text-xs text-slate-500 flex justify-between border-t border-slate-200 dark:border-slate-800">
         <span className="font-medium">
           {t("tools.yagiCalculator.results.totalBoom", {
             val: (design.totalBoomLength + 60).toFixed(0),
@@ -142,7 +146,7 @@ export function ResultsTable({ design }: ResultsTableProps) {
             </Tooltip>
           </TooltipProvider>
         </span>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

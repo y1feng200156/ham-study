@@ -1,4 +1,5 @@
 import { QuestionIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
@@ -27,7 +28,6 @@ import type {
   MountMethod,
   SpacingType,
 } from "~/lib/yagi-calc";
-import { useTranslation } from "react-i18next";
 
 interface ProModePanelProps {
   proBoomShape: BoomShape;

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
@@ -8,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useTranslation } from "react-i18next";
 
 export type QuickPresetType = "metal_bonded" | "metal_insulated" | "pvc";
 

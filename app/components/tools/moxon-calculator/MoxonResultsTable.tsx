@@ -2,6 +2,13 @@ import { CopyIcon, TableIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "~/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
   Table,
   TableBody,
   TableCell,
@@ -18,15 +25,15 @@ interface MoxonResultsTableProps {
 export function MoxonResultsTable({ design }: MoxonResultsTableProps) {
   const { t } = useTranslation("common");
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-        <h3 className="font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
+    <Card className="gap-0">
+      <CardHeader className="pb-6 border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
           <TableIcon className="w-5 h-5 text-indigo-500" />
           {t("tools.moxonCalculator.results.title")}
-        </h3>
-      </div>
+        </CardTitle>
+      </CardHeader>
 
-      <div className="p-0">
+      <CardContent className="p-0 border-t border-slate-100 dark:border-slate-800">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent bg-slate-50/50 dark:bg-slate-900/50">
@@ -97,9 +104,9 @@ export function MoxonResultsTable({ design }: MoxonResultsTableProps) {
             </TableRow>
           </TableBody>
         </Table>
-      </div>
+      </CardContent>
 
-      <div className="p-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 space-y-1">
+      <CardFooter className="text-xs text-slate-500 flex-col items-start gap-1 border-t border-slate-100 dark:border-slate-800">
         <p>
           <strong>{t("tools.moxonCalculator.results.rows.wireDriven")}:</strong>{" "}
           {design.wireLengthDriven.toFixed(1)} mm
@@ -108,7 +115,7 @@ export function MoxonResultsTable({ design }: MoxonResultsTableProps) {
           <strong>{t("tools.moxonCalculator.results.rows.wireRef")}:</strong>{" "}
           {design.wireLengthReflector.toFixed(1)} mm
         </p>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

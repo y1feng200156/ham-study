@@ -120,7 +120,25 @@ export const MoxonSvgRenderer = forwardRef<
       className="max-w-full h-auto"
     >
       <title>Moxon</title>
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path
+            d="M 40 0 L 0 0 0 40"
+            fill="none"
+            stroke="#334155"
+            strokeWidth="0.5"
+            opacity="0.3"
+          />
+        </pattern>
+      </defs>
       <rect width={width} height={height} fill="#0f172a" rx="12" />
+      <rect
+        width={width}
+        height={height}
+        fill="url(#grid)"
+        rx="12"
+        pointerEvents="none"
+      />
 
       <g transform={`translate(${centerX}, ${centerY})`}>
         {/* Grid check / Center Cross */}

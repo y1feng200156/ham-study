@@ -77,6 +77,9 @@ const getDemoRoutes = (idPrefix: string) => [
   route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx", {
     id: `${idPrefix}-yagi-tools`,
   }),
+  route("tools/moxon-calculator", "routes/tools/moxon-calculator.tsx", {
+    id: `${idPrefix}-moxon-tools`,
+  }),
 ];
 
 export default [

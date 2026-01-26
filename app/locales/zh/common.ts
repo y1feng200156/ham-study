@@ -127,6 +127,48 @@ export default {
       keywords:
         "八木计算器, 天线设计, DL6WU, VK5DJ, yagi calculator, antenna design",
     },
+    moxonCalculator: {
+      title: "莫克森天线计算器 (Moxon Calculator)",
+      description: "基于 AC6LA / MoxGen 算法的 3D 莫克森天线设计工具。",
+      keywords: "莫克森计算器, Moxon, MoxGen, 天线设计, AC6LA",
+      algorithm: "AC6LA / MoxGen 算法",
+      specs: {
+        title: "基础参数",
+        subtitle: "Frequency & Wire",
+        freqLabel: "中心频率 (MHz)",
+        diaLabel: "线材直径 (mm)",
+        typicalFreq: "典型值: 144.100, 435.000, 28.500",
+        typicalDia: "典型值: 2mm ~ 6mm",
+        introTitle: "什么是 Moxon 天线?",
+        introDesc:
+          "Moxon Rectangle 是由 Les Moxon (G6XN) 推广的双单元线束天线。它是一个折叠的八木天线，具有矩形形状。优点包括出色的前后比 (F/B ratio) 和紧凑的尺寸（约为全尺寸八木的 70%）。它通常具有 50Ω 的直接馈电阻抗，无需复杂的匹配网络。",
+      },
+      results: {
+        title: "尺寸数据表 (Dimensions List)",
+        copy: "复制数据",
+        copied: "数据已复制到剪贴板！",
+        headers: {
+          id: "代号 (ID)",
+          desc: "说明 (Description)",
+          len: "长度 (mm)",
+          wl: "波长系数 (λ)",
+        },
+        rows: {
+          A: "驱动单元宽度 (Driven Width)",
+          B: "驱动单元折弯 (Driven Tail)",
+          C: "单元间隙 (Gap)",
+          D: "反射单元折弯 (Reflector Tail)",
+          E: "总深度 (Total Depth)",
+          wireDriven: "驱动单元总线长",
+          wireRef: "反射单元总线长",
+        },
+      },
+      blueprint: {
+        title: "设计蓝图预览 (Blueprint Preview)",
+        download: "保存图纸",
+        feed: "馈电点",
+      },
+    },
   },
 
   footer: {

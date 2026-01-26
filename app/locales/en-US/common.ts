@@ -136,6 +136,49 @@ export default {
         "A Yagi antenna design tool based on the DL6WU long boom model & VK5DJ correction algorithm.",
       keywords: "yagi calculator, antenna design, DL6WU, VK5DJ",
     },
+    moxonCalculator: {
+      title: "Moxon Calculator",
+      description:
+        "Moxon Rectangle antenna designer based on AC6LA / MoxGen algorithm.",
+      keywords: "moxon calculator, Moxon, MoxGen, antenna design, AC6LA",
+      algorithm: "AC6LA / MoxGen Algorithm",
+      specs: {
+        title: "Configuration",
+        subtitle: "Frequency & Wire",
+        freqLabel: "Center Frequency (MHz)",
+        diaLabel: "Wire Diameter (mm)",
+        typicalFreq: "Typ: 144.100, 435.000, 28.500",
+        typicalDia: "Typ: 2mm ~ 6mm",
+        introTitle: "What is a Moxon?",
+        introDesc:
+          "The Moxon Rectangle is a 2-element wire beam improved by Les Moxon (G6XN). It offers excellent Front-to-Back ratio and wide bandwidth in a compact rectangle shape (approx 70% of a full size yagi). It typically provides a direct 50Ω feed impedance.",
+      },
+      results: {
+        title: "Dimensions List",
+        copy: "Copy Data",
+        copied: "Copied to clipboard!",
+        headers: {
+          id: "ID",
+          desc: "Description",
+          len: "Length (mm)",
+          wl: "Wavelength (λ)",
+        },
+        rows: {
+          A: "Driven Width",
+          B: "Driven Tail",
+          C: "Gap",
+          D: "Reflector Tail",
+          E: "Total Depth",
+          wireDriven: "Driven Wire Total",
+          wireRef: "Reflector Wire Total",
+        },
+      },
+      blueprint: {
+        title: "Blueprint Preview",
+        download: "Save Blueprint",
+        feed: "Feedpoint",
+      },
+    },
   },
 
   footer: {

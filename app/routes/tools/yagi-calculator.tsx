@@ -198,119 +198,144 @@ export default function YagiCalculator() {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const downloadPng = () => {
-    if (!svgRef.current) return;
-    const svgData = new XMLSerializer().serializeToString(svgRef.current);
-    const canvas = document.createElement("canvas");
-    const scale = 2;
-    const w = 1000;
-    const h_svg = 600;
+    console.log("[YagiDownload] Starting download process...");
+    if (!svgRef.current) {
+      console.error("[YagiDownload] svgRef.current is null!");
+      alert("错误：无法获取图纸数据，请刷新页面重试。");
+      return;
+    }
 
-    // Table vars
-    const rowHeight = 30;
-    const headerHeight = 80;
-    const footerHeight = 50;
-    const tableH = design.elements.length * rowHeight;
-    const totalH = h_svg + headerHeight + tableH + footerHeight;
+    try {
+      console.log("[YagiDownload] Serializing SVG...");
+      const svgData = new XMLSerializer().serializeToString(svgRef.current);
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      const w = 1000;
+      const h_svg = 600;
 
-    canvas.width = w * scale;
-    canvas.height = totalH * scale;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+      // Table vars
+      const rowHeight = 30;
+      const headerHeight = 80;
+      const footerHeight = 50;
+      const tableH = design.elements.length * rowHeight;
+      const totalH = h_svg + headerHeight + tableH + footerHeight;
 
-    ctx.scale(scale, scale);
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(0, 0, w, totalH);
+      canvas.width = w * scale;
+      canvas.height = totalH * scale;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.error("[YagiDownload] Could not get 2D context");
+        return;
+      }
 
-    const img = new Image();
-    img.src =
-      "data:image/svg+xml;base64," +
-      btoa(unescape(encodeURIComponent(svgData)));
-    img.onload = () => {
-      // Draw Blueprint
-      ctx.drawImage(img, 0, 0, w, h_svg);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(0, 0, w, totalH);
 
-      // Draw Table
-      const startY = h_svg;
-      ctx.fillStyle = "#e2e8f0";
-      ctx.font = "bold 20px sans-serif";
-      ctx.fillText("切割尺寸表 (CUT LIST)", 40, startY + 40);
+      const img = new Image();
+      img.src =
+        "data:image/svg+xml;base64," +
+        btoa(unescape(encodeURIComponent(svgData)));
 
-      ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(40, startY + 55);
-      ctx.lineTo(w - 40, startY + 55);
-      ctx.stroke();
+      console.log("[YagiDownload] Waiting for image load...");
+      img.onload = () => {
+        console.log("[YagiDownload] Image loaded, drawing to canvas...");
+        // Draw Blueprint
+        ctx.drawImage(img, 0, 0, w, h_svg);
 
-      const headers = [
-        "ELEMENT / 单元",
-        "POS (mm)",
-        "SPACE (mm)",
-        "HALF LEN (mm)",
-        "CUT LEN (mm)",
-        "NOTES / 备注",
-      ];
-      const colX = [40, 200, 350, 500, 650, 800];
+        // Draw Table
+        const startY = h_svg;
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillText("切割尺寸表 (CUT LIST)", 40, startY + 40);
 
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "bold 12px monospace";
-      let y = startY + 75;
-      headers.forEach((h, i) => {
-        ctx.fillText(h, colX[i], y);
-      });
+        ctx.strokeStyle = "#475569";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(40, startY + 55);
+        ctx.lineTo(w - 40, startY + 55);
+        ctx.stroke();
 
-      ctx.font = "12px monospace";
-      y += 10;
-
-      design.elements.forEach((el) => {
-        y += rowHeight;
-        const isDE = el.type === "DE";
-        ctx.fillStyle = isDE ? "#38bdf8" : "#cbd5e1";
-
-        let note = "-";
-        if (isDE) {
-          if (el.style === "folded") note = "Folded Loop";
-          else if (el.gap) note = `Gap: ${el.gap}mm`;
-        }
-
-        const rowData = [
-          el.name,
-          el.position.toFixed(1),
-          el.spacing > 0 ? el.spacing.toFixed(1) : "-",
-          el.halfLength.toFixed(1),
-          el.cutLength.toFixed(1),
-          note,
+        const headers = [
+          "ELEMENT / 单元",
+          "POS (mm)",
+          "SPACE (mm)",
+          "HALF LEN (mm)",
+          "CUT LEN (mm)",
+          "NOTES / 备注",
         ];
+        const colX = [40, 200, 350, 500, 650, 800];
 
-        rowData.forEach((txt, i) => {
-          if (i === 4) ctx.font = "bold 12px monospace";
-          else ctx.font = "12px monospace";
-          ctx.fillText(txt, colX[i], y);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "bold 12px monospace";
+        let y = startY + 75;
+        headers.forEach((h, i) => {
+          ctx.fillText(h, colX[i], y);
         });
 
-        // Line
-        ctx.strokeStyle = "#334155";
-        ctx.beginPath();
-        ctx.moveTo(40, y + 5);
-        ctx.lineTo(w - 40, y + 5);
-        ctx.stroke();
-      });
+        ctx.font = "12px monospace";
+        y += 10;
 
-      // Footer
-      y += 40;
-      ctx.fillStyle = "#64748b";
-      ctx.font = "italic 10px sans-serif";
-      ctx.fillText(
-        `Generated by Yagi Calc Pro | ${new Date().toISOString().split("T")[0]}`,
-        40,
-        y,
-      );
+        design.elements.forEach((el) => {
+          y += rowHeight;
+          const isDE = el.type === "DE";
+          ctx.fillStyle = isDE ? "#38bdf8" : "#cbd5e1";
 
-      const a = document.createElement("a");
-      a.download = `yagi_design_${design.config.frequency}MHz.png`;
-      a.href = canvas.toDataURL("image/png");
-      a.click();
-    };
+          let note = "-";
+          if (isDE) {
+            if (el.style === "folded") note = "Folded Loop";
+            else if (el.gap) note = `Gap: ${el.gap}mm`;
+          }
+
+          const rowData = [
+            el.name,
+            el.position.toFixed(1),
+            el.spacing > 0 ? el.spacing.toFixed(1) : "-",
+            el.halfLength.toFixed(1),
+            el.cutLength.toFixed(1),
+            note,
+          ];
+
+          rowData.forEach((txt, i) => {
+            if (i === 4) ctx.font = "bold 12px monospace";
+            else ctx.font = "12px monospace";
+            ctx.fillText(txt, colX[i], y);
+          });
+
+          // Line
+          ctx.strokeStyle = "#334155";
+          ctx.beginPath();
+          ctx.moveTo(40, y + 5);
+          ctx.lineTo(w - 40, y + 5);
+          ctx.stroke();
+        });
+
+        // Footer
+        y += 40;
+        ctx.fillStyle = "#64748b";
+        ctx.font = "italic 10px sans-serif";
+        ctx.fillText(
+          `Generated by Yagi Calc Pro | ${new Date().toISOString().split("T")[0]}`,
+          40,
+          y,
+        );
+
+        console.log("[YagiDownload] Triggering download click...");
+        const a = document.createElement("a");
+        a.download = `yagi_design_${design.config.frequency}MHz.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+        console.log("[YagiDownload] Download complete.");
+      };
+
+      img.onerror = (e) => {
+        console.error("[YagiDownload] Image load error:", e);
+        alert("图片生成失败，请稍后重试");
+      };
+    } catch (e) {
+      console.error("[YagiDownload] Exception:", e);
+      alert("下载过程中发生未知错误，详情请查看控制台。");
+    }
   };
 
   return (

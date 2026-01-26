@@ -2,15 +2,18 @@ import {
   ApproximateEqualsIcon,
   CopyIcon,
   QuestionIcon,
+  TableIcon,
 } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Button } from "~/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
@@ -18,62 +21,52 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import type { YagiDesign } from "~/lib/yagi-calc";
-import { useTranslation } from "react-i18next";
 
 interface ResultsTableProps {
   design: YagiDesign;
-  copyTable: () => void;
 }
 
-export function ResultsTable({ design, copyTable }: ResultsTableProps) {
+export function ResultsTable({ design }: ResultsTableProps) {
   const { t } = useTranslation("common");
   return (
-    <Card className="gap-y-0 pb-0">
-      <CardHeader className="border-b flex flex-row items-center justify-between">
-        <div>
-          <CardTitle className="text-sm font-bold text-slate-800">
+    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="flex flex-col">
+          <h3 className="font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
+            <TableIcon className="w-5 h-5 text-indigo-500" />
             {t("tools.yagiCalculator.results.title")}
-          </CardTitle>
-          <CardDescription className="text-xs">
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5 ml-7">
             {t("tools.yagiCalculator.results.tolerance")}
-          </CardDescription>
+          </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          type="button"
-          onClick={copyTable}
-          className="h-8 text-xs gap-2"
-        >
-          <CopyIcon className="w-3 h-3" />
-          {t("tools.yagiCalculator.results.copy")}
-        </Button>
-      </CardHeader>
-      <CardContent className="p-0 border-0 overflow-x-auto">
-        <table className="w-full text-sm text-left font-mono">
-          <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b">
-            <tr>
-              <th className="px-5 py-3 font-sans">
+      </div>
+
+      <div className="p-0">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent bg-slate-50/50 dark:bg-slate-900/50">
+              <TableHead className="w-[100px]">
                 {t("tools.yagiCalculator.results.headers.element")}
-              </th>
-              <th className="px-5 py-3 font-sans">
+              </TableHead>
+              <TableHead>
                 {t("tools.yagiCalculator.results.headers.pos")}
-              </th>
-              <th className="px-5 py-3 font-sans">
+              </TableHead>
+              <TableHead>
                 {t("tools.yagiCalculator.results.headers.space")}
-              </th>
-              <th className="px-5 py-3 font-sans text-slate-400">
+              </TableHead>
+              <TableHead className="text-slate-400">
                 {t("tools.yagiCalculator.results.headers.half")}
-              </th>
-              <th className="px-5 py-3 font-sans text-sky-700 font-bold bg-sky-50">
+              </TableHead>
+              <TableHead className="text-sky-700 font-bold bg-sky-50 dark:bg-sky-900/20">
                 {t("tools.yagiCalculator.results.headers.cut")}
-              </th>
-              <th className="px-5 py-3 font-sans text-slate-400">
+              </TableHead>
+              <TableHead className="text-slate-400">
                 {t("tools.yagiCalculator.results.headers.note")}
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {design.elements.map((el) => {
               const isDE = el.type === "DE";
               let note = "-";
@@ -86,40 +79,49 @@ export function ResultsTable({ design, copyTable }: ResultsTableProps) {
                   });
               }
               return (
-                <tr
+                <TableRow
                   key={el.name}
-                  className={`hover:bg-slate-50 transition ${isDE ? "bg-sky-50/30" : ""}`}
+                  className={`hover:bg-slate-50 dark:hover:bg-slate-800 transition ${
+                    isDE ? "bg-sky-50/50 dark:bg-sky-900/10" : ""
+                  }`}
                 >
-                  <td className={`relative px-5 py-2`}>
+                  <TableCell className="relative font-mono font-medium">
                     <div
-                      className={`absolute left-0 top-0 w-4 h-full border-l-4 ${isDE ? "border-sky-500" : "border-transparent"}`}
+                      className={`absolute left-0 top-0 w-1 h-full ${
+                        isDE ? "bg-sky-500" : "bg-transparent"
+                      }`}
                     ></div>
                     {el.name}
-                  </td>
-                  <td className="px-5 py-2 text-slate-600">
+                  </TableCell>
+                  <TableCell className="text-slate-600 dark:text-slate-400 font-mono">
                     {el.position.toFixed(1)}
-                  </td>
-                  <td className="px-5 py-2 text-slate-400">
+                  </TableCell>
+                  <TableCell className="text-slate-400 font-mono">
                     {el.spacing > 0 ? el.spacing.toFixed(1) : "-"}
-                  </td>
-                  <td className="px-5 py-2 text-slate-400">
+                  </TableCell>
+                  <TableCell className="text-slate-400 font-mono">
                     {el.halfLength.toFixed(1)}
-                  </td>
-                  <td
-                    className={`px-5 py-2 font-bold ${isDE ? "text-sky-700" : "text-slate-700"}`}
+                  </TableCell>
+                  <TableCell
+                    className={`font-bold font-mono text-base ${
+                      isDE
+                        ? "text-sky-700 dark:text-sky-400"
+                        : "text-slate-700 dark:text-slate-300"
+                    }`}
                   >
                     {el.cutLength.toFixed(1)}
-                  </td>
-                  <td className="px-5 py-2 text-xs text-slate-400 italic">
+                  </TableCell>
+                  <TableCell className="text-xs text-slate-400 italic">
                     {note}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
-      </CardContent>
-      <div className="bg-slate-50 px-6 py-3 text-xs text-slate-500 flex justify-between border-t border-slate-200">
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="bg-slate-50 dark:bg-slate-950 px-6 py-3 text-xs text-slate-500 flex justify-between border-t border-slate-200 dark:border-slate-800">
         <span className="font-medium">
           {t("tools.yagiCalculator.results.totalBoom", {
             val: (design.totalBoomLength + 60).toFixed(0),
@@ -141,6 +143,6 @@ export function ResultsTable({ design, copyTable }: ResultsTableProps) {
           </TooltipProvider>
         </span>
       </div>
-    </Card>
+    </div>
   );
 }

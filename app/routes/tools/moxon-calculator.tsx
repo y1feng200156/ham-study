@@ -56,20 +56,6 @@ export default function MoxonCalculator() {
   const design = useMemo(() => calculateMoxon(config), [config]);
 
   // --- Handlers ---
-  const copyTable = () => {
-    const header = "Dimension\tValue (mm)\tDesc\n";
-    const body = `
-A\t${design.A.toFixed(1)}\tDriven Width
-B\t${design.B.toFixed(1)}\tDriven Tail
-C\t${design.C.toFixed(1)}\tGap
-D\t${design.D.toFixed(1)}\tReflector Tail
-E\t${design.E.toFixed(1)}\tTotal Depth
-Freq\t${config.frequency}\tMHz
-`.trim();
-    navigator.clipboard.writeText(header + body);
-    alert(t("tools.moxonCalculator.results.copied"));
-  };
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const downloadPng = () => {
@@ -272,7 +258,7 @@ Freq\t${config.frequency}\tMHz
               </div>
             </div>
 
-            <MoxonResultsTable design={design} copyTable={copyTable} />
+            <MoxonResultsTable design={design} />
           </div>
         </div>
       </TooltipProvider>

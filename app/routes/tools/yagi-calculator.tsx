@@ -180,24 +180,6 @@ export default function YagiCalculator() {
   }, [autoKFactor, mode]);
 
   // --- Handlers ---
-  const copyTable = () => {
-    const header = `${t("tools.yagiCalculator.results.headers.element")}\t${t("tools.yagiCalculator.results.headers.pos")}\t${t("tools.yagiCalculator.results.headers.space")}\t${t("tools.yagiCalculator.results.headers.half")}\t${t("tools.yagiCalculator.results.headers.cut")}\t${t("tools.yagiCalculator.results.headers.note")}\n`;
-    const body = design.elements
-      .map((e) => {
-        let note = "-";
-        if (e.type === "DE") {
-          if (e.style === "folded")
-            note = t("tools.yagiCalculator.results.notes.folded");
-          else if (e.gap)
-            note = t("tools.yagiCalculator.results.notes.gap", { val: e.gap });
-        }
-        return `${e.name}\t${e.position.toFixed(1)}\t${e.spacing > 0 ? e.spacing.toFixed(1) : "-"}\t${e.halfLength.toFixed(1)}\t${e.cutLength.toFixed(1)}\t${note}`;
-      })
-      .join("\n");
-    navigator.clipboard.writeText(header + body);
-    alert(t("tools.yagiCalculator.ui.copySuccess"));
-  };
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const downloadPng = () => {
@@ -485,7 +467,7 @@ export default function YagiCalculator() {
               </div>
             )}
 
-            <ResultsTable design={design} copyTable={copyTable} />
+            <ResultsTable design={design} />
           </div>
         </div>
       </TooltipProvider>

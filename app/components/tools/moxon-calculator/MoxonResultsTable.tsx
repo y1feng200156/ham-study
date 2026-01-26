@@ -13,13 +13,9 @@ import type { MoxonDesign } from "~/lib/moxon-calc";
 
 interface MoxonResultsTableProps {
   design: MoxonDesign;
-  copyTable: () => void;
 }
 
-export function MoxonResultsTable({
-  design,
-  copyTable,
-}: MoxonResultsTableProps) {
+export function MoxonResultsTable({ design }: MoxonResultsTableProps) {
   const { t } = useTranslation("common");
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -28,15 +24,6 @@ export function MoxonResultsTable({
           <TableIcon className="w-5 h-5 text-indigo-500" />
           {t("tools.moxonCalculator.results.title")}
         </h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={copyTable}
-          className="h-8 text-xs border-dashed"
-        >
-          <CopyIcon className="size-3.5 mr-1.5" />
-          {t("tools.moxonCalculator.results.copy")}
-        </Button>
       </div>
 
       <div className="p-0">

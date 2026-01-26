@@ -17,6 +17,7 @@ export default {
       harmonic4: "4次谐波 (n=4)",
       invertedV: "倒V模式 (Inverted V)",
       download: "下载截图",
+      autoRotate: "自动旋转 (Auto Rotate)",
     },
   },
   circularPolarization: {

@@ -1,5 +1,5 @@
 import { Camera } from "@phosphor-icons/react";
-import { OrbitControls } from "@react-three/drei";
+import { ArcballControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useId, useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -299,9 +299,7 @@ export default function InvertedVAntennaScene({
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
 
-          {!isThumbnail && (
-            <OrbitControls enableDamping dampingFactor={0.05} zoomSpeed={0.3} />
-          )}
+          {!isThumbnail && <ArcballControls target={[0, 0, 0]} makeDefault />}
 
           <ambientLight intensity={0.5} color={0x404040} />
           <directionalLight

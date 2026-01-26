@@ -17,6 +17,7 @@ export default {
       harmonic4: "4th Harmonic (n=4)",
       invertedV: "Inverted V Mode",
       download: "Download Screenshot",
+      autoRotate: "Auto Rotate",
     },
   },
   circularPolarization: {

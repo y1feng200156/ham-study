@@ -1,5 +1,5 @@
 import { Camera } from "@phosphor-icons/react";
-import { OrbitControls } from "@react-three/drei";
+import { ArcballControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useId, useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -259,6 +259,7 @@ export default function MoxonAntennaScene({
   const ControlsContent = () => (
     <div className="flex flex-col space-y-3">
       {/* Visualization Mode */}
+
       <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
         <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
           {t("common.controls.visualization")}
@@ -374,14 +375,7 @@ export default function MoxonAntennaScene({
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
 
-          {!isThumbnail && (
-            <OrbitControls
-              enableDamping
-              dampingFactor={0.05}
-              zoomSpeed={0.3}
-              target={[0, 2, 0]}
-            />
-          )}
+          {!isThumbnail && <ArcballControls target={[0, 2, 0]} makeDefault />}
 
           <ambientLight intensity={0.5} color={0x404040} />
           <directionalLight

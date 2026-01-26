@@ -64,7 +64,7 @@ export function Footer() {
         <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-900 flex flex-col items-center gap-2">
           <p className="text-xs text-zinc-400 dark:text-zinc-600 text-center">
             {t("footer.credits")}: BG5LU, BI1SFC, BH3XZT, BA4JPR, BD6MM, BH8AVW,
-            BI1NIZ, BD4UNH, BG5TOX
+            BI1NIZ, BD4UNH, BG5TOX, BG6LH
           </p>
           <p className="text-xs text-zinc-400 dark:text-zinc-600">
             {t("footer.copyright", { year: new Date().getFullYear() })}

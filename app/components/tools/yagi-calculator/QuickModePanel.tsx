@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
@@ -20,6 +21,8 @@ export function QuickModePanel({
   quickPreset,
   setQuickPreset,
 }: QuickModePanelProps) {
+  const { t } = useTranslation("common");
+
   return (
     <Card className="border-l-4 border-l-green-500 shadow-sm animate-in fade-in slide-in-from-top-2">
       <CardHeader className="">
@@ -30,12 +33,14 @@ export function QuickModePanel({
           >
             QUICK
           </Badge>
-          <CardTitle className="text-sm">场景预设</CardTitle>
+          <CardTitle className="text-sm">
+            {t("tools.yagiCalculator.quick.title")}
+          </CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>动臂材质类型</Label>
+          <Label>{t("tools.yagiCalculator.quick.label")}</Label>
           <Select
             value={quickPreset}
             onValueChange={(v) => setQuickPreset(v as QuickPresetType)}
@@ -45,16 +50,18 @@ export function QuickModePanel({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="metal_bonded">
-                金属管 - 振子穿过并接触 (最常见)
+                {t("tools.yagiCalculator.quick.presets.metal_bonded")}
               </SelectItem>
               <SelectItem value="metal_insulated">
-                金属管 - 振子绝缘安装
+                {t("tools.yagiCalculator.quick.presets.metal_insulated")}
               </SelectItem>
-              <SelectItem value="pvc">PVC/PPR管 - 非金属</SelectItem>
+              <SelectItem value="pvc">
+                {t("tools.yagiCalculator.quick.presets.pvc")}
+              </SelectItem>
             </SelectContent>
           </Select>
           <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-            * 默认设置: 4mm 振子, 20mm 动臂, 折合振子, DL6WU 间距。
+            {t("tools.yagiCalculator.quick.note")}
           </p>
         </div>
       </CardContent>

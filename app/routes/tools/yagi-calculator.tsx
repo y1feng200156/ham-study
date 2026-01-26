@@ -7,7 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import i18next from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { initReactI18next } from "react-i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
 import { BasicSpecsCard } from "~/components/tools/yagi-calculator/BasicSpecsCard";
 import { ProModePanel } from "~/components/tools/yagi-calculator/ProModePanel";
 import {
@@ -58,6 +58,8 @@ export const meta = ({ loaderData }: Route.MetaArgs) => {
 };
 
 export default function YagiCalculator() {
+  const { t } = useTranslation("common");
+
   // --- UI State ---
   const [mode, setMode] = useState<"quick" | "pro">("quick");
 
@@ -178,139 +180,155 @@ export default function YagiCalculator() {
   }, [autoKFactor, mode]);
 
   // --- Handlers ---
-  const copyTable = () => {
-    const header =
-      "单元(Element)\t位置(Pos)\t间距(Space)\t半长(Half)\t切割长(Cut)\t备注(Note)\n";
-    const body = design.elements
-      .map((e) => {
-        let note = "-";
-        if (e.type === "DE") {
-          if (e.style === "folded") note = "折合振子";
-          else if (e.gap) note = `间隙: ${e.gap}mm`;
-        }
-        return `${e.name}\t${e.position.toFixed(1)}\t${e.spacing > 0 ? e.spacing.toFixed(1) : "-"}\t${e.halfLength.toFixed(1)}\t${e.cutLength.toFixed(1)}\t${note}`;
-      })
-      .join("\n");
-    navigator.clipboard.writeText(header + body);
-    alert("数据已复制到剪贴板！");
-  };
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const downloadPng = () => {
-    if (!svgRef.current) return;
-    const svgData = new XMLSerializer().serializeToString(svgRef.current);
-    const canvas = document.createElement("canvas");
-    const scale = 2;
-    const w = 1000;
-    const h_svg = 600;
+    console.log("[YagiDownload] Starting download process...");
+    if (!svgRef.current) {
+      console.error("[YagiDownload] svgRef.current is null!");
+      alert(t("tools.yagiCalculator.ui.downloadError"));
+      return;
+    }
 
-    // Table vars
-    const rowHeight = 30;
-    const headerHeight = 80;
-    const footerHeight = 50;
-    const tableH = design.elements.length * rowHeight;
-    const totalH = h_svg + headerHeight + tableH + footerHeight;
+    try {
+      console.log("[YagiDownload] Serializing SVG...");
+      const svgData = new XMLSerializer().serializeToString(svgRef.current);
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      const w = 1000;
+      const h_svg = 600;
 
-    canvas.width = w * scale;
-    canvas.height = totalH * scale;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+      // Table vars
+      const rowHeight = 30;
+      const headerHeight = 80;
+      const footerHeight = 50;
+      const tableH = design.elements.length * rowHeight;
+      const totalH = h_svg + headerHeight + tableH + footerHeight;
 
-    ctx.scale(scale, scale);
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(0, 0, w, totalH);
+      canvas.width = w * scale;
+      canvas.height = totalH * scale;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.error("[YagiDownload] Could not get 2D context");
+        return;
+      }
 
-    const img = new Image();
-    img.src =
-      "data:image/svg+xml;base64," +
-      btoa(unescape(encodeURIComponent(svgData)));
-    img.onload = () => {
-      // Draw Blueprint
-      ctx.drawImage(img, 0, 0, w, h_svg);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(0, 0, w, totalH);
 
-      // Draw Table
-      const startY = h_svg;
-      ctx.fillStyle = "#e2e8f0";
-      ctx.font = "bold 20px sans-serif";
-      ctx.fillText("切割尺寸表 (CUT LIST)", 40, startY + 40);
+      const img = new Image();
+      img.src =
+        "data:image/svg+xml;base64," +
+        btoa(unescape(encodeURIComponent(svgData)));
 
-      ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(40, startY + 55);
-      ctx.lineTo(w - 40, startY + 55);
-      ctx.stroke();
+      console.log("[YagiDownload] Waiting for image load...");
+      img.onload = () => {
+        console.log("[YagiDownload] Image loaded, drawing to canvas...");
+        // Draw Blueprint
+        ctx.drawImage(img, 0, 0, w, h_svg);
 
-      const headers = [
-        "ELEMENT / 单元",
-        "POS (mm)",
-        "SPACE (mm)",
-        "HALF LEN (mm)",
-        "CUT LEN (mm)",
-        "NOTES / 备注",
-      ];
-      const colX = [40, 200, 350, 500, 650, 800];
+        // Draw Table
+        const startY = h_svg;
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillText(
+          `${t("tools.yagiCalculator.results.title")} (CUT LIST)`,
+          40,
+          startY + 40,
+        );
 
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "bold 12px monospace";
-      let y = startY + 75;
-      headers.forEach((h, i) => {
-        ctx.fillText(h, colX[i], y);
-      });
+        ctx.strokeStyle = "#475569";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(40, startY + 55);
+        ctx.lineTo(w - 40, startY + 55);
+        ctx.stroke();
 
-      ctx.font = "12px monospace";
-      y += 10;
-
-      design.elements.forEach((el) => {
-        y += rowHeight;
-        const isDE = el.type === "DE";
-        ctx.fillStyle = isDE ? "#38bdf8" : "#cbd5e1";
-
-        let note = "-";
-        if (isDE) {
-          if (el.style === "folded") note = "Folded Loop";
-          else if (el.gap) note = `Gap: ${el.gap}mm`;
-        }
-
-        const rowData = [
-          el.name,
-          el.position.toFixed(1),
-          el.spacing > 0 ? el.spacing.toFixed(1) : "-",
-          el.halfLength.toFixed(1),
-          el.cutLength.toFixed(1),
-          note,
+        const headers = [
+          `${t("tools.yagiCalculator.results.headers.element")} / Element`,
+          `${t("tools.yagiCalculator.results.headers.pos")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.space")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.half")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.cut")} (mm)`,
+          `${t("tools.yagiCalculator.results.headers.note")} / Note`,
         ];
+        const colX = [40, 200, 350, 500, 650, 800];
 
-        rowData.forEach((txt, i) => {
-          if (i === 4) ctx.font = "bold 12px monospace";
-          else ctx.font = "12px monospace";
-          ctx.fillText(txt, colX[i], y);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "bold 12px monospace";
+        let y = startY + 75;
+        headers.forEach((h, i) => {
+          ctx.fillText(h, colX[i], y);
         });
 
-        // Line
-        ctx.strokeStyle = "#334155";
-        ctx.beginPath();
-        ctx.moveTo(40, y + 5);
-        ctx.lineTo(w - 40, y + 5);
-        ctx.stroke();
-      });
+        ctx.font = "12px monospace";
+        y += 10;
 
-      // Footer
-      y += 40;
-      ctx.fillStyle = "#64748b";
-      ctx.font = "italic 10px sans-serif";
-      ctx.fillText(
-        `Generated by Yagi Calc Pro | ${new Date().toISOString().split("T")[0]}`,
-        40,
-        y,
-      );
+        design.elements.forEach((el) => {
+          y += rowHeight;
+          const isDE = el.type === "DE";
+          ctx.fillStyle = isDE ? "#38bdf8" : "#cbd5e1";
 
-      const a = document.createElement("a");
-      a.download = `yagi_design_${design.config.frequency}MHz.png`;
-      a.href = canvas.toDataURL("image/png");
-      a.click();
-    };
+          let note = "-";
+          if (isDE) {
+            if (el.style === "folded")
+              note = t("tools.yagiCalculator.results.notes.folded");
+            else if (el.gap)
+              note = t("tools.yagiCalculator.results.notes.gap", {
+                val: el.gap,
+              });
+          }
+
+          const rowData = [
+            el.name,
+            el.position.toFixed(1),
+            el.spacing > 0 ? el.spacing.toFixed(1) : "-",
+            el.halfLength.toFixed(1),
+            el.cutLength.toFixed(1),
+            note,
+          ];
+
+          rowData.forEach((txt, i) => {
+            if (i === 4) ctx.font = "bold 12px monospace";
+            else ctx.font = "12px monospace";
+            ctx.fillText(txt, colX[i], y);
+          });
+
+          // Line
+          ctx.strokeStyle = "#334155";
+          ctx.beginPath();
+          ctx.moveTo(40, y + 5);
+          ctx.lineTo(w - 40, y + 5);
+          ctx.stroke();
+        });
+
+        // Footer
+        y += 40;
+        ctx.fillStyle = "#64748b";
+        ctx.font = "italic 10px sans-serif";
+        ctx.fillText(
+          `Generated by Yagi Calc Pro | ${new Date().toISOString().split("T")[0]}`,
+          40,
+          y,
+        );
+
+        console.log("[YagiDownload] Triggering download click...");
+        const a = document.createElement("a");
+        a.download = `yagi_design_${design.config.frequency}MHz.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+        console.log("[YagiDownload] Download complete.");
+      };
+
+      img.onerror = (e) => {
+        console.error("[YagiDownload] Image load error:", e);
+        alert(t("tools.yagiCalculator.ui.downloadFail"));
+      };
+    } catch (e) {
+      console.error("[YagiDownload] Exception:", e);
+      alert(t("tools.yagiCalculator.ui.downloadUnknownError"));
+    }
   };
 
   return (
@@ -322,10 +340,10 @@ export default function YagiCalculator() {
             <CalculatorIcon className="w-8 h-8 text-sky-400" />
             <div>
               <h1 className="text-xl font-bold tracking-tight">
-                八木天线计算器
+                {t("tools.yagiCalculator.ui.title")}
               </h1>
               <p className="text-xs text-slate-400 uppercase tracking-widest">
-                DL6WU 工程工具
+                {t("tools.yagiCalculator.ui.subtitle")}
               </p>
             </div>
           </div>
@@ -340,7 +358,7 @@ export default function YagiCalculator() {
                 className="size-5 text-yellow-400"
                 weight="duotone"
               />{" "}
-              快速模式
+              {t("tools.yagiCalculator.ui.quickMode")}
             </button>
             <button
               type="button"
@@ -351,7 +369,7 @@ export default function YagiCalculator() {
                 className="size-5 text-blue-400"
                 weight="duotone"
               />{" "}
-              专业工程模式
+              {t("tools.yagiCalculator.ui.proMode")}
             </button>
           </div>
         </div>
@@ -404,7 +422,7 @@ export default function YagiCalculator() {
             <div className="bg-slate-900 rounded-xl shadow-lg border border-slate-700 p-1">
               <div className="flex justify-between items-center px-4 py-2 bg-slate-800 rounded-t-lg">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  设计蓝图预览 (Blueprint Preview)
+                  {t("tools.yagiCalculator.ui.blueprintPreview")}
                 </span>
                 <Button
                   variant="default"
@@ -413,7 +431,8 @@ export default function YagiCalculator() {
                   className="h-7 text-xs bg-sky-600 hover:bg-sky-500 font-bold"
                   onClick={downloadPng}
                 >
-                  <DownloadIcon className="mr-2 w-3 h-3" />⬇ 保存图纸+表格
+                  <DownloadIcon className="mr-2 w-3 h-3" />{" "}
+                  {t("tools.yagiCalculator.ui.imgDownload")}
                 </Button>
               </div>
               <div className="bg-slate-950 min-h-[400px] flex items-center justify-center overflow-auto rounded-b-lg scrollbar-none relative">
@@ -431,14 +450,15 @@ export default function YagiCalculator() {
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-800 animate-in fade-in">
                 <p className="font-bold flex items-center mb-1 text-xs uppercase tracking-wide text-amber-900">
                   <InfoIcon className="w-4 h-4 mr-1.5" />
-                  物理修正已应用
+                  {t("tools.yagiCalculator.ui.boomCorrectionApplied")}
                 </p>
                 <p className="text-xs opacity-90 leading-relaxed font-mono">
-                  基于 B/d=
-                  {(
-                    design.config.boomDiameter / design.config.elementDiameter
-                  ).toFixed(2)}{" "}
-                  和 k={design.bcFactor.toFixed(3)}. 所有振子已延长{" "}
+                  {t("tools.yagiCalculator.ui.boomCorrectionDetails", {
+                    ratio: (
+                      design.config.boomDiameter / design.config.elementDiameter
+                    ).toFixed(2),
+                    k: design.bcFactor.toFixed(3),
+                  })}{" "}
                   <span className="font-bold underline bg-amber-100 px-1 rounded">
                     {design.boomCorrection.toFixed(2)} mm
                   </span>
@@ -447,7 +467,7 @@ export default function YagiCalculator() {
               </div>
             )}
 
-            <ResultsTable design={design} copyTable={copyTable} />
+            <ResultsTable design={design} />
           </div>
         </div>
       </TooltipProvider>

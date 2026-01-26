@@ -1,4 +1,5 @@
 import { QuestionIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
@@ -69,11 +70,15 @@ export function ProModePanel({
   proManualSpacing,
   setProManualSpacing,
 }: ProModePanelProps) {
+  const { t } = useTranslation("common");
+
   return (
     <Card className="border-l-4 border-l-sky-600 shadow-sm animate-in fade-in slide-in-from-top-2">
       <CardHeader className="bg-slate-50 border-b px-5">
         <div className="flex justify-between items-center">
-          <h3 className="text-sm font-bold text-slate-800">工程参数设置</h3>
+          <h3 className="text-sm font-bold text-slate-800">
+            {t("tools.yagiCalculator.pro.title")}
+          </h3>
           <Badge variant="secondary" className="bg-sky-100 text-sky-700">
             Pro Mode
           </Badge>
@@ -83,12 +88,14 @@ export function ProModePanel({
         {/* 1. Boom Correction */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-slate-400 uppercase border-b pb-1">
-            1. 动臂修正 (Boom Correction)
+            {t("tools.yagiCalculator.pro.section1")}
           </h4>
 
           {/* Boom Shape Toggle */}
           <div className="flex justify-between items-center bg-slate-50 p-2 rounded border">
-            <Label className="text-xs uppercase text-slate-500">动臂截面</Label>
+            <Label className="text-xs uppercase text-slate-500">
+              {t("tools.yagiCalculator.pro.boomShape")}
+            </Label>
             <div className="flex gap-1">
               <Button
                 type="button"
@@ -97,7 +104,7 @@ export function ProModePanel({
                 className={`h-6 text-xs px-2 ${proBoomShape === "round" ? "bg-sky-600 hover:bg-sky-500" : ""}`}
                 onClick={() => setProBoomShape("round")}
               >
-                圆管 (Round)
+                {t("tools.yagiCalculator.pro.shapes.round")}
               </Button>
               <Button
                 type="button"
@@ -106,7 +113,7 @@ export function ProModePanel({
                 className={`h-6 text-xs px-2 ${proBoomShape === "square" ? "bg-sky-600 hover:bg-sky-500" : ""}`}
                 onClick={() => setProBoomShape("square")}
               >
-                方管 (Square)
+                {t("tools.yagiCalculator.pro.shapes.square")}
               </Button>
             </div>
           </div>
@@ -115,7 +122,7 @@ export function ProModePanel({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Label className="text-xs uppercase text-slate-500">
-                  振子直径 (d)
+                  {t("tools.yagiCalculator.pro.elementDia")}
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -123,10 +130,10 @@ export function ProModePanel({
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[220px]">
                     <p className="font-bold text-background mb-1">
-                      直径效应 (K Factor)
+                      {t("tools.yagiCalculator.pro.elementDiaTooltip.title")}
                     </p>
                     <p className="text-xs text-background/80">
-                      振子越粗，等效电气长度越长。物理切割时需缩短以补偿。
+                      {t("tools.yagiCalculator.pro.elementDiaTooltip.content")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -148,7 +155,7 @@ export function ProModePanel({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Label className="text-xs uppercase text-slate-500">
-                  动臂直径 (B)
+                  {t("tools.yagiCalculator.pro.boomDia")}
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -156,10 +163,10 @@ export function ProModePanel({
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[220px]">
                     <p className="font-bold text-background mb-1">
-                      动臂短路效应
+                      {t("tools.yagiCalculator.pro.boomDiaTooltip.title")}
                     </p>
                     <p className="text-xs text-background/80">
-                      金属动臂相当于寄生电感，会“缩短”穿过它的振子的电气长度。
+                      {t("tools.yagiCalculator.pro.boomDiaTooltip.content")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -183,7 +190,7 @@ export function ProModePanel({
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Label className="text-xs uppercase text-slate-500">
-                安装结构
+                {t("tools.yagiCalculator.pro.mount")}
               </Label>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -210,13 +217,17 @@ export function ProModePanel({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="bonded">
-                  Bonded (穿过金属管且接触)
+                  {t("tools.yagiCalculator.pro.mountMethods.bonded")}
                 </SelectItem>
                 <SelectItem value="insulated">
-                  Insulated (穿过金属管但绝缘)
+                  {t("tools.yagiCalculator.pro.mountMethods.insulated")}
                 </SelectItem>
-                <SelectItem value="above">Above (架在金属管上方)</SelectItem>
-                <SelectItem value="none">None (非金属动臂)</SelectItem>
+                <SelectItem value="above">
+                  {t("tools.yagiCalculator.pro.mountMethods.above")}
+                </SelectItem>
+                <SelectItem value="none">
+                  {t("tools.yagiCalculator.pro.mountMethods.none")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -225,20 +236,18 @@ export function ProModePanel({
             <div>
               <div className="flex items-center gap-2">
                 <Label className="text-xs uppercase text-sky-700 block w-fit">
-                  计算修正系数 (BC Factor)
+                  {t("tools.yagiCalculator.pro.bcFactor")}
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <QuestionIcon className="h-4 w-4 text-sky-500 hover:text-sky-700 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[250px]">
-                    <p className="font-bold text-background mb-1">修正系数 k</p>
+                    <p className="font-bold text-background mb-1">
+                      {t("tools.yagiCalculator.pro.bcFactorTooltip.title")}
+                    </p>
                     <p className="text-xs text-background/80">
-                      DL6WU 曲线依据{" "}
-                      <code className="bg-background/20 px-1 rounded">B/d</code>{" "}
-                      比值动态计算。
-                      <br />
-                      最终物理增加长度 = B × k
+                      {t("tools.yagiCalculator.pro.bcFactorTooltip.content")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -258,28 +267,36 @@ export function ProModePanel({
             />
           </div>
           <p className="text-xs text-slate-400 italic">
-            * 系统根据 DL6WU 曲线自动计算 k 值，您也可手动修改右侧数值。
+            {t("tools.yagiCalculator.pro.autoCalcNote")}
           </p>
         </div>
 
         {/* 2. Driven Element */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-slate-400 uppercase border-b pb-1">
-            2. 主振子 (Driven Element)
+            {t("tools.yagiCalculator.pro.section2")}
           </h4>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Label className="text-xs uppercase text-slate-500">类型</Label>
+                <Label className="text-xs uppercase text-slate-500">
+                  {t("tools.yagiCalculator.pro.deType")}
+                </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <QuestionIcon className="h-4 w-4 text-slate-400 hover:text-sky-600 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[220px]">
-                    <p className="font-bold text-background mb-1">阻抗特性</p>
+                    <p className="font-bold text-background mb-1">
+                      {t("tools.yagiCalculator.pro.deTypeTooltip.title")}
+                    </p>
                     <ul className="list-disc pl-3 space-y-1 text-xs text-background/80">
-                      <li>Folded: ~288Ω (需4:1巴伦)</li>
-                      <li>Straight: ~72Ω (可直接馈电)</li>
+                      <li>
+                        {t("tools.yagiCalculator.pro.deTypeTooltip.item1")}
+                      </li>
+                      <li>
+                        {t("tools.yagiCalculator.pro.deTypeTooltip.item2")}
+                      </li>
                     </ul>
                   </TooltipContent>
                 </Tooltip>
@@ -292,26 +309,30 @@ export function ProModePanel({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="folded">折合振子 (Folded)</SelectItem>
-                  <SelectItem value="straight">直立振子 (Straight)</SelectItem>
+                  <SelectItem value="folded">
+                    {t("tools.yagiCalculator.pro.deTypes.folded")}
+                  </SelectItem>
+                  <SelectItem value="straight">
+                    {t("tools.yagiCalculator.pro.deTypes.straight")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Label className="text-xs uppercase text-slate-500">
-                  馈电间隙 (Gap)
+                  {t("tools.yagiCalculator.pro.feedGap")}
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <QuestionIcon className="h-4 w-4 text-slate-400 hover:text-sky-600 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[220px]">
-                    <p className="font-bold text-background mb-1">物理切割</p>
+                    <p className="font-bold text-background mb-1">
+                      {t("tools.yagiCalculator.pro.feedGapTooltip.title")}
+                    </p>
                     <p className="text-xs text-background/80">
-                      直立偶极子的切割长度需减去此间隙。
-                      <br />
-                      CutLen = TotalLen - Gap
+                      {t("tools.yagiCalculator.pro.feedGapTooltip.content")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -336,12 +357,12 @@ export function ProModePanel({
         {/* 3. Spacing */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-slate-400 uppercase border-b pb-1">
-            3. 间距策略 (Spacing)
+            {t("tools.yagiCalculator.pro.section3")}
           </h4>
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Label className="text-xs uppercase text-slate-500">
-                算法选择
+                {t("tools.yagiCalculator.pro.algo")}
               </Label>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -349,11 +370,10 @@ export function ProModePanel({
                 </TooltipTrigger>
                 <TooltipContent className="max-w-[250px]">
                   <p className="font-bold text-background mb-1">
-                    DL6WU Tapering
+                    {t("tools.yagiCalculator.pro.algoTooltip.title")}
                   </p>
                   <p className="text-xs text-background/80">
-                    引向器间距从 0.075λ 逐渐增大到
-                    0.30λ，以在保证带宽的同时最大化前方增益。
+                    {t("tools.yagiCalculator.pro.algoTooltip.content")}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -366,8 +386,12 @@ export function ProModePanel({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="dl6wu">DL6WU 标准渐变 (推荐)</SelectItem>
-                <SelectItem value="uniform">Uniform 等间距 (自定义)</SelectItem>
+                <SelectItem value="dl6wu">
+                  {t("tools.yagiCalculator.pro.algos.dl6wu")}
+                </SelectItem>
+                <SelectItem value="uniform">
+                  {t("tools.yagiCalculator.pro.algos.uniform")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -375,7 +399,7 @@ export function ProModePanel({
           {proSpacingType === "uniform" && (
             <div className="bg-slate-50 p-2 rounded">
               <Label className="text-xs uppercase text-slate-500">
-                固定间距值 (λ)
+                {t("tools.yagiCalculator.pro.fixedSpacing")}
               </Label>
               <div className="flex items-center gap-1 mt-1">
                 <InputGroup className="h-8">

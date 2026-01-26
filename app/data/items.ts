@@ -98,4 +98,9 @@ export const tools: Item[] = [
     href: "/tools/yagi-calculator",
     category: "tool",
   },
+  {
+    i18nKey: "tools.moxonCalculator",
+    href: "/tools/moxon-calculator",
+    category: "tool",
+  },
 ];

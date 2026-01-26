@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import type { YagiDesign } from "~/lib/yagi-calc";
 
 interface YagiSvgRendererProps {
@@ -6,17 +6,12 @@ interface YagiSvgRendererProps {
   width: number;
   height: number;
   minimal?: boolean;
-  ref?: React.Ref<SVGSVGElement>;
 }
 
-// Improved SVG Renderer with Grid and Dimensions
-export function YagiSvgRenderer({
-  design,
-  width,
-  height,
-  minimal = false,
-  ref,
-}: YagiSvgRendererProps) {
+export const YagiSvgRenderer = React.forwardRef<
+  SVGSVGElement,
+  YagiSvgRendererProps
+>(({ design, width, height, minimal = false }, ref) => {
   // Layout Constants
   const padX = minimal ? 30 : 60;
   const vPad = minimal ? 40 : 160;
@@ -34,7 +29,7 @@ export function YagiSvgRenderer({
       height={"100%"}
       viewBox={`0 0 ${width} ${height}`}
       className="w-full h-full"
-      xmlns="https://www.w3.org/2000/svg"
+      xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
       ref={ref}
     >
@@ -250,4 +245,6 @@ export function YagiSvgRenderer({
       )}
     </svg>
   );
-}
+});
+
+YagiSvgRenderer.displayName = "YagiSvgRenderer";

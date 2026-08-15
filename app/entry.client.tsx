@@ -12,7 +12,7 @@ async function main() {
     .use(I18nextBrowserLanguageDetector)
     .init({
       fallbackLng: "zh",
-      supportedLngs: ["zh", "zh-HK", "en-US"],
+      supportedLngs: ["zh", "zh-HK", "en-US", "es"],
       defaultNS: "common",
       ns: ["common"],
       detection: { order: ["htmlTag"], caches: [] },

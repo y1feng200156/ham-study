@@ -26,7 +26,7 @@ export default async function handleRequest(
     ns,
     defaultNS: "common",
     fallbackLng: "zh",
-    supportedLngs: ["zh", "zh-HK", "en-US"],
+    supportedLngs: ["zh", "zh-HK", "en-US", "es"],
     resources,
     interpolation: {
       escapeValue: false,

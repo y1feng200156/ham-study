@@ -17,10 +17,11 @@ export function Header() {
     { code: "zh", label: "简体中文" },
     { code: "zh-HK", label: "繁體中文" },
     { code: "en-US", label: "English" },
+    { code: "es", label: "Español" },
   ];
 
   const handleLanguageChange = (newLang: string) => {
-    const prefixes = ["zh-HK", "en-US"];
+    const prefixes = ["zh-HK", "en-US", "es"];
     const segments = location.pathname.split("/").filter(Boolean);
     const hasPrefix = segments.length > 0 && prefixes.includes(segments[0]);
 
@@ -42,7 +43,7 @@ export function Header() {
   };
 
   // Determine home link
-  const prefixes = ["zh-HK", "en-US"];
+  const prefixes = ["zh-HK", "en-US", "es"];
   const segments = location.pathname.split("/").filter(Boolean);
   const currentPrefix =
     segments.length > 0 && prefixes.includes(segments[0]) ? segments[0] : "";

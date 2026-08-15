@@ -14,13 +14,13 @@ export const localeCookie = createCookie("lng", {
 
 const [i18nextMiddleware] = createI18nextMiddleware({
   detection: {
-    supportedLanguages: ["zh", "zh-HK", "en-US"],
+    supportedLanguages: ["zh", "zh-HK", "en-US", "es"],
     fallbackLanguage: "zh",
     cookie: localeCookie,
     // Detect locale from URL pathname
     async findLocale(request) {
       const locale = new URL(request.url).pathname.split("/").at(1);
-      if (locale === "en-US" || locale === "zh-HK") {
+      if (locale === "en-US" || locale === "zh-HK" || locale === "es") {
         return locale;
       }
       return "zh";
@@ -39,7 +39,7 @@ export function getLocale(request: Request): string {
   // 1. Check URL first
   const url = new URL(request.url);
   const pathLocale = url.pathname.split("/")[1];
-  if (pathLocale === "en-US" || pathLocale === "zh-HK") {
+  if (pathLocale === "en-US" || pathLocale === "zh-HK" || pathLocale === "es") {
     return pathLocale;
   }
 

@@ -2,7 +2,7 @@ import { cacheHeader } from "pretty-cache-header";
 import { data } from "react-router";
 import resources from "~/locales";
 
-const supportedLngs = ["zh", "zh-HK", "en-US"] as const;
+const supportedLngs = ["zh", "zh-HK", "en-US", "es"] as const;
 const supportedNs = ["common", "demos", "scene"] as const;
 
 type SupportedLng = (typeof supportedLngs)[number];

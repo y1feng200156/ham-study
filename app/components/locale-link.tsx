@@ -18,7 +18,7 @@ export function LocaleLink({ to, children, ...props }: LocaleLinkProps) {
   // Check if we're currently on a localized route
   const pathSegments = location.pathname.split("/");
   const currentLocale = pathSegments[1];
-  const isLocalizedRoute = ["zh-HK", "en-US"].includes(currentLocale);
+  const isLocalizedRoute = ["zh-HK", "en-US", "es"].includes(currentLocale);
 
   // Build the localized path
   let localizedTo = to;

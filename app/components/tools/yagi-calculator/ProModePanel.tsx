@@ -76,6 +76,7 @@ export function ProModePanel({
   setProMaterial,
 }: ProModePanelProps) {
   const { t } = useTranslation("common");
+  const nonMetalBoom = proMaterial === "fiberglass";
 
   return (
     <Card className="border-l-4 border-l-sky-600 shadow-sm animate-in fade-in slide-in-from-top-2">
@@ -148,6 +149,7 @@ export function ProModePanel({
                   <InputGroupInput
                     type="number"
                     value={proElDia}
+                    aria-label={t("tools.yagiCalculator.pro.elementDia")}
                     onChange={(e) =>
                       setProElDia(parseFloat(e.target.value) || 0)
                     }
@@ -216,8 +218,12 @@ export function ProModePanel({
             <Select
               value={proMountMethod}
               onValueChange={(v) => setProMountMethod(v as MountMethod)}
+              disabled={nonMetalBoom}
             >
-              <SelectTrigger className="h-8 text-xs">
+              <SelectTrigger
+                className="h-8 text-xs"
+                aria-label={t("tools.yagiCalculator.pro.mount")}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -260,7 +266,10 @@ export function ProModePanel({
               value={proMaterial}
               onValueChange={(v) => setProMaterial(v as AntennaMaterial)}
             >
-              <SelectTrigger className="h-8 text-xs">
+              <SelectTrigger
+                className="h-8 text-xs"
+                aria-label={t("tools.yagiCalculator.pro.material")}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -307,15 +316,21 @@ export function ProModePanel({
             <Input
               type="number"
               value={proManualBCFactor ?? 0}
+              aria-label={t("tools.yagiCalculator.pro.bcFactor")}
               onChange={(e) =>
                 setProManualBCFactor(parseFloat(e.target.value) || 0)
               }
+              disabled={nonMetalBoom}
               className="w-20 h-8 text-center font-mono font-bold text-sky-700 bg-white"
               step="0.001"
             />
           </div>
           <p className="text-xs text-slate-400 italic">
-            {t("tools.yagiCalculator.pro.autoCalcNote")}
+            {t(
+              nonMetalBoom
+                ? "tools.yagiCalculator.pro.nonMetalBoomNote"
+                : "tools.yagiCalculator.pro.autoCalcNote",
+            )}
           </p>
         </div>
 
@@ -353,7 +368,10 @@ export function ProModePanel({
                 value={proDeType}
                 onValueChange={(v) => setProDeType(v as DrivenElementType)}
               >
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger
+                  className="h-8 text-xs"
+                  aria-label={t("tools.yagiCalculator.pro.deType")}
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -390,9 +408,11 @@ export function ProModePanel({
                   <InputGroupInput
                     type="number"
                     value={proFeedGap}
+                    aria-label={t("tools.yagiCalculator.pro.feedGap")}
                     onChange={(e) =>
                       setProFeedGap(parseFloat(e.target.value) || 0)
                     }
+                    disabled={proDeType === "folded"}
                     className="text-sm font-mono"
                   />
                   <InputGroupAddon align="inline-end">mm</InputGroupAddon>
@@ -400,6 +420,20 @@ export function ProModePanel({
               </div>
             </div>
           </div>
+          <output
+            className="block rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs leading-relaxed text-slate-700 dark:border-sky-800 dark:bg-sky-950/30 dark:text-slate-300"
+            aria-live="polite"
+          >
+            <p className="font-semibold text-sky-800 dark:text-sky-300">
+              {t("tools.yagiCalculator.pro.matching.title")}
+            </p>
+            <p className="mt-1">
+              {t(`tools.yagiCalculator.pro.matching.${proDeType}`)}
+            </p>
+            <p className="mt-1 text-slate-600 dark:text-slate-400">
+              {t("tools.yagiCalculator.pro.matching.measure")}
+            </p>
+          </output>
         </div>
 
         {/* 3. Spacing */}

@@ -1,5 +1,6 @@
 use antenna::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
+use serde_json::Value;
 
 #[derive(Serialize)]
 struct YagiConfig {
@@ -63,4 +64,62 @@ fn test_calculate_element_lengths() {
 
     assert!(result.starts_with("["));
     assert!(result.ends_with("]"));
+}
+
+#[test]
+fn fiberglass_boom_has_no_radiator_loss_or_metal_boom_correction() {
+    let mut config = create_test_config();
+    config.frequency = 435.0;
+    config.element_count = 8;
+    config.element_diameter = 4.0;
+    config.manual_bc_factor = Some(0.72);
+
+    let aluminum: Value = serde_json::from_str(&calculate_yagi_json(
+        &serde_json::to_string(&config).unwrap(),
+    ))
+    .unwrap();
+    config.material = Some("fiberglass".to_string());
+    let fiberglass: Value = serde_json::from_str(&calculate_yagi_json(
+        &serde_json::to_string(&config).unwrap(),
+    ))
+    .unwrap();
+
+    assert_eq!(fiberglass["estimated_gain"], aluminum["estimated_gain"]);
+    assert_eq!(fiberglass["estimated_gain"].as_f64(), Some(11.75));
+    assert_eq!(fiberglass["bc_factor"].as_f64(), Some(0.0));
+    assert_eq!(fiberglass["boom_correction"].as_f64(), Some(0.0));
+    assert!(aluminum["boom_correction"].as_f64().unwrap() > 0.0);
+}
+
+#[test]
+fn parasitic_elements_change_with_diameter_on_nonmetal_boom() {
+    let mut config = create_test_config();
+    config.frequency = 435.0;
+    config.element_diameter = 4.0;
+    config.mount_method = "none".to_string();
+    config.material = Some("fiberglass".to_string());
+
+    let thin: Value = serde_json::from_str(&calculate_yagi_json(
+        &serde_json::to_string(&config).unwrap(),
+    ))
+    .unwrap();
+    config.element_diameter = 8.0;
+    let thick: Value = serde_json::from_str(&calculate_yagi_json(
+        &serde_json::to_string(&config).unwrap(),
+    ))
+    .unwrap();
+
+    let wavelength = 299_792.458 / 435.0;
+    let thin_d1 = thin["elements"][2]["length"].as_f64().unwrap();
+    let thick_d1 = thick["elements"][2]["length"].as_f64().unwrap();
+    let thin_d2 = thin["elements"][3]["length"].as_f64().unwrap();
+    let thick_d2 = thick["elements"][3]["length"].as_f64().unwrap();
+    assert!((thin_d1 - 0.455 * wavelength).abs() < 1e-9);
+    assert!(thick_d1 < thin_d1);
+    assert!(thick_d2 < thin_d2);
+    assert_ne!(thin_d1 - thick_d1, thin_d2 - thick_d2);
+    assert_eq!(
+        thin["elements"][2]["position"],
+        thick["elements"][2]["position"]
+    );
 }

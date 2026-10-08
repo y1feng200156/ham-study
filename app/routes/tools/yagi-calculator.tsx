@@ -129,12 +129,12 @@ export default function YagiCalculator() {
         elementDiameter: proElDia,
         boomDiameter: proBoomDia,
         boomShape: proBoomShape,
-        mountMethod: proMountMethod,
+        mountMethod: proMaterial === "fiberglass" ? "none" : proMountMethod,
         feedGap: proFeedGap,
         drivenElementType: proDeType,
         spacingType: proSpacingType,
         manualSpacing: proManualSpacing,
-        manualBCFactor: proManualBCFactor,
+        manualBCFactor: proMaterial === "fiberglass" ? 0 : proManualBCFactor,
         material: proMaterial,
       };
     }
@@ -178,6 +178,7 @@ export default function YagiCalculator() {
 
   // --- Auto-calculate K Factor for display in Pro Mode ---
   const autoKFactor = useMemo(() => {
+    if (proMaterial === "fiberglass") return 0;
     const d = proElDia || 0;
     const B = proBoomDia || 0;
     const ratio = d > 0 ? B / d : 0;
@@ -195,7 +196,7 @@ export default function YagiCalculator() {
       return 0.7;
     }
     return 0;
-  }, [proElDia, proBoomDia, proMountMethod]);
+  }, [proElDia, proBoomDia, proMountMethod, proMaterial]);
 
   useEffect(() => {
     if (mode === "pro") {
@@ -436,9 +437,13 @@ export default function YagiCalculator() {
                 setProElDia={setProElDia}
                 proBoomDia={proBoomDia}
                 setProBoomDia={setProBoomDia}
-                proMountMethod={proMountMethod}
+                proMountMethod={
+                  proMaterial === "fiberglass" ? "none" : proMountMethod
+                }
                 setProMountMethod={setProMountMethod}
-                proManualBCFactor={proManualBCFactor}
+                proManualBCFactor={
+                  proMaterial === "fiberglass" ? 0 : proManualBCFactor
+                }
                 setProManualBCFactor={setProManualBCFactor}
                 proDeType={proDeType}
                 setProDeType={setProDeType}

@@ -53,6 +53,14 @@ fn calculate_bc_factor(
     frequency: f64,
     material: Option<&str>,
 ) -> f64 {
+    // Material describes the boom. A non-conductive boom has no metal-boom correction,
+    // even when a stale manual K factor or bonded mounting option was supplied.
+    if matches!(material, Some("fiberglass" | "plastic"))
+        || matches!(mount_method, "non_metal" | "none")
+    {
+        return 0.0;
+    }
+
     // Check if manual override is provided
     if let Some(bc) = manual_bc_factor {
         return bc;
@@ -141,6 +149,40 @@ fn calculate_bc_factor(
     }
 }
 
+const REFERENCE_ELEMENT_DIAMETER: f64 = 4.0; // mm; existing default cut list
+
+// Equal-reactance diameter scaling of each parasitic element before boom correction.
+// This keeps the existing 4 mm design as the reference (DL6WU/G3SEK method).
+fn adjust_parasitic_length_for_diameter(
+    reference_length: f64,
+    wavelength: f64,
+    diameter: f64,
+) -> f64 {
+    if !wavelength.is_finite()
+        || wavelength <= 0.0
+        || !diameter.is_finite()
+        || diameter <= 0.0
+        || diameter == REFERENCE_ELEMENT_DIAMETER
+    {
+        return reference_length;
+    }
+
+    let slope = |d: f64| 430.0 * (2.0 * wavelength / d).log10() - 320.0;
+    let reference_slope = slope(REFERENCE_ELEMENT_DIAMETER);
+    let selected_slope = slope(diameter);
+    if reference_slope <= 0.0 || selected_slope <= 0.0 {
+        return reference_length;
+    }
+
+    let adjusted = wavelength / 2.0
+        * (1.0 + (2.0 * reference_length / wavelength - 1.0) * reference_slope / selected_slope);
+    if adjusted.is_finite() && adjusted > 0.0 {
+        adjusted
+    } else {
+        reference_length
+    }
+}
+
 /// Internal calculation function
 fn calculate_yagi_internal(config: &YagiConfig) -> YagiDesign {
     let frequency = config.frequency;
@@ -175,7 +217,8 @@ fn calculate_yagi_internal(config: &YagiConfig) -> YagiDesign {
     let mut current_pos = 0.0;
 
     // --- Reflector ---
-    let ref_len = 0.495 * lambda + boom_correction;
+    let ref_len = adjust_parasitic_length_for_diameter(0.495 * lambda, lambda, element_diameter)
+        + boom_correction;
     elements.push(YagiElement {
         element_type: "REF".to_string(),
         name: "Reflector".to_string(),
@@ -244,7 +287,9 @@ fn calculate_yagi_internal(config: &YagiConfig) -> YagiDesign {
             len_factor = 0.405;
         }
 
-        let dir_len = len_factor * lambda + boom_correction;
+        let dir_len =
+            adjust_parasitic_length_for_diameter(len_factor * lambda, lambda, element_diameter)
+                + boom_correction;
 
         elements.push(YagiElement {
             element_type: "DIR".to_string(),
@@ -294,21 +339,12 @@ pub fn calculate_yagi_json(config_json: &str) -> String {
     }
 }
 
-/// Calculate estimated gain based on element count and material
+/// Calculate a rough gain estimate based on element count.
 ///
-/// Simple estimation formula: gain = element_count * 1.2 + 2.15 dBi - material_loss
+/// `material` is retained for API compatibility and describes the boom, not the elements.
 #[wasm_bindgen]
-pub fn estimate_yagi_gain(element_count: usize, material: &str) -> f64 {
-    let base_gain = element_count as f64 * 1.2 + 2.15;
-
-    // Material loss estimation (relative to Aluminum/Copper)
-    let loss = match material {
-        "stainless_steel" => 0.8,         // ~0.8 dB loss for SS
-        "fiberglass" | "plastic" => 20.0, // effectively non-functional as radiator
-        _ => 0.0,                         // Aluminum, Copper
-    };
-
-    base_gain - loss
+pub fn estimate_yagi_gain(element_count: usize, _material: &str) -> f64 {
+    element_count as f64 * 1.2 + 2.15
 }
 
 /// Calculate boom correction factor and amount

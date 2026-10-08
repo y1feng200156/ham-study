@@ -245,11 +245,11 @@ export function calculate_yagi_json(config_json: string): string;
 export function estimate_moxon_gain(): number;
 
 /**
- * Calculate estimated gain based on element count and material
+ * Calculate a rough gain estimate based on element count.
  *
- * Simple estimation formula: gain = element_count * 1.2 + 2.15 dBi - material_loss
+ * `material` is retained for API compatibility and describes the boom, not the elements.
  */
-export function estimate_yagi_gain(element_count: number, material: string): number;
+export function estimate_yagi_gain(element_count: number, _material: string): number;
 
 /**
  * 生成球面几何体数据

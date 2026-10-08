@@ -724,15 +724,15 @@ export function estimate_moxon_gain() {
 }
 
 /**
- * Calculate estimated gain based on element count and material
+ * Calculate a rough gain estimate based on element count.
  *
- * Simple estimation formula: gain = element_count * 1.2 + 2.15 dBi - material_loss
+ * `material` is retained for API compatibility and describes the boom, not the elements.
  * @param {number} element_count
- * @param {string} material
+ * @param {string} _material
  * @returns {number}
  */
-export function estimate_yagi_gain(element_count, material) {
-    const ptr0 = passStringToWasm0(material, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+export function estimate_yagi_gain(element_count, _material) {
+    const ptr0 = passStringToWasm0(_material, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
     const ret = wasm.estimate_yagi_gain(element_count, ptr0, len0);
     return ret;

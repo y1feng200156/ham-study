@@ -63,6 +63,13 @@ export function QuickModePanel({
           <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
             {t("tools.yagiCalculator.quick.note")}
           </p>
+          <p className="rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs leading-relaxed text-slate-700 dark:border-sky-800 dark:bg-sky-950/30 dark:text-slate-300">
+            <span className="font-semibold text-sky-800 dark:text-sky-300">
+              {t("tools.yagiCalculator.pro.matching.title")}
+            </span>{" "}
+            {t("tools.yagiCalculator.pro.matching.folded")}{" "}
+            {t("tools.yagiCalculator.pro.matching.measure")}
+          </p>
         </div>
       </CardContent>
     </Card>

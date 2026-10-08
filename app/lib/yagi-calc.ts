@@ -31,7 +31,7 @@ export interface YagiConfig {
   spacingType: SpacingType;
   manualSpacing: number; // in lambda
   manualBCFactor?: number; // Optional override for K factor
-  material?: AntennaMaterial; // Material for skin depth/conductivity
+  material?: AntennaMaterial; // Boom material, not radiating element material
 }
 
 export interface YagiElement {
@@ -120,6 +120,38 @@ export async function calculateYagi(config: YagiConfig): Promise<YagiDesign> {
   return calculateYagiWasm(config);
 }
 
+const REFERENCE_ELEMENT_DIAMETER = 4; // mm; preserves the existing default cut list
+
+// Preserve each parasitic element's approximate reactance when its diameter changes.
+// The reference length is the existing 4 mm free-space design; boom correction is separate.
+function adjustParasiticLengthForDiameter(
+  referenceLength: number,
+  wavelength: number,
+  diameter: number,
+): number {
+  if (
+    !Number.isFinite(wavelength) ||
+    wavelength <= 0 ||
+    !Number.isFinite(diameter) ||
+    diameter <= 0 ||
+    diameter === REFERENCE_ELEMENT_DIAMETER
+  ) {
+    return referenceLength;
+  }
+
+  const slope = (d: number) => 430 * Math.log10((2 * wavelength) / d) - 320;
+  const referenceSlope = slope(REFERENCE_ELEMENT_DIAMETER);
+  const selectedSlope = slope(diameter);
+  if (referenceSlope <= 0 || selectedSlope <= 0) return referenceLength;
+
+  const adjusted =
+    (wavelength / 2) *
+    (1 +
+      ((2 * referenceLength) / wavelength - 1) *
+        (referenceSlope / selectedSlope));
+  return Number.isFinite(adjusted) && adjusted > 0 ? adjusted : referenceLength;
+}
+
 export function calculateYagiJs(config: YagiConfig): YagiDesign {
   const {
     frequency,
@@ -138,7 +170,13 @@ export function calculateYagiJs(config: YagiConfig): YagiDesign {
 
   let bcFactor = 0;
 
-  if (manualBCFactor !== undefined && manualBCFactor !== null) {
+  if (
+    config.material === "fiberglass" ||
+    mountMethod === "none" ||
+    mountMethod === "non_metal"
+  ) {
+    bcFactor = 0;
+  } else if (manualBCFactor !== undefined && manualBCFactor !== null) {
     bcFactor = manualBCFactor;
   } else {
     const d = elementDiameter || 0;
@@ -146,10 +184,6 @@ export function calculateYagiJs(config: YagiConfig): YagiDesign {
     const ratio = d > 0 ? B / d : 0;
 
     switch (mountMethod) {
-      case "non_metal":
-      case "none":
-        bcFactor = 0;
-        break;
       case "above_insulated":
       case "above":
         bcFactor = 0.05;
@@ -177,7 +211,9 @@ export function calculateYagiJs(config: YagiConfig): YagiDesign {
   const elements: YagiElement[] = [];
   let currentPos = 0;
 
-  const refLen = 0.495 * lambda + boomCorrection;
+  const refLen =
+    adjustParasiticLengthForDiameter(0.495 * lambda, lambda, elementDiameter) +
+    boomCorrection;
   elements.push({
     type: "REF",
     name: "Reflector",
@@ -233,7 +269,12 @@ export function calculateYagiJs(config: YagiConfig): YagiDesign {
     let lenFactor = 0.455 - (i - 1) * 0.005;
     if (lenFactor < 0.405) lenFactor = 0.405;
 
-    const dirLen = lenFactor * lambda + boomCorrection;
+    const dirLen =
+      adjustParasiticLengthForDiameter(
+        lenFactor * lambda,
+        lambda,
+        elementDiameter,
+      ) + boomCorrection;
 
     elements.push({
       type: "DIR",
